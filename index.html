@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html itemtype="https://schema.org/WebApplication" lang="en">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Idea Rx</title>
+    <meta name="apple-mobile-web-app-title" content="Idea Rx" />
+    <meta name="mobile-web-app-capable" content="no" />
+    <meta name="apple-touch-fullscreen" content="no" />
+    <meta name="apple-mobile-web-app-capable" content="no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, minimum-scale=1, maximum-scale=5, user-scalable=yes" />
+    <meta name="theme-color" id="themeColor" content="rgb(0, 9, 15)" />
+
+    <meta name="keywords" content="Bring your ideas into focus." />
+    <meta name="description" content="A web app that helps folks zero in on the best ideas, words, phrases that apply to any situation." />
+
+    <link rel="apple-touch-icon" sizes="120x120" href="images/icon120.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="images/icon180.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="images/icon192.png" />
+    <link rel="apple-touch-icon" sizes="512x512" href="images/icon512-apple-touch.png" />
+
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="128x128" href="favicon.png" />
+
+    <link rel="manifest" href="manifest.webmanifest" />
+
+    <link rel="stylesheet" href="styles/normalize.css" media="screen" />
+    <link rel="stylesheet" href="styles/idearx.css" media="screen" />
+  </head>
+
+  <body>
+    <app id="app" v-cloak>
+      <button v-if="newVersionAvailable">Update Now</button>
+      <notification :class="{show: visualStateShowNofication}"></notification>
+      <modal :class="{show: visualStateShowModal}"></modal>
+      <stage>
+        <hgroup>
+          <h1>Idea Rx</h1>
+          <h2>Bring your ideas into focus.</h2>
+        </hgroup>
+        <p>Version: {{appDataVersion}}</p>
+      </stage>
+    </app>
+    <script src="helpers/console-enhancer.js" type="text/javascript"></script>
+    <script src="helpers/vue.min.js" type="text/javascript"></script>
+    <script src="scripts/idearx-controller.js" type="text/javascript"></script>
+  </body>
+</html>

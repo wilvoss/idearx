@@ -1,0 +1,38 @@
+:root {
+    --maxWidth: 1024px;
+    --defaultUnit: 20px;
+    --largeUnit: calc(var(--defaultUnit) * 4);
+
+    --horMargin: clamp(var(--defaultUnit), 5vw, var(--largeUnit));
+    --horPadding: clamp(var(--defaultUnit), 5vw, var(--largeUnit));
+    --vertMargin: var(--largeUnit);
+    --vertPadding: var(--largeUnit);
+
+    --colorBackground: hsl(0, 0%, 98%);
+    --colorForeground: hsl(0, 0%, 20%);
+    --colorAppBackground: hsl(0, 100%, 100%);
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    background: var(--colorBackground);
+    color: var(--colorForeground);
+}
+
+app {
+    display: flex;
+    width: 100%;
+    height: calc(100% - (2 * var(--vertPadding)));
+    max-width: var(--maxWidth);
+    padding: var(--vertPadding) var(--horPadding);
+    background: var(--colorAppBackground);
+}
