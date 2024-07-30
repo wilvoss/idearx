@@ -14,11 +14,11 @@ var app = new Vue({
   el: '#app',
   data: {
     // app data
-    appDataVersion: '0.0.003',
+    appDataVersion: '0.0.004',
     newVersionAvailable: false,
 
     // idea data
-    currentIdeaSet: { name: 'Feelings Wheel', cta: 'Which of these best describes how are you are feeling?', description: 'This exercise will help you gain clarity on how you are feeling right now!', data: ['./data/feelings.json'] },
+    currentIdeaSet: { name: 'Feelings Wheel', cta: 'How are you are feeling?', description: 'This exercise will help you gain clarity on how you are feeling right now!', data: ['./data/feelings.json'] },
     currentIdeas: null,
     currentSelectedIdea: null,
     allMethods: Methods,
