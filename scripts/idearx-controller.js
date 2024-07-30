@@ -14,7 +14,7 @@ var app = new Vue({
   el: '#app',
   data: {
     // app data
-    appDataVersion: '0.0.002',
+    appDataVersion: '0.0.003',
     newVersionAvailable: false,
 
     // idea data
