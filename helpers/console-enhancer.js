@@ -31,7 +31,7 @@ function log(text, color, override = false) {
   ms = ms < 10 ? ms * 100 : ms;
   ms = ms < 100 ? ms * 10 : ms;
   if (UseDebug || override) {
-    console.log(new Date(Date.now()).toLocaleTimeString('en-US').replace(/ AM/, '').replace(/ PM/, '') + '.' + ms + ' \t' + text);
+    console.log('%c' + new Date(Date.now()).toLocaleTimeString('en-US').replace(/ AM/, '').replace(/ PM/, '') + '.' + ms + ' \t%c' + text, 'color:lightgray;', color);
   }
 }
 

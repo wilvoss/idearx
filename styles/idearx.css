@@ -1,7 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap');
+
 :root {
     --maxWidth: 1024px;
     --defaultUnit: 20px;
     --largeUnit: calc(var(--defaultUnit) * 4);
+    --borderRadius: 5px;
+    --bodyFont: "Jura", sans-serif;
 
     --horMargin: clamp(var(--defaultUnit), 5vw, var(--largeUnit));
     --horPadding: clamp(var(--defaultUnit), 5vw, var(--largeUnit));
@@ -22,17 +26,122 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: var(--bodyFont);
     padding: 0;
     margin: 0;
+    width: 100%;
     background: var(--colorBackground);
     color: var(--colorForeground);
 }
 
+h2, h3, h4, h5, h6 {
+    font-weight: 500;
+}
+
 app {
-    display: flex;
+    display: block;
     width: 100%;
     height: calc(100% - (2 * var(--vertPadding)));
     max-width: var(--maxWidth);
     padding: var(--vertPadding) var(--horPadding);
     background: var(--colorAppBackground);
+}
+
+stage {
+    display: block;
+}
+
+button {
+    border: 1px solid black;
+    padding: var(--defaultUnit);
+    background: var(--colorBackground);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, .2);
+    border-radius: var(--borderRadius);
+    transition: 50ms ease-in-out all;
+}
+
+hgroup {
+    margin-bottom: var(--defaultUnit);
+}
+
+hgroup:first-of-type {
+    text-align: center;
+    margin-bottom: calc(2 * var(--defaultUnit));
+    border-bottom: 1px solid rgba(0, 0, 0, .2);
+    padding-bottom: var(--defaultUnit);
+}
+
+hgroup h1, hgroup h2, hgroup p {
+    margin: 0;
+    line-height: 150%;
+    padding: 0;
+}
+
+controls {
+    display: flex;
+    gap: var(--defaultUnit);
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--defaultUnit);
+    /* border-radius: var(--borderRadius); */
+    /* border-top: 1px solid rgba(0, 0, 0, .2); */
+    /* padding: 0 var(--defaultUnit); */
+}
+
+controls control {
+    display: flex;
+    gap: 10px;
+    justify-content: end;
+    word-wrap: nowrap;
+}
+
+picker {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: var(--defaultUnit);
+    margin: 0;
+}
+
+idea {
+    display: flex;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    flex: 1 0 21%;
+    /* explanation below */
+    /* width: calc(50% - .5 * var(--defaultUnit)); */
+    border: 1px solid black;
+    padding: var(--defaultUnit);
+    height: 140px;
+    background: var(--colorBackground);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, .2);
+    transition: 50ms ease-in-out all;
+    border-radius: var(--borderRadius);
+    font-weight: 800;
+}
+
+idea.selected, idea.selected:hover {
+    border-color: green;
+    background: rgba(0, 255, 0, .1);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0);
+    transform: translateY(0px);
+}
+
+idea:hover {
+    box-shadow: 0px 8px 8px rgba(0, 0, 0, .1);
+    transform: translateY(-1px);
+}
+
+idea:active {
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, .1);
+    transform: translateY(0px);
+
+}
+
+version {
+    display: block;
+    position: fixed;
+    top: 10px;
+    font-size: .8em;
 }

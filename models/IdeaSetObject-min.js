@@ -1,0 +1,1 @@
+class IdeaSetObject{constructor(a){this.name=void 0===a.name?"Name":a.name,this.description=void 0===a.description?"":a.description,this.data=void 0===a.data?"./data/feelings.json":a.data}}
