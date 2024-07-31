@@ -6,4 +6,4 @@ class MethodObject {
   }
 }
 
-let Methods = [new MethodObject({ name: 'Level Crawl', value: 'full' }), new MethodObject({ name: 'Binary Crawl', value: 'binary' })];
+let Methods = [new MethodObject({ name: 'Tree Crawl', value: 'full' }), new MethodObject({ name: 'Binary Crawl', value: 'binary' })];

@@ -14,7 +14,7 @@ var app = new Vue({
   el: '#app',
   data: {
     // app data
-    appDataVersion: '0.0.006',
+    appDataVersion: '0.0.007',
     newVersionAvailable: false,
 
     // idea data
@@ -87,7 +87,7 @@ var app = new Vue({
         });
       }
     },
-
+    // none of tehse service worker app update methods actually light up atm: unsure if it needs to at all
     HandleUpdateAppButtonClick() {
       note('HandleUpdateAppButtonClick() called');
       this.newVersionAvailable = false;

@@ -63,6 +63,7 @@ stage {
     display: block;
     width: 100%;
     height: auto;
+    min-height: calc(100% - 2 * var(--vertPadding));
     max-width: calc(var(--maxWidth) - 2 * var(--horPadding));
     padding: var(--vertPadding) var(--horPadding);
     background-color: var(--colorStageBackground);
@@ -131,6 +132,7 @@ idea {
     display: flex;
     cursor: pointer;
     justify-content: center;
+    font-size: 1.25em;
     align-items: center;
     flex: 1 0 21%;
     border: 1px solid black;
