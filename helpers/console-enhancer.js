@@ -2,20 +2,20 @@ var UseDebug = document.location.href.indexOf('staging') != -1 || document.locat
 
 function announce(text) {
   console.log('◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦');
-  log(text, 'color:black', true);
+  log(text, null, true);
   console.log('◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦');
 }
 
 function highlight(text) {
-  log('NOTICE: ' + text, 'color:green;');
+  log(text, 'color:green;');
 }
 
 function warn(text) {
-  log('Warn: ' + text, 'color:orange;');
+  log(text, 'color:orange;');
 }
 
 function error(text) {
-  log('Error: ' + text, 'color:red;');
+  log(text, 'color:red;');
 }
 
 function note(text) {
@@ -25,7 +25,7 @@ function note(text) {
 function log(text, color, override = false) {
   text = text.toString();
 
-  color = color === undefined || color === null ? 'black' : color;
+  color = color === undefined || color === null ? null : color;
 
   var ms = new Date(Date.now()).getMilliseconds();
   ms = ms < 10 ? ms * 100 : ms;
