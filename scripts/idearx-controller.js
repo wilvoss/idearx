@@ -14,7 +14,7 @@ var app = new Vue({
   el: '#app',
   data: {
     // app data
-    appDataVersion: '0.0.010',
+    appDataVersion: '0.0.011',
     newVersionAvailable: false,
 
     // idea data
@@ -154,13 +154,11 @@ var app = new Vue({
       const selectedChild = children.filter((obj) => obj.isSelected).length === 1 ? children.filter((obj) => obj.isSelected)[0] : null;
 
       const filteredObjects = children.filter((obj) => !obj.seen && !obj.isSelected);
-      for (let i = filteredObjects.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [filteredObjects[i], filteredObjects[j]] = [filteredObjects[j], filteredObjects[i]];
-      }
-      if (this.currentMethod.value !== 'binary') {
-        return filteredObjects;
-      } else {
+      if (this.currentMethod.value === 'binary') {
+        for (let i = filteredObjects.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [filteredObjects[i], filteredObjects[j]] = [filteredObjects[j], filteredObjects[i]];
+        }
         if (selectedChild === null) {
           let ideas = filteredObjects.slice(0, 2);
           ideas.forEach((idea) => {
@@ -170,8 +168,22 @@ var app = new Vue({
         } else {
           const randomObject = filteredObjects.slice(0, 1);
           randomObject[0].showing = true;
-          return randomObject.concat(selectedChild);
+          const finalArray = [randomObject[0], selectedChild];
+          finalArray.sort(() => Math.random() - 0.5);
+
+          return finalArray;
         }
+      } else if (this.currentMethod.value !== 'binary') {
+        filteredObjects.sort((a, b) => {
+          if (a.name < b.name) {
+            return -1;
+          }
+          if (a.name > b.name) {
+            return 1;
+          }
+          return 0;
+        });
+        return filteredObjects;
       }
     },
   },
