@@ -7,6 +7,20 @@
     {
       "type": "msedge",
       "request": "launch",
+      "name": "Launch Edge against staging.idearx.com",
+      "url": "http://staging.idearx.com",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Chrome against staging.idearx.com",
+      "url": "http://staging.idearx.com",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "type": "msedge",
+      "request": "launch",
       "name": "Launch Edge against localhost",
       "url": "http://localhost:80",
       "webRoot": "${workspaceFolder}"
