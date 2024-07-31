@@ -14,7 +14,7 @@ var app = new Vue({
   el: '#app',
   data: {
     // app data
-    appDataVersion: '0.0.011',
+    appDataVersion: '0.0.012',
     newVersionAvailable: false,
 
     // idea data
@@ -87,46 +87,11 @@ var app = new Vue({
         });
       }
     },
-    // none of tehse service worker app update methods actually light up atm: unsure if it needs to at all
-    HandleUpdateAppButtonClick() {
-      note('HandleUpdateAppButtonClick() called');
-      this.newVersionAvailable = false;
-      if (this.serviceWorker !== '') {
-        window.location.reload(true);
-      }
-    },
-
-    HandleServiceWorkerRegistration() {
-      note('HandleServiceWorkerRegistration() called');
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker
-          .register('./sw.js')
-          .then((reg) => {
-            log('Service worker registered with scope:', reg.scope);
-          })
-          .catch((error) => {
-            error('Service worker registration failed:', error);
-          });
-      }
-      if (navigator.serviceWorker !== undefined) {
-        navigator.serviceWorker.addEventListener('message', (event) => {
-          if (event.data === 'updateAvailable') {
-            if (this.serviceWorker !== '') {
-              this.serviceWorker.postMessage({ action: 'skipWaiting' });
-            }
-          }
-        });
-      }
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        this.newVersionAvailable = true;
-      });
-    },
   },
 
   mounted() {
     announce('App Initialized');
     this.IntializeApp();
-    // this.HandleServiceWorkerRegistration(); // uncomment when ssl is available in local environment
   },
 
   computed: {
