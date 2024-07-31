@@ -14,20 +14,22 @@ var app = new Vue({
   el: '#app',
   data: {
     // app data
-    appDataVersion: '0.0.004',
+    appDataVersion: '0.0.005',
     newVersionAvailable: false,
 
     // idea data
-    currentIdeaSet: { name: 'Feelings Wheel', cta: 'How are you are feeling?', description: 'This exercise will help you gain clarity on how you are feeling right now!', data: ['./data/feelings.json'] },
+    currentIdeaSet: { name: 'Feelings Wheel', cta: 'What are you feeling right now?', description: 'This exercise will help you gain clarity on how you are feeling right now!', data: ['./data/feelings.json'] },
     currentIdeas: null,
     currentSelectedIdea: null,
     allMethods: Methods,
     currentMethod: Methods[0],
     currentMethodType: Methods[0].value,
+    currentExerciseIsDirty: false,
     selectedIdeasPath: [],
 
     visualStateShowNofication: false,
     visualStateShowModal: false,
+
     // DOM reference
     documentCssRoot: document.querySelector(':root'),
   },
@@ -63,11 +65,14 @@ var app = new Vue({
         this.selectedIdeasPath.push(_idea);
         log('"' + _idea.name + '"' + ' is now this.currentSelectedIdea');
       }
+      this.currentExerciseIsDirty = true;
     },
 
     RestartExercise() {
       note('RestartExercise() called');
       this.selectedIdeasPath = [];
+      this.currentExerciseIsDirty = false;
+
       this.ResetNodeChildren(this.currentIdeas);
       this.currentSelectedIdea = this.currentIdeas;
     },

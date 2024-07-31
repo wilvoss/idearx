@@ -34,7 +34,6 @@
       <notification :class="{show: visualStateShowNofication}"></notification>
       <modal :class="{show: visualStateShowModal}"></modal>
       <stage>
-        <version>Version: {{appDataVersion}}</version>
         <hgroup>
           <h1>Idea Rx</h1>
           <p>Bring your ideas into focus.</p>
@@ -56,8 +55,9 @@
           <idea :class="{selectednot: idea.isSelected}" v-for="idea in getRandomIdeasFromCurrentIdeasLevel" @click="SelectIdea(idea)">{{idea.name}}</idea>
           <idea class="selected" v-if="selectedIdeasPath.length > 0 && selectedIdeasPath[selectedIdeasPath.length - 1].children.length === 0">{{selectedIdeasPath[selectedIdeasPath.length - 1].name}}</idea>
         </picker>
-        <controls :disabled="currentIdeas !== currentSelectedIdea" :class="{disabled: currentIdeas !== currentSelectedIdea}">
-          <button @click="RestartExercise()">Start Over</button>
+        <controls>
+          <button :disabled="!currentExerciseIsDirty" @click="RestartExercise()">Start Over</button>
+          <version>Version: {{appDataVersion}}</version>
         </controls>
         <!-- <h3>Current Choices = <span v-if="selectedIdeasPath.length === 0">Nothing chosen</span><span v-for="(idea, index) in selectedIdeasPath">{{idea.name + (index === selectedIdeasPath.length-1 ? '' : ' -> ')}}</span></h3> -->
       </stage>

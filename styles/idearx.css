@@ -12,9 +12,12 @@
     --vertMargin: var(--largeUnit);
     --vertPadding: var(--largeUnit);
 
-    --colorBackground: hsl(0, 0%, 98%);
+    --colorBackground: hsl(0, 0%, 95%);
     --colorForeground: hsl(0, 0%, 20%);
-    --colorAppBackground: hsl(0, 100%, 100%);
+    --colorHighlight: hsl(190, 100%, 82%);
+    --colorStageBackground: hsl(0, 100%, 100%);
+
+    --shortTransition: 50ms ease-in-out all;
 }
 
 html, body {
@@ -23,13 +26,15 @@ html, body {
 }
 
 body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: var(--bodyFont);
     padding: 0;
     margin: 0;
-    width: 100%;
     background: var(--colorBackground);
     color: var(--colorForeground);
 }
@@ -39,25 +44,37 @@ h2, h3, h4, h5, h6 {
 }
 
 app {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: start;
     width: 100%;
-    height: calc(100% - (2 * var(--vertPadding)));
-    max-width: var(--maxWidth);
-    padding: var(--vertPadding) var(--horPadding);
-    background: var(--colorAppBackground);
+    height: 100%;
+    overflow-y: scroll;
+    background: var(--colorBackground);
 }
 
 stage {
     display: block;
+    width: 100%;
+    height: auto;
+    max-width: calc(var(--maxWidth) - 2 * var(--horPadding));
+    padding: var(--vertPadding) var(--horPadding);
+    background-color: var(--colorStageBackground);
 }
 
 button {
     border: 1px solid black;
     padding: var(--defaultUnit);
-    background: var(--colorBackground);
+    background: var(--colorHighlight);
+    color: var(--colorForeground);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, .2);
     border-radius: var(--borderRadius);
-    transition: 50ms ease-in-out all;
+    transition: var(--shortTransition);
+}
+
+:disabled, .disabled {
+    user-select: none;
+    opacity: .3;
 }
 
 hgroup {
@@ -82,7 +99,8 @@ controls {
     gap: var(--defaultUnit);
     justify-content: space-between;
     align-items: center;
-    margin-top: var(--defaultUnit);
+    margin: var(--defaultUnit) 0;
+    transition: var(--shortTransition);
     /* border-radius: var(--borderRadius); */
     /* border-top: 1px solid rgba(0, 0, 0, .2); */
     /* padding: 0 var(--defaultUnit); */
@@ -109,8 +127,6 @@ idea {
     justify-content: center;
     align-items: center;
     flex: 1 0 21%;
-    /* explanation below */
-    /* width: calc(50% - .5 * var(--defaultUnit)); */
     border: 1px solid black;
     padding: var(--defaultUnit);
     height: 140px;
@@ -141,7 +157,7 @@ idea:active {
 
 version {
     display: block;
-    position: fixed;
+    /* position: absolute; */
     top: 10px;
     font-size: .8em;
 }
