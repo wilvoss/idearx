@@ -1,4 +1,4 @@
-var UseDebug = document.location.href.indexOf('staging') != -1 || document.location.href.indexOf('pp') != -1;
+var UseDebug = document.location.href.indexOf('staging') != -1 || document.location.href.indexOf('pp') != -1 || document.location.href.indexOf('localhost') != -1;
 
 function announce(text) {
   console.log('◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦◦');
