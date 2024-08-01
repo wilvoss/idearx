@@ -45,6 +45,10 @@ body {
     opacity: 0;
 }
 
+h1 {
+    font-size: 2.75em;
+}
+
 h2, h3, h4, h5, h6 {
     font-weight: 500;
 }
@@ -79,6 +83,11 @@ button {
     transition: var(--shortTransition);
 }
 
+select {
+    padding: 4px calc(.5 * var(--defaultUnit));
+    width: auto;
+}
+
 :disabled, .disabled {
     user-select: none;
     opacity: .3;
@@ -86,12 +95,15 @@ button {
 
 hgroup {
     margin-bottom: var(--defaultUnit);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 hgroup:first-of-type {
     text-align: center;
-    margin-bottom: calc(2 * var(--defaultUnit));
-    border-bottom: 1px solid rgba(0, 0, 0, .2);
     padding-bottom: var(--defaultUnit);
 }
 
@@ -99,6 +111,17 @@ hgroup h1, hgroup h2, hgroup p {
     margin: 0;
     line-height: 150%;
     padding: 0;
+    max-width: 700px;
+}
+
+hgroup h2 {
+    margin-top: calc(2 * var(--defaultUnit));
+}
+
+workbench {
+    display: block;
+    border-top: 1px solid rgba(0, 0, 0, .2);
+    margin-top: var(--defaultUnit);
 }
 
 controls {
@@ -118,6 +141,15 @@ controls control {
     gap: 10px;
     justify-content: end;
     word-wrap: nowrap;
+}
+
+controls.vertical {
+    justify-content: center;
+}
+
+controls.vertical control {
+    flex-direction: column;
+    text-align: center;
 }
 
 picker {

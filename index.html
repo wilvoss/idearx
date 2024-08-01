@@ -37,36 +37,47 @@
         <hgroup>
           <h1>Idea Rx</h1>
           <p>Bring your ideas or intuitions into focus.</p>
+          <h2 v-if="currentIdeaSet.name === null">Hello and Welcome!</h2>
+          <p v-if="currentIdeaSet.name === null">If you have a bunch of options you are trying to choose from, we can help. To get started select one of our pre-made sets! In the future, you'll be able to upload your own dataset!</p>
         </hgroup>
-        <hgroup>
-          <h2>{{currentIdeaSet.name}} Exercise</h2>
-          <p>{{currentIdeaSet.description}}</p>
-        </hgroup>
-        <controls>
-          <p>{{currentIdeaSet.cta}}</p>
+
+        <controls class="vertical">
           <control>
-            <label for="methodPicker">Method:</label>
-            <select name="methodPicker" id="methodPicker" v-model="currentMethod" @change="RestartExercise()">
-              <option v-for="method in allMethods" :value="method">{{method.name}}</option>
+            <label for="ideaSetPicker">Pick a Focus</label>
+            <select name="ideaSetPicker" id="ideaSetPicker" v-model="currentIdeaSet" @change="SelectIdeaSet()" class="big">
+              <option :value="{}" disabled>Select</option>
+              <option v-for="idea in allIdeaSets" :value="idea">{{idea.name}}</option>
             </select>
+            <!-- <p>{{currentIdeaSet.description}}</p> -->
           </control>
         </controls>
-        <picker>
-          <idea :class="{selectednot: idea.isSelected}" v-for="idea in getRandomIdeasFromCurrentIdeasLevel" @click="SelectIdea(idea)">{{idea.name}}</idea>
-          <idea class="selected" v-if="selectedIdeasPath.length > 0 && selectedIdeasPath[selectedIdeasPath.length - 1].children.length === 0">{{selectedIdeasPath[selectedIdeasPath.length - 1].name}}</idea>
-        </picker>
-        <controls>
-          <button :disabled="!currentExerciseIsDirty" @click="RestartExercise()">Start Over</button>
-          <version>Version: {{appDataVersion}}</version>
-        </controls>
+        <workbench v-if="currentIdeaSet.name !== null">
+          <controls>
+            <p>{{currentIdeaSet.cta}}</p>
+            <control>
+              <label for="methodPicker">Method:</label>
+              <select name="methodPicker" id="methodPicker" v-model="currentMethod" @change="RestartExercise()">
+                <option v-for="method in allMethods" :value="method">{{method.name}}</option>
+              </select>
+            </control>
+          </controls>
+          <picker>
+            <idea :class="{selectednot: idea.isSelected}" v-for="idea in getRandomIdeasFromCurrentIdeasLevel" @click="SelectIdea(idea)">{{idea.name}}</idea>
+            <idea class="selected" v-if="selectedIdeasPath.length > 0 && selectedIdeasPath[selectedIdeasPath.length - 1].children.length === 0">{{selectedIdeasPath[selectedIdeasPath.length - 1].name}}</idea>
+          </picker>
+          <controls>
+            <button :disabled="!currentExerciseIsDirty" @click="RestartExercise()">Start Over</button>
+            <version>Version: {{appDataVersion}}</version>
+          </controls>
+        </workbench>
         <!-- <h3>Current Choices = <span v-if="selectedIdeasPath.length === 0">Nothing chosen</span><span v-for="(idea, index) in selectedIdeasPath">{{idea.name + (index === selectedIdeasPath.length-1 ? '' : ' -> ')}}</span></h3> -->
       </stage>
     </app>
     <script src="helpers/console-enhancer.js" type="text/javascript"></script>
     <script src="helpers/vue.min.js" type="text/javascript"></script>
+    <script src="models/MethodObject.js" type="text/javascript"></script>
     <script src="models/IdeaObject.js" type="text/javascript"></script>
     <script src="models/IdeaSetObject.js" type="text/javascript"></script>
-    <script src="models/MethodObject.js" type="text/javascript"></script>
     <script src="scripts/idearx-controller.js" type="text/javascript"></script>
   </body>
 </html>

@@ -14,16 +14,17 @@ var app = new Vue({
   el: '#app',
   data: {
     // app data
-    appDataVersion: '0.0.012',
+    appDataVersion: '0.0.013',
     newVersionAvailable: false,
 
     // idea data
-    currentIdeaSet: { name: 'Feelings Wheel', cta: 'What are you feeling right now?', description: 'This exercise will help you gain clarity on how you are feeling right now!', data: ['./data/feelings.json'] },
+    currentIdeaSet: new IdeaSetObject({}),
     currentIdeas: null,
     currentSelectedIdea: null,
     allMethods: Methods,
-    currentMethod: Methods[0],
-    currentMethodType: Methods[0].value,
+    allIdeaSets: IdeaSets,
+    currentMethod: new MethodObject({}),
+    currentMethodType: '',
     currentExerciseIsDirty: false,
     selectedIdeasPath: [],
 
@@ -37,11 +38,7 @@ var app = new Vue({
   methods: {
     async IntializeApp() {
       note('InitializeApp() called');
-      let json = await this.getCurrentIdeasJSON;
-      this.currentIdeas = createNestedIdeaObject(json);
-      this.currentIdeas.selectedCount = 1;
-      this.currentIdeas.isSelected = true;
-      this.currentSelectedIdea = this.currentIdeas;
+      this.SelectIdeaSet();
     },
 
     SelectIdea(_idea) {
@@ -66,6 +63,19 @@ var app = new Vue({
         log('"' + _idea.name + '"' + ' is now this.currentSelectedIdea');
       }
       this.currentExerciseIsDirty = true;
+    },
+
+    async SelectIdeaSet(_set) {
+      this.currentIdeaSet = _set === undefined ? this.currentIdeaSet : _set;
+      if (this.currentIdeaSet.data !== null) {
+        let json = await this.getCurrentIdeasJSON;
+        this.currentIdeas = createNestedIdeaObject(json);
+        this.currentIdeas.selectedCount = 1;
+        this.currentIdeas.isSelected = true;
+        this.currentSelectedIdea = this.currentIdeas;
+        this.currentMethod = this.currentIdeaSet.method;
+        this.currentMethodType = this.currentIdeaSet.method.value;
+      }
     },
 
     RestartExercise() {
@@ -96,16 +106,17 @@ var app = new Vue({
 
   computed: {
     getCurrentIdeasJSON: async function () {
-      let allIdeas = [];
+      note('getCurrentIdeasJSON() called');
+      let idea = [];
       let fetchPromises = this.currentIdeaSet.data.map((url) => fetch(url).then((response) => response.json()));
 
       try {
         let dataArrays = await Promise.all(fetchPromises);
-        allIdeas = [].concat(...dataArrays);
+        idea = [].concat(...dataArrays);
       } catch (error) {
         error(error);
       }
-      return allIdeas[0];
+      return idea[0];
     },
     getRandomIdeasFromCurrentIdeasLevel: function () {
       note('getRandomIdeasFromCurrentIdeasLevel() called');
