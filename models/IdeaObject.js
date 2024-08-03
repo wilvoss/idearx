@@ -2,7 +2,7 @@ class IdeaObject {
   constructor(spec) {
     this.name = spec.name === undefined ? 'Idea' : spec.name;
     this.type = spec.type === undefined ? 'binary' : spec.type;
-    this.description = spec.description === undefined ? 'Description' : spec.description;
+    this.description = spec.description === undefined ? null : spec.description;
     this.seen = spec.seen === undefined ? false : spec.seen;
     this.showing = spec.showing === undefined ? false : spec.showing;
     this.isSelected = spec.isSelected === undefined ? false : spec.isSelected;
@@ -22,6 +22,11 @@ function createNestedIdeaObject(_node, _parent = null) {
   } else if (ideaObject.parent !== undefined && ideaObject.parent !== null && ideaObject.parent.hsl !== undefined) {
     ideaObject.hsl = ideaObject.parent.hsl;
   }
+
+  if (_node.d !== undefined) {
+    ideaObject.description = _node.d;
+  }
+
   ideaObject.children = _node.c === undefined ? [] : _node.c.map((child) => createNestedIdeaObject(child, ideaObject));
   return ideaObject;
 }

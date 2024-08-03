@@ -35,14 +35,13 @@
       <modal :class="{show: visualStateShowModal}"></modal>
       <stage>
         <controls>
-          <button :disabled="!currentExerciseIsDirty" @click="RestartExercise()">Start Over</button>
           <version>Version: {{appDataVersion}}</version>
         </controls>
         <hgroup>
           <h1>Idea Rx</h1>
           <p>Bring your ideas or intuitions into focus.</p>
-          <h2 v-if="currentIdeaSet.name === null">Hello and Welcome!</h2>
-          <p v-if="currentIdeaSet.name === null">If you have a bunch of options you are trying to choose from, we can help. To get started select one of our pre-made sets! In the future, you'll be able to upload your own dataset!</p>
+          <!-- <h2 v-if="currentIdeaSet.name === null">Hello and Welcome!</h2>
+          <p v-if="currentIdeaSet.name === null">If you have a bunch of options you are trying to choose from, we can help. To get started select one of our pre-made sets! In the future, you'll be able to upload your own dataset!</p> -->
         </hgroup>
 
         <controls class="vertical">
@@ -52,22 +51,23 @@
               <option :value="{}" disabled>Select</option>
               <option v-for="idea in allIdeaSets" :key="idea.type" :value="idea">{{idea.name}}</option>
             </select>
-            <p>{{currentIdeaSet.description}}</p>
+            <!-- <p>{{currentIdeaSet.description}}</p> -->
           </control>
         </controls>
         <workbench v-if="currentIdeaSet.name !== null">
           <controls>
-            <p>{{currentIdeaSet.cta}}</p>
             <control>
-              <label for="methodPicker">Method:</label>
-              <select name="methodPicker" id="methodPicker" v-model="currentMethod" @change="RestartExercise()">
+              <!-- <label for="methodPicker">Method:</label> -->
+              <select :disabled="currentIdeaSet.locked" name="methodPicker" id="methodPicker" v-model="currentMethod" @change="RestartExercise()">
                 <option v-for="method in allMethods" :key="method.value" :value="method">{{method.name}}</option>
               </select>
             </control>
+            <button :disabled="!currentExerciseIsDirty" @click="RestartExercise()">Start Over</button>
           </controls>
+          <p>{{currentIdeaSet.cta}}</p>
           <ideas>
-            <idea :style="{backgroundColor: 'hsla(' + idea.hsl + ', .3)' }" :class="{selectednot: idea.isSelected}" v-for="idea in getIdeasFromCurrentLevelBasedOnMethod" @click="SelectIdea(idea)">{{idea.name}}</idea>
-            <idea :style="{backgroundColor: 'hsla(' + selectedIdeasPath[selectedIdeasPath.length - 1].hsl + ', .3)' }" class="selected" v-if="selectedIdeasPath.length > 0 && selectedIdeasPath[selectedIdeasPath.length - 1].children.length === 0">{{selectedIdeasPath[selectedIdeasPath.length - 1].name}}</idea>
+            <idea :style="{backgroundColor: 'hsla(' + idea.hsl + ', .3)' }" :class="{selectednot: idea.isSelected}" v-for="idea in getIdeasFromCurrentLevelBasedOnMethod" @click="SelectIdea(idea)"><tooltip v-if="idea.description !== null">{{idea.description}}</tooltip>{{idea.name}}</idea>
+            <idea :style="{backgroundColor: 'hsla(' + getLastSelectedIdea.hsl + ', .3)' }" class="selected" v-if="selectedIdeasPath.length > 0 && getLastSelectedIdea.children.length === 0"><tooltip v-if="getLastSelectedIdea.description !== null">{{getLastSelectedIdea.description}}</tooltip>{{getLastSelectedIdea.name}}</idea>
           </ideas>
         </workbench>
       </stage>

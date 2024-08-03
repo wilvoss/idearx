@@ -8,17 +8,19 @@ class IdeaSetObject {
     this.description = spec.description === undefined ? '' : spec.description;
     this.data = spec.data === undefined ? null : spec.data;
     this.method = spec.method === undefined ? Methods[0] : spec.method;
+    this.locked = spec.locked === undefined ? false : spec.locked;
   }
 }
 
 var IdeaSets = [
   new IdeaSetObject({
-    name: 'Feelings Wheel Exercise',
+    name: 'Feelings Wheel',
     value: 'feelings',
     method: Methods[0],
     cta: 'What are you feeling right now?',
-    description: 'This exercise will help you clarify feelings!',
+    description: 'This feelings wheel is based on the Junto Emotion Wheel.',
     data: ['./data/feelings.json'],
+    locked: true,
   }),
   new IdeaSetObject({
     name: 'Lorum picker',

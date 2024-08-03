@@ -14,7 +14,7 @@ var app = new Vue({
   el: '#app',
   data: {
     // app data
-    appDataVersion: '0.0.015',
+    appDataVersion: '0.0.016',
     newVersionAvailable: false,
 
     // idea data
@@ -192,6 +192,9 @@ var app = new Vue({
       }
 
       return filteredObjects;
+    },
+    getLastSelectedIdea: function () {
+      return this.selectedIdeasPath[this.selectedIdeasPath.length - 1];
     },
     getAllSelectedIdeasRecursively: function () {
       note('getAllSelectedIdeasRecursively() called');

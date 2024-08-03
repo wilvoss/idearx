@@ -4,7 +4,7 @@
     --maxWidth: 1024px;
     --defaultUnit: 20px;
     --largeUnit: calc(var(--defaultUnit) * 4);
-    --borderRadius: 5px;
+    --borderRadius: 25px;
     --bodyFont: "Jura", sans-serif;
 
     --horMargin: clamp(var(--defaultUnit), 5vw, var(--largeUnit));
@@ -59,7 +59,7 @@ app {
     width: 100%;
     height: 100%;
     padding: 0;
-    background: var(--colorBackground);
+    background: var(--colorStageBackground);
 }
 
 stage {
@@ -76,18 +76,26 @@ button {
     border: 1px solid black;
     cursor: pointer;
     padding: calc(.5 * var(--defaultUnit)) var(--defaultUnit);
-    background: var(--colorStageBackground);
+    background-color: var(--colorBackground);
     color: var(--colorForeground);
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, .2);
     border-radius: var(--borderRadius);
     transition: var(--shortTransition);
 }
 
 select {
-    background: var(--colorBackground);
-    padding: 4px calc(.5 * var(--defaultUnit));
+    display: flex;
+    background-color: var(--colorBackground);
+    background-image: url(../images/chevron-down.svg);
+    background-position: right 13px center;
+    background-repeat: no-repeat;
+    background-size: 15px;
+    padding: calc(.5 * var(--defaultUnit)) calc(2.5 * var(--defaultUnit)) calc(.5 * var(--defaultUnit)) calc(1 * var(--defaultUnit));
     width: auto;
+    outline: none;
+    border: 1px solid var(--colorForeground);
+    border-radius: var(--borderRadius);
 }
+
 
 :disabled, .disabled {
     user-select: none;
@@ -117,14 +125,21 @@ hgroup h1, hgroup h2, hgroup p {
     max-width: 700px;
 }
 
-hgroup h1, hgroup h2 {
+hgroup h2 {
     margin-top: calc(2 * var(--defaultUnit));
 }
 
 workbench {
-    display: block;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
     border-top: 1px solid rgba(0, 0, 0, .2);
-    margin-top: var(--defaultUnit);
+    margin-top: calc(2 * var(--defaultUnit));
+}
+
+workbench p {
+    width: 100%;
+    text-align: center;
 }
 
 controls {
@@ -132,7 +147,7 @@ controls {
     gap: var(--defaultUnit);
     justify-content: space-between;
     align-items: baseline;
-    margin: var(--defaultUnit) 0;
+    margin-top: var(--defaultUnit);
     transition: var(--shortTransition);
 }
 
@@ -170,22 +185,21 @@ idea {
     font-size: 1.25em;
     align-items: start;
     border: 1px solid black;
-    padding: var(--defaultUnit);
+    padding: calc(.75 * var(--defaultUnit)) var(--defaultUnit);
     background: var(--colorBackground);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, .2);
     transition: 50ms ease-in-out all;
-    border-radius: var(--borderRadius);
+    /* border-radius: var(--borderRadius); */
     font-weight: 800;
     background: var(--colorStageBackground);
     user-select: none;
     -webkit-user-select: none;
+    transform: translateY(0px);
 }
 
 idea.selected, idea.selected:hover {
-    /* border-color: green; */
-    /* background: rgba(0, 255, 0, .1); */
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0);
-    transform: translateY(0px);
+    transform: translateY(-1px);
     cursor: default;
 }
 
@@ -204,6 +218,44 @@ idea:active {
     box-shadow: 0px 0px 0px rgba(0, 0, 0, .1);
     transform: translateY(0px);
 
+}
+
+tooltip {
+    display: block;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+    opacity: 0;
+    position: absolute;
+    width: calc(100% - 2.5 * var(--defaultUnit));
+    font-size: .65em;
+    padding: calc(.5 * var(--defaultUnit)) calc(.8 * var(--defaultUnit));
+    transform: translate(0px, calc(-.5 * var(--defaultUnit) - 46px));
+    background: var(--colorForeground);
+    color: var(--colorBackground);
+    bottom: -2%;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, .3);
+    border-radius: calc(.25 * var(--borderRadius));
+    transition: 200ms ease-in-out all;
+    transition-delay: 0ms;
+}
+
+tooltip:after {
+    content: " ";
+    position: absolute;
+    top: 100%;
+    /* At the bottom of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 10px;
+    border-style: solid;
+    border-color: var(--colorForeground) transparent transparent transparent;
+}
+
+idea:hover tooltip {
+    opacity: .9;
+    transition-delay: 150ms;
+    transform: translateY(calc(-.5 * var(--defaultUnit) - 57px));
 }
 
 version {

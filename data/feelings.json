@@ -3,6 +3,7 @@
   "c": [
     {
       "n": "Anger",
+      "d": "A strong feeling of displeasure or hostility.",
       "c": [
         { "n": "Hurt", "c": [{ "n": "Devastated" }, { "n": "Embarrassed" }] },
         { "n": "Threatened", "c": [{ "n": "Jealous" }, { "n": "Insecure" }] },
@@ -17,6 +18,7 @@
     },
     {
       "n": "Disgust",
+      "d": "A feeling of profound dislike or annoyance.",
       "c": [
         { "n": "Disapproval", "c": [{ "n": "Judgemental" }, { "n": "Loathing" }] },
         { "n": "Disappointed", "c": [{ "n": "Repugnant" }, { "n": "Revolted" }] },
@@ -27,6 +29,7 @@
     },
     {
       "n": "Sad",
+      "d": "A feeling sorrow or unhappiness.",
       "c": [
         { "n": "Guilty", "c": [{ "n": "Remorseful" }, { "n": "Ashamed" }] },
         { "n": "Abandoned", "c": [{ "n": "Ignored" }, { "n": "Victimized" }] },
@@ -39,6 +42,7 @@
     },
     {
       "n": "Happy",
+      "d": "A feeling of pleasure, satisfaction, or joy.",
       "c": [
         { "n": "Optimistic", "c": [{ "n": "Inspired" }, { "n": "Open" }] },
         { "n": "Intimate", "c": [{ "n": "Playful" }, { "n": "Sensitive" }] },
@@ -53,6 +57,7 @@
     },
     {
       "n": "Surprise",
+      "d": "A feeling wonder, astonishment, or amazement.",
       "c": [
         { "n": "Startled", "c": [{ "n": "Shocked" }, { "n": "Dismayed" }] },
         { "n": "Confused", "c": [{ "n": "Disillusioned" }, { "n": "Perplexed" }] },
@@ -63,6 +68,7 @@
     },
     {
       "n": "Fear",
+      "d": "A feeling of disquiet or apprehension.",
       "c": [
         { "n": "Humiliated", "c": [{ "n": "Ridiculed" }, { "n": "Disrespected" }] },
         { "n": "Rejected", "c": [{ "n": "Alienated" }, { "n": "Inadequate" }] },
