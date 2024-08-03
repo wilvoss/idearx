@@ -1,1 +1,77 @@
-{"n": "Feelings Wheel", "c": [{"n":"Anger","c":[{"n":"Hurt","c":[{"n":"Devastated"},{"n":"Embarrassed"}]},{"n":"Threatened","c":[{"n":"Jealous"},{"n":"Insecure"}]},{"n":"Hateful","c":[{"n":"Violated"},{"n":"Resentful"}]},{"n":"Mad","c":[{"n":"Enraged"},{"n":"Furious"}]},{"n":"Aggressive","c":[{"n":"Provoked"},{"n":"Hostile"}]},{"n":"Frutrated","c":[{"n":"Infuriated"},{"n":"Irritated"}]},{"n":"Distant","c":[{"n":"Withdrawn"},{"n":"Suspicious"}]},{"n":"Critical","c":[{"n":"Skeptical"},{"n":"Sarcastic"}]}]},{"n":"Disgust","c":[{"n":"Disapproval","c":[{"n":"Judgemental"},{"n":"Loathing"}]},{"n":"Disappointed","c":[{"n":"Repugnant"},{"n":"Revolted"}]},{"n":"Awful","c":[{"n":"Revulsion"},{"n":"Detestable"}]},{"n":"Avoidance","c":[{"n":"Aversion"},{"n":"Hesitant"}]}]},{"n":"Sad","c":[{"n":"Guilty","c":[{"n":"Remorseful"},{"n":"Ashamed"}]},{"n":"Abandoned","c":[{"n":"Ignored"},{"n":"Victimized"}]},{"n":"Despair","c":[{"n":"Powerless"},{"n":"Vulnerable"}]},{"n":"Depressed","c":[{"n":"Inferior"},{"n":"Empty"}]},{"n":"Lonely","c":[{"n":"Abandoned"},{"n":"Isolated"}]},{"n":"Bored","c":[{"n":"Apathetic"},{"n":"Indifferent"}]}]},{"n":"Happy","c":[{"n":"Optimistic","c":[{"n":"Inspired"},{"n":"Open"}]},{"n":"Intimate","c":[{"n":"Playful"},{"n":"Sensitive"}]},{"n":"Peaceful","c":[{"n":"Hopeful"},{"n":"Loving"}]},{"n":"Powerful","c":[{"n":"Provocative"},{"n":"Courgageous"}]},{"n":"Accepted","c":[{"n":"Fulfilled"},{"n":"Respected"}]},{"n":"Proud","c":[{"n":"Confident"},{"n":"Important"}]},{"n":"Interested","c":[{"n":"Inquisitive"},{"n":"Amused"}]},{"n":"Joyful","c":[{"n":"Liberated"},{"n":"Ecstatic"}]}]},{"n":"Surprise","c":[{"n":"Startled","c":[{"n":"Shocked"},{"n":"Dismayed"}]},{"n":"Confused","c":[{"n":"Disillusioned"},{"n":"Perplexed"}]},{"n":"Amazed","c":[{"n":"Astonished"},{"n":"Awe"}]},{"n":"Excited","c":[{"n":"Eager"},{"n":"Energetic"}]}]},{"n":"Fear","c":[{"n":"Humiliated","c":[{"n":"Ridiculed"},{"n":"Disrespected"}]},{"n":"Rejected","c":[{"n":"Alienated"},{"n":"Inadequate"}]},{"n":"Sumissive","c":[{"n":"Insignificant"},{"n":"Worthless"}]},{"n":"Insecure","c":[{"n":"Inferior"},{"n":"Inadequate"}]},{"n":"Anxious","c":[{"n":"Worried"},{"n":"Overwhelmed"}]},{"n":"Scared","c":[{"n":"Frightened"},{"n":"Terrified"}]}]}]}
+{
+  "n": "Feelings Wheel",
+  "c": [
+    {
+      "n": "Anger",
+      "c": [
+        { "n": "Hurt", "c": [{ "n": "Devastated" }, { "n": "Embarrassed" }] },
+        { "n": "Threatened", "c": [{ "n": "Jealous" }, { "n": "Insecure" }] },
+        { "n": "Hateful", "c": [{ "n": "Violated" }, { "n": "Resentful" }] },
+        { "n": "Mad", "c": [{ "n": "Enraged" }, { "n": "Furious" }] },
+        { "n": "Aggressive", "c": [{ "n": "Provoked" }, { "n": "Hostile" }] },
+        { "n": "Frutrated", "c": [{ "n": "Infuriated" }, { "n": "Irritated" }] },
+        { "n": "Distant", "c": [{ "n": "Withdrawn" }, { "n": "Suspicious" }] },
+        { "n": "Critical", "c": [{ "n": "Skeptical" }, { "n": "Sarcastic" }] }
+      ],
+      "hsl": "0,100%,50%"
+    },
+    {
+      "n": "Disgust",
+      "c": [
+        { "n": "Disapproval", "c": [{ "n": "Judgemental" }, { "n": "Loathing" }] },
+        { "n": "Disappointed", "c": [{ "n": "Repugnant" }, { "n": "Revolted" }] },
+        { "n": "Awful", "c": [{ "n": "Revulsion" }, { "n": "Detestable" }] },
+        { "n": "Avoidance", "c": [{ "n": "Aversion" }, { "n": "Hesitant" }] }
+      ],
+      "hsl": "265,100%,50%"
+    },
+    {
+      "n": "Sad",
+      "c": [
+        { "n": "Guilty", "c": [{ "n": "Remorseful" }, { "n": "Ashamed" }] },
+        { "n": "Abandoned", "c": [{ "n": "Ignored" }, { "n": "Victimized" }] },
+        { "n": "Despair", "c": [{ "n": "Powerless" }, { "n": "Vulnerable" }] },
+        { "n": "Depressed", "c": [{ "n": "Inferior" }, { "n": "Empty" }] },
+        { "n": "Lonely", "c": [{ "n": "Abandoned" }, { "n": "Isolated" }] },
+        { "n": "Bored", "c": [{ "n": "Apathetic" }, { "n": "Indifferent" }] }
+      ],
+      "hsl": "200,100%,50%"
+    },
+    {
+      "n": "Happy",
+      "c": [
+        { "n": "Optimistic", "c": [{ "n": "Inspired" }, { "n": "Open" }] },
+        { "n": "Intimate", "c": [{ "n": "Playful" }, { "n": "Sensitive" }] },
+        { "n": "Peaceful", "c": [{ "n": "Hopeful" }, { "n": "Loving" }] },
+        { "n": "Powerful", "c": [{ "n": "Provocative" }, { "n": "Courgageous" }] },
+        { "n": "Accepted", "c": [{ "n": "Fulfilled" }, { "n": "Respected" }] },
+        { "n": "Proud", "c": [{ "n": "Confident" }, { "n": "Important" }] },
+        { "n": "Interested", "c": [{ "n": "Inquisitive" }, { "n": "Amused" }] },
+        { "n": "Joyful", "c": [{ "n": "Liberated" }, { "n": "Ecstatic" }] }
+      ],
+      "hsl": "65,100%,50%"
+    },
+    {
+      "n": "Surprise",
+      "c": [
+        { "n": "Startled", "c": [{ "n": "Shocked" }, { "n": "Dismayed" }] },
+        { "n": "Confused", "c": [{ "n": "Disillusioned" }, { "n": "Perplexed" }] },
+        { "n": "Amazed", "c": [{ "n": "Astonished" }, { "n": "Awe" }] },
+        { "n": "Excited", "c": [{ "n": "Eager" }, { "n": "Energetic" }] }
+      ],
+      "hsl": "43,100%,50%"
+    },
+    {
+      "n": "Fear",
+      "c": [
+        { "n": "Humiliated", "c": [{ "n": "Ridiculed" }, { "n": "Disrespected" }] },
+        { "n": "Rejected", "c": [{ "n": "Alienated" }, { "n": "Inadequate" }] },
+        { "n": "Sumissive", "c": [{ "n": "Insignificant" }, { "n": "Worthless" }] },
+        { "n": "Insecure", "c": [{ "n": "Inferior" }, { "n": "Inadequate" }] },
+        { "n": "Anxious", "c": [{ "n": "Worried" }, { "n": "Overwhelmed" }] },
+        { "n": "Scared", "c": [{ "n": "Frightened" }, { "n": "Terrified" }] }
+      ],
+      "hsl": "120,100%,50%"
+    }
+  ]
+}

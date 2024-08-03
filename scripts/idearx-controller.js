@@ -14,7 +14,7 @@ var app = new Vue({
   el: '#app',
   data: {
     // app data
-    appDataVersion: '0.0.014',
+    appDataVersion: '0.0.015',
     newVersionAvailable: false,
 
     // idea data
@@ -38,7 +38,6 @@ var app = new Vue({
   methods: {
     async IntializeApp() {
       note('InitializeApp() called');
-      this.SelectIdeaSet();
     },
 
     SelectIdea(_idea) {
@@ -60,21 +59,18 @@ var app = new Vue({
       if (count === 0 || this.currentMethod.value !== 'binary') {
         this.currentSelectedIdea = _idea;
         this.selectedIdeasPath.push(_idea);
-        log('"' + _idea.name + '"' + ' is now this.currentSelectedIdea');
       }
       this.currentExerciseIsDirty = true;
     },
 
     async SelectIdeaSet(_set) {
+      note('SelectIdeaSet() called');
       this.currentIdeaSet = _set === undefined ? this.currentIdeaSet : _set;
       if (this.currentIdeaSet.data !== null) {
         let json = await this.getCurrentIdeasJSON;
         this.currentIdeas = createNestedIdeaObject(json);
-        this.currentIdeas.selectedCount = 1;
-        this.currentIdeas.isSelected = true;
-        this.currentSelectedIdea = this.currentIdeas;
         this.currentMethod = this.currentIdeaSet.method;
-        this.currentMethodType = this.currentIdeaSet.method.value;
+        this.RestartExercise();
       }
     },
 
@@ -82,20 +78,43 @@ var app = new Vue({
       note('RestartExercise() called');
       this.selectedIdeasPath = [];
       this.currentExerciseIsDirty = false;
-
-      this.ResetNodeChildren(this.currentIdeas);
       this.currentSelectedIdea = this.currentIdeas;
+      this.currentMethodType = this.currentMethod.value;
+      this.ResetNode(this.currentIdeas);
+      this.currentIdeas.isSelected = true;
+      this.currentIdeas.seen = true;
+
+      highlight('selectedIdeasPath = ' + this.selectedIdeasPath);
+      highlight('currentExerciseIsDirty = ' + this.currentExerciseIsDirty);
+      highlight('currentSelectedIdea = ' + this.currentSelectedIdea.name);
+      highlight('currentMethodType = ' + this.currentMethodType);
+      highlight('currentIdeas.isSelected = ' + this.currentIdeas.isSelected);
     },
 
-    ResetNodeChildren(_node) {
+    ResetNode(_node) {
       _node.isSelected = false;
       _node.seen = false;
+      _node.showing = false;
 
       if (_node.children && _node.children.length > 0) {
         _node.children.forEach((child) => {
-          this.ResetNodeChildren(child);
+          this.ResetNode(child);
         });
       }
+    },
+
+    GetSelectedIdeas(_ideaObject) {
+      note('ResetNode("' + _ideaObject.name + '") called');
+      if (!_ideaObject.isSelected) {
+        return null;
+      }
+
+      const filteredChildren = _ideaObject.children.map(this.GetSelectedIdeas).filter((child) => child !== null);
+
+      return {
+        ..._ideaObject,
+        children: filteredChildren,
+      };
     },
   },
 
@@ -118,7 +137,7 @@ var app = new Vue({
       }
       return idea[0];
     },
-    getRandomIdeasFromCurrentIdeasLevel: function () {
+    getIdeasFromCurrentLevelBasedOnMethod: function () {
       note('getRandomIdeasFromCurrentIdeasLevel() called');
       if (this.currentIdeas === null) return [];
       let parent = this.currentSelectedIdea.parent === null ? this.currentSelectedIdea : this.currentSelectedIdea.parent;
@@ -128,39 +147,55 @@ var app = new Vue({
         children = this.currentSelectedIdea.children;
       }
       const selectedChild = children.filter((obj) => obj.isSelected).length === 1 ? children.filter((obj) => obj.isSelected)[0] : null;
+      let filteredObjects = [];
 
-      const filteredObjects = children.filter((obj) => !obj.seen && !obj.isSelected);
-      if (this.currentMethod.value === 'binary') {
-        for (let i = filteredObjects.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [filteredObjects[i], filteredObjects[j]] = [filteredObjects[j], filteredObjects[i]];
-        }
-        if (selectedChild === null) {
-          let ideas = filteredObjects.slice(0, 2);
-          ideas.forEach((idea) => {
-            idea.showing = true;
+      switch (this.currentMethod.value) {
+        case 'binary':
+          filteredObjects = children.filter((obj) => !obj.seen && !obj.isSelected);
+          for (let i = filteredObjects.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [filteredObjects[i], filteredObjects[j]] = [filteredObjects[j], filteredObjects[i]];
+          }
+          if (selectedChild === null) {
+            let ideas = filteredObjects.slice(0, 2);
+            ideas.forEach((idea) => {
+              idea.showing = true;
+            });
+            return ideas;
+          } else {
+            const randomObject = filteredObjects.slice(0, 1);
+            randomObject[0].showing = true;
+            const finalArray = [randomObject[0], selectedChild];
+            finalArray.sort(() => Math.random() - 0.5);
+
+            filteredObjects = finalArray;
+          }
+          break;
+
+        case 'full':
+          filteredObjects = children.filter((obj) => !obj.seen && !obj.isSelected);
+          filteredObjects.sort((a, b) => {
+            if (a.name < b.name) {
+              return -1;
+            }
+            if (a.name > b.name) {
+              return 1;
+            }
+            return 0;
           });
-          return ideas;
-        } else {
-          const randomObject = filteredObjects.slice(0, 1);
-          randomObject[0].showing = true;
-          const finalArray = [randomObject[0], selectedChild];
-          finalArray.sort(() => Math.random() - 0.5);
+          break;
 
-          return finalArray;
-        }
-      } else if (this.currentMethod.value !== 'binary') {
-        filteredObjects.sort((a, b) => {
-          if (a.name < b.name) {
-            return -1;
-          }
-          if (a.name > b.name) {
-            return 1;
-          }
-          return 0;
-        });
-        return filteredObjects;
+        case 'merge':
+
+        default:
+          break;
       }
+
+      return filteredObjects;
+    },
+    getAllSelectedIdeasRecursively: function () {
+      note('getAllSelectedIdeasRecursively() called');
+      return this.GetSelectedIdeas(this.currentIdeas);
     },
   },
 });

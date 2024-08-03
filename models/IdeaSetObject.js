@@ -21,11 +21,19 @@ var IdeaSets = [
     data: ['./data/feelings.json'],
   }),
   new IdeaSetObject({
-    name: 'Test',
-    value: 'test',
+    name: 'Lorum picker',
+    value: 'lorum',
     method: Methods[1],
-    cta: 'Which letter is better?',
+    cta: 'Which latin text is better?',
     description: 'This is a test!',
     data: ['./data/test.json'],
+  }),
+  new IdeaSetObject({
+    name: 'LETTERS!',
+    value: 'letter',
+    method: Methods[0],
+    cta: 'Which letter is better?',
+    description: 'This is a test!',
+    data: ['./data/test2.json'],
   }),
 ];

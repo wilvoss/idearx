@@ -36,7 +36,7 @@ body {
     margin: 0;
     background: var(--colorBackground);
     color: var(--colorForeground);
-  }
+}
 
 
 [v-cloak] {
@@ -65,17 +65,18 @@ app {
 stage {
     display: block;
     width: 100%;
-    height: 100%;
-    min-height: calc(100vh - 2 * var(--vertPadding));
+    /* height: 100%; */
+    min-height: calc(100vh - var(--vertPadding));
     max-width: calc(var(--maxWidth) - 2 * var(--horPadding));
-    padding: var(--vertPadding) var(--horPadding);
+    padding: 0 var(--horPadding) var(--vertPadding);
     background: var(--colorStageBackground);
 }
 
 button {
     border: 1px solid black;
-    padding: var(--defaultUnit);
-    background: var(--colorHighlight);
+    cursor: pointer;
+    padding: calc(.5 * var(--defaultUnit)) var(--defaultUnit);
+    background: var(--colorStageBackground);
     color: var(--colorForeground);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, .2);
     border-radius: var(--borderRadius);
@@ -91,6 +92,8 @@ select {
 :disabled, .disabled {
     user-select: none;
     opacity: .3;
+    cursor: default;
+    box-shadow: none;
 }
 
 hgroup {
@@ -128,35 +131,35 @@ controls {
     display: flex;
     gap: var(--defaultUnit);
     justify-content: space-between;
-    align-items: center;
+    align-items: baseline;
     margin: var(--defaultUnit) 0;
     transition: var(--shortTransition);
-    /* border-radius: var(--borderRadius); */
-    /* border-top: 1px solid rgba(0, 0, 0, .2); */
-    /* padding: 0 var(--defaultUnit); */
 }
 
 controls control {
     display: flex;
     gap: 10px;
     justify-content: end;
+    align-items: baseline;
     word-wrap: nowrap;
 }
 
 controls.vertical {
     justify-content: center;
+    align-items: center;
 }
 
 controls.vertical control {
     flex-direction: column;
     text-align: center;
+    align-items: center;
 }
 
-picker {
-    display: flex;
-    flex-wrap: wrap;
+ideas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: calc(.5 * var(--defaultUnit));
     width: 100%;
-    gap: var(--defaultUnit);
     margin: 0;
 }
 
@@ -165,24 +168,31 @@ idea {
     cursor: pointer;
     justify-content: center;
     font-size: 1.25em;
-    align-items: center;
-    flex: 1 0 10%;
+    align-items: start;
     border: 1px solid black;
     padding: var(--defaultUnit);
-    height: 140px;
     background: var(--colorBackground);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, .2);
     transition: 50ms ease-in-out all;
     border-radius: var(--borderRadius);
     font-weight: 800;
     background: var(--colorStageBackground);
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 idea.selected, idea.selected:hover {
-    border-color: green;
-    background: rgba(0, 255, 0, .1);
+    /* border-color: green; */
+    /* background: rgba(0, 255, 0, .1); */
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0);
     transform: translateY(0px);
+    cursor: default;
+}
+
+idea.selected:before {
+    display: inline-block;
+    content: '✔';
+    padding-right: calc(.5 * var(--defaultUnit));
 }
 
 idea:hover {

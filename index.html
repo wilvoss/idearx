@@ -34,6 +34,10 @@
       <notification :class="{show: visualStateShowNofication}"></notification>
       <modal :class="{show: visualStateShowModal}"></modal>
       <stage>
+        <controls>
+          <button :disabled="!currentExerciseIsDirty" @click="RestartExercise()">Start Over</button>
+          <version>Version: {{appDataVersion}}</version>
+        </controls>
         <hgroup>
           <h1>Idea Rx</h1>
           <p>Bring your ideas or intuitions into focus.</p>
@@ -46,9 +50,9 @@
             <label for="ideaSetPicker">Pick a Focus</label>
             <select name="ideaSetPicker" id="ideaSetPicker" v-model="currentIdeaSet" @change="SelectIdeaSet()" class="big">
               <option :value="{}" disabled>Select</option>
-              <option v-for="idea in allIdeaSets" :value="idea">{{idea.name}}</option>
+              <option v-for="idea in allIdeaSets" :key="idea.type" :value="idea">{{idea.name}}</option>
             </select>
-            <!-- <p>{{currentIdeaSet.description}}</p> -->
+            <p>{{currentIdeaSet.description}}</p>
           </control>
         </controls>
         <workbench v-if="currentIdeaSet.name !== null">
@@ -57,20 +61,15 @@
             <control>
               <label for="methodPicker">Method:</label>
               <select name="methodPicker" id="methodPicker" v-model="currentMethod" @change="RestartExercise()">
-                <option v-for="method in allMethods" :value="method">{{method.name}}</option>
+                <option v-for="method in allMethods" :key="method.value" :value="method">{{method.name}}</option>
               </select>
             </control>
           </controls>
-          <picker>
-            <idea :class="{selectednot: idea.isSelected}" v-for="idea in getRandomIdeasFromCurrentIdeasLevel" @click="SelectIdea(idea)">{{idea.name}}</idea>
-            <idea class="selected" v-if="selectedIdeasPath.length > 0 && selectedIdeasPath[selectedIdeasPath.length - 1].children.length === 0">{{selectedIdeasPath[selectedIdeasPath.length - 1].name}}</idea>
-          </picker>
-          <controls>
-            <button :disabled="!currentExerciseIsDirty" @click="RestartExercise()">Start Over</button>
-            <version>Version: {{appDataVersion}}</version>
-          </controls>
+          <ideas>
+            <idea :style="{backgroundColor: 'hsla(' + idea.hsl + ', .3)' }" :class="{selectednot: idea.isSelected}" v-for="idea in getIdeasFromCurrentLevelBasedOnMethod" @click="SelectIdea(idea)">{{idea.name}}</idea>
+            <idea :style="{backgroundColor: 'hsla(' + selectedIdeasPath[selectedIdeasPath.length - 1].hsl + ', .3)' }" class="selected" v-if="selectedIdeasPath.length > 0 && selectedIdeasPath[selectedIdeasPath.length - 1].children.length === 0">{{selectedIdeasPath[selectedIdeasPath.length - 1].name}}</idea>
+          </ideas>
         </workbench>
-        <!-- <h3>Current Choices = <span v-if="selectedIdeasPath.length === 0">Nothing chosen</span><span v-for="(idea, index) in selectedIdeasPath">{{idea.name + (index === selectedIdeasPath.length-1 ? '' : ' -> ')}}</span></h3> -->
       </stage>
     </app>
     <script src="helpers/console-enhancer.js" type="text/javascript"></script>
