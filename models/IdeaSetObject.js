@@ -3,11 +3,13 @@
 class IdeaSetObject {
   constructor(spec) {
     this.name = spec.name === undefined ? null : spec.name;
+    // binding a select element with vue.js requires a "value" property
     this.value = spec.value === undefined ? null : spec.value;
     this.cta = spec.cta === undefined ? null : spec.cta;
     this.description = spec.description === undefined ? '' : spec.description;
     this.data = spec.data === undefined ? null : spec.data;
     this.method = spec.method === undefined ? Methods[0] : spec.method;
+    // this.locked is used to disabled the Method picker in the UI
     this.locked = spec.locked === undefined ? false : spec.locked;
   }
 }

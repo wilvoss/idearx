@@ -12,7 +12,7 @@ var app = new Vue({
   el: '#app',
   data: {
     // app data
-    appDataVersion: '0.0.017',
+    appDataVersion: '0.0.018',
     newVersionAvailable: false,
 
     // idea data
@@ -25,33 +25,48 @@ var app = new Vue({
     currentMethodType: '',
     currentExerciseIsDirty: false,
     selectedIdeasPath: [],
-    allSelectedIdeas: [],
-    allDeSelectedIdeas: [],
+    ideasQueueForUndo: [], // array of all ideas that were "selected" by the user
+    ideasQueueForRedo: [], // array of all ideas that were "deselected" by the user with the "Undo" feature
 
     visualStateShowNofication: false,
     visualStateShowModal: false,
+    visualStateLastEvent: null,
   },
 
   methods: {
-    async IntializeApp() {
-      note('InitializeApp() called');
-    },
+    // === DATA MANIPULATION ===
 
-    // data manipulation
+    /**
+     * Reads the data source (usually .json, but can be .csv or .js in the future)
+     * Generates the entire IdeaObject tree that is used for all data manipulation
+     * "Restarts" the exercise by clearing out any stale data
+     * @param {IdeaSetObject} _set
+     */
     async SelectIdeaSet(_set) {
       note('SelectIdeaSet() called');
       this.currentIdeaSet = _set === undefined ? this.currentIdeaSet : _set;
       if (this.currentIdeaSet.data !== null) {
-        let json = await this.getCurrentIdeasJSON;
+        let json = await this.GetCurrentIdeasJSON();
         this.currentIdeas = createNestedIdeaObject(json);
         this.currentMethod = this.currentIdeaSet.method;
         this.RestartExercise();
       }
     },
 
+    /**
+     * Updates the passed _idea object to be selected
+     * Sets any visible sibling "seen" variable to true and
+     *   "isSelected" to false, this is janky but it informs
+     *   the computed property "getIdeasFromCurrentLevelBasedOnMethod"
+     *   which updates the view with a viable set of Ideas
+     * Updates the undo array with appropriately
+     * Updates ("Cleans") the redo array when _clean === true
+     * @param {IdeaObject} _idea
+     * @param {Boolean} _clean "true" by default
+     */
     SelectIdea(_idea, _clean = true) {
       note('SelectIdea(_idea) called');
-      let count = 0;
+      let count = 0; // used to determine if the _idea is the last unseen object amongst its siblings
       if (_idea.parent.children && _idea.parent.children.length > 0) {
         count = _idea.parent.children.length;
         Array.from(_idea.parent.children).forEach((child) => {
@@ -65,11 +80,13 @@ var app = new Vue({
         });
       }
       _idea.isSelected = true;
+
       if (count === 0 || this.currentMethod.value !== 'binary') {
         this.currentSelectedIdea = _idea;
         this.selectedIdeasPath.push(_idea);
       }
-      this.allSelectedIdeas.push(_idea);
+
+      this.ideasQueueForUndo.push(_idea);
 
       if (_clean) {
         this.CleanDeselectedArrayBasedOnAncestry(_idea);
@@ -79,24 +96,36 @@ var app = new Vue({
       this.MoveFocus();
     },
 
+    /**
+     * Moves keyboard focus based on use interaction and DOM update
+     * This helps keyboard navigation when a new set of ideas is displayed to the user.
+     *    Without it, the focus would be "lost"
+     *    With it the focus is placed on either the first idea element or the restart button based on context
+     */
     MoveFocus() {
       note('MoveFocus() called');
-      this.$nextTick(() => {
-        if (this.getLastSelectedIdea === undefined || this.getLastSelectedIdea.children.length > 0 || this.selectedIdeasPath.length === 0) {
-          document.getElementsByTagName('idea')[0].focus();
-        } else {
-          document.getElementById('button-restart').focus();
-        }
-      });
+      if (this.visualStateLastEvent === 'keydown') {
+        this.$nextTick(() => {
+          if (this.getLastSelectedIdea === undefined || this.getLastSelectedIdea.children.length > 0 || this.selectedIdeasPath.length === 0) {
+            document.getElementsByTagName('idea')[0].focus();
+          } else {
+            document.getElementById('button-restart').focus();
+          }
+        });
+      }
     },
 
+    /**
+     * Moves an IdeaObject from the ideasQueueForUndo array to the ideasQueueForRedo array
+     * Adjusts all affected ancestors, siblings and descendents
+     * This is horribly implemented, won't scale, and needs a better brain than mine
+     */
     UndoLastIdea() {
       note('UndoLastIdea() called');
-      // these is totally unscalable - i have no idea how to do this kind of thing well
-      if (this.allSelectedIdeas.length > 0) {
+      if (this.ideasQueueForUndo.length > 0) {
         note('UndoLastIdea() called');
-        let idea = this.allSelectedIdeas.pop();
-        this.allDeSelectedIdeas.push(idea);
+        let idea = this.ideasQueueForUndo.pop();
+        this.ideasQueueForRedo.push(idea);
         if (idea) {
           if (this.getLastSelectedIdea === idea) {
             this.selectedIdeasPath.pop();
@@ -121,12 +150,15 @@ var app = new Vue({
       }
     },
 
+    /**
+     * Removes the last IdeaObject from the ideasQueueForRedo and then selects it via the "SelectIdea" method
+     * This is horribly implemented, doesn't scale, and needs a better brain than mine
+     */
     RedoLastIdea() {
       note('RedoLastIdea() called');
-      // these is totally unscalable - i have no idea how to do this kind of thing well
-      if (this.allDeSelectedIdeas.length > 0) {
+      if (this.ideasQueueForRedo.length > 0) {
         note('RedoLastIdea() called');
-        let idea = this.allDeSelectedIdeas.pop();
+        let idea = this.ideasQueueForRedo.pop();
         if (idea) {
           this.SelectIdea(idea, false);
         } else {
@@ -135,11 +167,36 @@ var app = new Vue({
       }
     },
 
-    // state management
+    /**
+     * Fetches, then concatenates all .json data sources for the current IdeaSetObject into a single json object
+     * @returns a single json object
+     */
+    async GetCurrentIdeasJSON() {
+      note('getCurrentIdeasJSON() called');
+      let idea = [];
+      let fetchPromises = this.currentIdeaSet.data.map((url) => fetch(url).then((response) => response.json()));
+
+      try {
+        let dataArrays = await Promise.all(fetchPromises);
+        idea = [].concat(...dataArrays);
+      } catch (error) {
+        error(error);
+      }
+      return idea[0];
+    },
+
+    // === STATE MANAGEMENT ===
+
+    /**
+     * Updates all current IdeaObject data as if the user had
+     *    just selected a new IdeaSetObject ("Pick a focus" in UI)
+     *    without changing any settings overrides like the current MethodObject
+     *    and without clearing out the ideasQueueForRedo array
+     */
     RestartExercise() {
       note('RestartExercise() called');
       this.selectedIdeasPath = [];
-      this.allSelectedIdeas = [];
+      this.ideasQueueForUndo = [];
       this.currentExerciseIsDirty = false;
       this.currentSelectedIdea = this.currentIdeas;
       this.currentMethodType = this.currentMethod.value;
@@ -149,14 +206,22 @@ var app = new Vue({
       this.MoveFocus();
     },
 
-    // utilities
-    GetSelectedIdeas(_ideaObject) {
+    // === UTILITIES ===
+
+    /**
+     * Stubbed in (isn't actually used atm)
+     * Finds all selected descendents of the current top level IdeaObject
+     * This is voodoo magic and chatgpt wrote it for me
+     * @param {IdeaObject} _ideaObject
+     * @returns an array of IdeaObjects (i think)
+     */
+    GetSelectedIdeasGetSelectedIdeasRecursively(_ideaObject) {
       note('GetSelectedIdeas("' + _ideaObject.name + '") called');
       if (!_ideaObject.isSelected) {
         return null;
       }
 
-      const filteredChildren = _ideaObject.children.map(this.GetSelectedIdeas).filter((child) => child !== null);
+      const filteredChildren = _ideaObject.children.map(this.GetSelectedIdeasRecursively).filter((child) => child !== null);
 
       return {
         ..._ideaObject,
@@ -164,6 +229,11 @@ var app = new Vue({
       };
     },
 
+    /**
+     * Updates the ideasQueueForRedo array by removing any IdeaObjects that aren't ancestors
+     * This is voodoo magic and chatgpt wrote it for me
+     * @param {IdeaObject} _idea
+     */
     CleanDeselectedArrayBasedOnAncestry(_idea) {
       let ancestors = new Set();
       let current = _idea;
@@ -172,11 +242,16 @@ var app = new Vue({
         current = current.parent;
       }
 
-      this.allDeSelectedIdeas = this.allDeSelectedIdeas.filter((obj) => {
+      this.ideasQueueForRedo = this.ideasQueueForRedo.filter((obj) => {
         ancestors.has(obj) && obj !== this.currentIdeas;
       });
     },
 
+    /**
+     * Sets the passed IdeaObject and all of its descendents to their original constructed state
+     * @param {IdeaObject} _idea
+     * @param {Boolean} _log "False" by default - used for debugging
+     */
     ResetIdea(_idea, _log = false) {
       if (_log) {
         highlight('Undoing "' + _idea.name + '"');
@@ -192,10 +267,15 @@ var app = new Vue({
       }
     },
 
-    // event handlers
+    // === EVENT HANDLERS ===
+
+    /**
+     * Used to manage keyboard input from the user
+     * Used to establish current type of user input
+     * @param {Object} event
+     */
     HandleKeyDown(event) {
       note('HandleKeyDown() called');
-      console.log(event);
       switch (event.key) {
         case 'z':
         case 'Z':
@@ -210,29 +290,29 @@ var app = new Vue({
         default:
           break;
       }
+      this.visualStateLastEvent = 'keydown';
+    },
+
+    /**
+     * Used to establish current type of user input
+     */
+    HandleMouseUp() {
+      note('HandleMouseUp() called');
+      this.visualStateLastEvent = 'mouseup';
     },
   },
 
   mounted() {
     announce('App Initialized');
-    this.IntializeApp();
     window.addEventListener('keydown', this.HandleKeyDown);
+    window.addEventListener('mouseup', this.HandleMouseUp);
   },
 
   computed: {
-    getCurrentIdeasJSON: async function () {
-      note('getCurrentIdeasJSON() called');
-      let idea = [];
-      let fetchPromises = this.currentIdeaSet.data.map((url) => fetch(url).then((response) => response.json()));
-
-      try {
-        let dataArrays = await Promise.all(fetchPromises);
-        idea = [].concat(...dataArrays);
-      } catch (error) {
-        error(error);
-      }
-      return idea[0];
-    },
+    /**
+     * Finds the appropriate set of sibling IdeaObjects that can be presented to the user for their interaction
+     * @returns an array of IdeaObjects
+     */
     getIdeasFromCurrentLevelBasedOnMethod: function () {
       note('getRandomIdeasFromCurrentIdeasLevel() called');
       if (this.currentIdeas === null) return [];
@@ -289,9 +369,20 @@ var app = new Vue({
 
       return filteredObjects;
     },
+    /**
+     * Gets the final "selected" Idea of a set of IdeaObject siblings
+     * Computed here because it's used in both this controller and in
+     *    the front-end html
+     * @returns a single IdeaObject
+     */
     getLastSelectedIdea: function () {
       return this.selectedIdeasPath[this.selectedIdeasPath.length - 1];
     },
+    /**
+     * Stubbed in (isn't actually used atm)
+     * Used to display the results of "GetSelectedIdeas" in the front-end html
+     * @returns an array of IdeaObjects (i think)
+     */
     getAllSelectedIdeasRecursively: function () {
       note('getAllSelectedIdeasRecursively() called');
       return this.GetSelectedIdeas(this.currentIdeas);
