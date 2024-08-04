@@ -12,7 +12,7 @@ var app = new Vue({
   el: '#app',
   data: {
     // app data
-    appDataVersion: '0.0.016',
+    appDataVersion: '0.0.017',
     newVersionAvailable: false,
 
     // idea data
@@ -107,6 +107,7 @@ var app = new Vue({
                 this.currentSelectedIdea = idea.parent;
                 idea.parent.children.forEach((child) => {
                   this.ResetIdea(child, true);
+                  this.MoveFocus();
                 });
               }
             } else {
@@ -114,6 +115,7 @@ var app = new Vue({
             }
           } else {
             this.ResetIdea(idea, true);
+            this.MoveFocus();
           }
         }
       }
@@ -127,6 +129,7 @@ var app = new Vue({
         let idea = this.allDeSelectedIdeas.pop();
         if (idea) {
           this.SelectIdea(idea, false);
+        } else {
           this.MoveFocus();
         }
       }
