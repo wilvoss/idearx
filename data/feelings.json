@@ -29,7 +29,7 @@
     },
     {
       "n": "Sad",
-      "d": "A feeling sorrow or unhappiness.",
+      "d": "A feeling of sorrow or unhappiness.",
       "c": [
         { "n": "Guilty", "c": [{ "n": "Remorseful" }, { "n": "Ashamed" }] },
         { "n": "Abandoned", "c": [{ "n": "Ignored" }, { "n": "Victimized" }] },

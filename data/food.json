@@ -1,0 +1,105 @@
+{
+  "n": "Food Choices",
+  "c": [
+    {
+      "n": "Cuisine",
+      "c": [
+        {
+          "n": "European",
+          "c": [
+            {
+              "n": "Western European",
+              "c": [{ "n": "Belgian" }, { "n": "Dutch" }, { "n": "French" }]
+            },
+            {
+              "n": "Eastern European",
+              "c": [{ "n": "Belarusian" }, { "n": "Kazakh" }, { "n": "Moldovan" }, { "n": "Romanian" }, { "n": "Russian" }, { "n": "Ukranian" }, { "n": "Caucasian" }]
+            },
+            {
+              "n": "Northern European",
+              "c": [{ "n": "Baltic" }, { "n": "English" }, { "n": "Northern Irish" }, { "n": "Irish" }, { "n": "Scottish" }, { "n": "Welsh" }, { "n": "Danish" }, { "n": "Finnish" }, { "n": "Icelandic" }, { "n": "Norwegian" }, { "n": "Swedish" }]
+            },
+            {
+              "n": "Southern European",
+              "c": [{ "n": "Albanian" }, { "n": "Greek" }, { "n": "Serbian" }, { "n": "Portugese" }, { "n": "Spanish" }, { "n": "Italian" }, { "n": "Mediterranean" }, { "n": "Turkish" }]
+            },
+            {
+              "n": "Central European",
+              "c": [{ "n": "Austrian" }, { "n": "Czech" }, { "n": "German" }, { "n": "Hungarian" }, { "n": "Polish" }, { "n": "Slovenian" }, { "n": "Slovak" }, { "n": "Swiss" }]
+            }
+          ]
+        },
+        {
+          "n": "African",
+          "c": [
+            {
+              "n": "Central African",
+              "c": [{ "n": "" }]
+            },
+            {
+              "n": "East African",
+              "c": [{ "n": "" }]
+            },
+            {
+              "n": "North African",
+              "c": [{ "n": "" }]
+            },
+            {
+              "n": "Southern African",
+              "c": [{ "n": "" }]
+            },
+            {
+              "n": "West African",
+              "c": [{ "n": "" }]
+            }
+          ]
+        },
+        {
+          "n": "Americans",
+          "c": [
+            { "n": "Central American", "c": [{ "n": "Belizean" }, { "n": "Costa Rican" }, { "n": "Guatemalan" }, { "n": "Honduran" }, { "n": "Nicaraguan" }, { "n": "Panamanian" }, { "n": "Salvadorian" }] },
+            {
+              "n": "North American",
+              "c": [{ "n": "Bermudian" }, { "n": "Canadian" }, { "n": "Inuit" }, { "n": "Mexican" }, { "n": "American" }]
+            },
+            {
+              "n": "South American",
+              "c": [{ "n": "Argentinian" }, { "n": "Bolivian" }, { "n": "Chilean" }, { "n": "Columbian" }, { "n": "Equadorian" }, { "n": "Peruvian" }, { "n": "Venezuelan" }]
+            },
+            {
+              "n": "Caribbean",
+              "c": [{ "n": "Haitian" }, { "n": "Jamaican" }, { "n": "Puerto Rican" }, { "n": "Dominican Republic" }, { "n": "Cuban" }]
+            }
+          ]
+        },
+
+        {
+          "n": "Asian",
+          "c": [
+            { "n": "Central Asian", "c": [] },
+            { "n": "East Asian", "c": [] },
+            { "n": "Chinese", "c": [] },
+            { "n": "Highland Asian", "c": [] },
+            { "n": "North Asian", "c": [] },
+            { "n": "South Asian", "c": [] },
+            { "n": "Indian", "c": [] },
+            { "n": "Pakastani", "c": [] },
+            { "n": "Mainland Southeast Asian", "c": [] },
+            { "n": "Maritime Southeast Asian", "c": [] },
+            { "n": "Indonesian", "c": [] },
+            { "n": "West Asian cuisine", "c": [] },
+            { "n": "", "c": [] },
+            { "n": "", "c": [] },
+            { "n": "", "c": [] },
+            { "n": "", "c": [] },
+            { "n": "", "c": [] }
+          ]
+        }
+      ]
+    },
+    { "n": "Essence", "c": [{ "n": "Comfort food" }, { "n": "Decadent" }, { "n": "Healthy" }] },
+    { "n": "Cost", "c": [{ "n": "Cheap" }, { "n": "Reasonable" }, { "n": "Pricey" }, { "n": "Stupid expensive" }] },
+    { "n": "Meal time", "c": [{ "n": "Breakfast" }, { "n": "Second breakfast" }, { "n": "Brunch" }, { "n": "Lunch" }, { "n": "Supper" }, { "n": "Teatime" }, { "n": "Dinner" }] },
+    { "n": "Audience", "c": [{ "n": "21+" }, { "n": "Couples" }, { "n": "Family friendly" }, { "n": "Kids" }] }
+  ]
+}

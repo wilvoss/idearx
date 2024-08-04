@@ -15,9 +15,11 @@
     --colorBackground: hsl(0, 0%, 95%);
     --colorForeground: hsl(0, 0%, 20%);
     --colorHighlight: hsl(190, 100%, 82%);
+    --colorAction: hsl(200, 100%, 39%);
+    --colorFocus: hsl(300, 100%, 50%);
     --colorStageBackground: hsl(0, 100%, 100%);
 
-    --shortTransition: 50ms ease-in-out all;
+    --shortTransition: 100ms ease-in-out all;
 }
 
 html, body {
@@ -73,31 +75,81 @@ stage {
 }
 
 button {
-    border: 1px solid black;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: calc(.5 * var(--defaultUnit));
+    border: 1px solid var(--colorAction);
     cursor: pointer;
-    padding: calc(.5 * var(--defaultUnit)) var(--defaultUnit);
-    background-color: var(--colorBackground);
-    color: var(--colorForeground);
+    padding: 0 var(--defaultUnit);
+    min-height: 40px;
+    background-color: var(--colorStageBackground);
+    color: var(--colorAction);
     border-radius: var(--borderRadius);
     transition: var(--shortTransition);
+    outline: 1px solid transparent;
+}
+
+button:hover, select:hover, button:focus-visible, select:focus-visible, button:active, select:active, button:focus, select:focus {
+    outline: 1px solid var(--colorFocus);
+    outline-offset: 1px;
+}
+
+icon {
+    display: block;
+    mask-size: 16px 16px;
+    -webkit-mask-size: 16px 16px;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-position: center;
+    background-color: var(--colorAction);
+    width: 16px;
+    height: 16px;
+    pointer-events: none;
+    position: absolute;
+}
+
+icon.undo {
+    height: 11px;
+    mask-image: url(../images/undo.svg);
+    -webkit-mask-image: url(../images/undo.svg);
+}
+
+icon.redo {
+    height: 11px;
+    mask-image: url(../images/redo.svg);
+    -webkit-mask-image: url(../images/redo.svg);
+}
+
+icon.chevron-down {
+    mask-image: url(../images/chevron-down.svg);
+    -webkit-mask-image: url(../images/chevron-down.svg);
 }
 
 select {
     display: flex;
-    background-color: var(--colorBackground);
+    cursor: pointer;
+    min-height: 40px;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--colorStageBackground);
     background-image: url(../images/chevron-down.svg);
     background-position: right 13px center;
     background-repeat: no-repeat;
     background-size: 15px;
-    padding: calc(.5 * var(--defaultUnit)) calc(2.5 * var(--defaultUnit)) calc(.5 * var(--defaultUnit)) calc(1 * var(--defaultUnit));
+    padding: 0 calc(2.5 * var(--defaultUnit)) 0 calc(1 * var(--defaultUnit));
     width: auto;
-    outline: none;
-    border: 1px solid var(--colorForeground);
+    border: 1px solid var(--colorAction);
+    color: var(--colorAction);
     border-radius: var(--borderRadius);
+    outline: 1px solid transparent;
+    transition: var(--shortTransition);
 }
 
 
 :disabled, .disabled {
+    pointer-events: none;
     user-select: none;
     opacity: .3;
     cursor: default;
@@ -144,9 +196,9 @@ workbench p {
 
 controls {
     display: flex;
-    gap: var(--defaultUnit);
+    gap: calc(.25 * var(--defaultUnit));
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
     margin-top: var(--defaultUnit);
     transition: var(--shortTransition);
 }
@@ -188,13 +240,16 @@ idea {
     padding: calc(.75 * var(--defaultUnit)) var(--defaultUnit);
     background: var(--colorBackground);
     box-shadow: 0px 4px 4px rgba(0, 0, 0, .2);
-    transition: 50ms ease-in-out all;
+    text-shadow: 0px 1px 0px rgba(255, 255, 255, .5);
+    transition: var(--shortTransition);
+
     /* border-radius: var(--borderRadius); */
     font-weight: 800;
     background: var(--colorStageBackground);
     user-select: none;
     -webkit-user-select: none;
     transform: translateY(0px);
+    outline: 1px solid transparent;
 }
 
 idea.selected, idea.selected:hover {
@@ -209,9 +264,17 @@ idea.selected:before {
     padding-right: calc(.5 * var(--defaultUnit));
 }
 
-idea:hover {
+idea:hover,
+idea:focus {
+    opacity: .9;
     box-shadow: 0px 8px 8px rgba(0, 0, 0, .1);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    outline: none;
+}
+
+idea:focus-visible {
+    outline: 1px solid var(--colorFocus);
+    outline-offset: 1px;
 }
 
 idea:active {
@@ -238,6 +301,7 @@ tooltip {
     border-radius: calc(.25 * var(--borderRadius));
     transition: 200ms ease-in-out all;
     transition-delay: 0ms;
+    text-shadow: none;
 }
 
 tooltip:after {
@@ -253,7 +317,7 @@ tooltip:after {
 }
 
 idea:hover tooltip {
-    opacity: .9;
+    opacity: .95;
     transition-delay: 150ms;
     transform: translateY(calc(-.5 * var(--defaultUnit) - 57px));
 }

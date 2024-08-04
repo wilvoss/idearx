@@ -3,6 +3,7 @@ class MethodObject {
     this.name = spec.name === undefined ? 'Binary' : spec.name;
     this.value = spec.value === undefined ? 'binary' : spec.value;
     this.description = spec.description === undefined ? 'Description' : spec.description;
+    this.allowUndo = spec.allowUndo === undefined ? false : spec.allowUndo;
   }
 }
 
@@ -11,6 +12,7 @@ let Methods = [
     name: 'Tree Crawl',
     value: 'full',
     description: 'Drill down a tree till you reach the best leaf.',
+    allowUndo: true,
   }),
   new MethodObject({
     name: 'Binary Crawl',

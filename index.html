@@ -47,26 +47,28 @@
         <controls class="vertical">
           <control>
             <label for="ideaSetPicker">Pick a Focus</label>
-            <select name="ideaSetPicker" id="ideaSetPicker" v-model="currentIdeaSet" @change="SelectIdeaSet()" class="big">
+            <select :title="'Select Focus' + (currentIdeaSet.name === null ? '' : ': ' + currentIdeaSet.name + ' is selected')" role="select" tabindex="0" aria-label="Select Focus" name="ideaSetPicker" id="ideaSetPicker" v-model="currentIdeaSet" @change="SelectIdeaSet()" class="big">
               <option :value="{}" disabled>Select</option>
               <option v-for="idea in allIdeaSets" :key="idea.type" :value="idea">{{idea.name}}</option>
             </select>
-            <!-- <p>{{currentIdeaSet.description}}</p> -->
           </control>
         </controls>
         <workbench v-if="currentIdeaSet.name !== null">
           <controls>
-            <control>
-              <!-- <label for="methodPicker">Method:</label> -->
-              <select :disabled="currentIdeaSet.locked" name="methodPicker" id="methodPicker" v-model="currentMethod" @change="RestartExercise()">
+            <controls>
+              <select title="Select Method" role="select" tabindex="0" aria-label="Select Method" :disabled="currentIdeaSet.locked" name="methodPicker" id="methodPicker" v-model="currentMethod" @change="RestartExercise()">
                 <option v-for="method in allMethods" :key="method.value" :value="method">{{method.name}}</option>
               </select>
-            </control>
-            <button :disabled="!currentExerciseIsDirty" @click="RestartExercise()">Start Over</button>
+            </controls>
+            <controls>
+              <button id="button-undo" title="Undo" role="button" tabindex="0" aria-label="Undo" class="symbol" v-if="currentMethod.allowUndo" :disabled="!currentExerciseIsDirty" @click="UndoLastIdea()"><icon class="undo"></icon></button>
+              <button id="button-redo" title="Redo" role="button" tabindex="0" aria-label="Redo" class="symbol" v-if="currentMethod.allowUndo" :disabled="this.allDeSelectedIdeas.length === 0" @click="RedoLastIdea()"><icon class="redo"></icon></button>
+              <button id="button-restart" title="Restart" role="button" tabindex="0" aria-label="Restart" :disabled="!currentExerciseIsDirty" @click="RestartExercise()">Restart</button>
+            </controls>
           </controls>
           <p>{{currentIdeaSet.cta}}</p>
           <ideas>
-            <idea :style="{backgroundColor: 'hsla(' + idea.hsl + ', .3)' }" :class="{selectednot: idea.isSelected}" v-for="idea in getIdeasFromCurrentLevelBasedOnMethod" @click="SelectIdea(idea)"><tooltip v-if="idea.description !== null">{{idea.description}}</tooltip>{{idea.name}}</idea>
+            <idea :key="idea.name" @keydown.space.prevent="SelectIdea(idea)" role="button" tabindex="0" aria-label="Idea" :style="{backgroundColor: 'hsla(' + idea.hsl + ', .3)' }" :class="{selectednot: idea.isSelected}" v-for="(idea, index) in getIdeasFromCurrentLevelBasedOnMethod" @click="SelectIdea(idea)"><tooltip v-if="idea.description !== null">{{idea.description}}</tooltip>{{idea.name}}</idea>
             <idea :style="{backgroundColor: 'hsla(' + getLastSelectedIdea.hsl + ', .3)' }" class="selected" v-if="selectedIdeasPath.length > 0 && getLastSelectedIdea.children.length === 0"><tooltip v-if="getLastSelectedIdea.description !== null">{{getLastSelectedIdea.description}}</tooltip>{{getLastSelectedIdea.name}}</idea>
           </ideas>
         </workbench>
