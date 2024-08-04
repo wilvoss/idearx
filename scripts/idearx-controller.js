@@ -12,16 +12,15 @@ var app = new Vue({
   el: '#app',
   data: {
     //#region app data
-    appDataVersion: '0.0.019',
-    newVersionAvailable: false,
+    appVersion: '0.0.020',
+    allMethods: Methods,
+    allIdeaSets: IdeaSets,
     //#endregion
 
     //#region idea data
     currentIdeaSet: new IdeaSetObject({}),
     currentIdeas: null,
     currentSelectedIdea: null,
-    allMethods: Methods,
-    allIdeaSets: IdeaSets,
     currentMethod: new MethodObject({}),
     currentMethodType: '',
     currentExerciseIsDirty: false,
@@ -31,9 +30,7 @@ var app = new Vue({
     //#endregion
 
     //#region visual state management
-    visualStateShowNofication: false,
-    visualStateShowModal: false,
-    visualStateLastEvent: null,
+    visualStateLastInputEvent: null,
     //#endregion
   },
 
@@ -108,7 +105,7 @@ var app = new Vue({
      */
     MoveFocus() {
       note('MoveFocus() called');
-      if (this.visualStateLastEvent === 'keydown') {
+      if (this.visualStateLastInputEvent === 'keydown') {
         this.$nextTick(() => {
           if (this.getLastSelectedIdea === undefined || this.getLastSelectedIdea.children.length > 0 || this.selectedIdeasPath.length === 0) {
             document.getElementsByTagName('idea')[0].focus();
@@ -297,7 +294,7 @@ var app = new Vue({
         default:
           break;
       }
-      this.visualStateLastEvent = 'keydown';
+      this.visualStateLastInputEvent = 'keydown';
     },
 
     /**
@@ -305,7 +302,7 @@ var app = new Vue({
      */
     HandleMouseUp() {
       note('HandleMouseUp() called');
-      this.visualStateLastEvent = 'mouseup';
+      this.visualStateLastInputEvent = 'mouseup';
     },
     //#endregion
   },

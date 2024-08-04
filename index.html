@@ -30,12 +30,9 @@
 
   <body>
     <app id="app" v-cloak>
-      <button v-if="newVersionAvailable">Update Now</button>
-      <notification :class="{show: visualStateShowNofication}"></notification>
-      <modal :class="{show: visualStateShowModal}"></modal>
       <stage>
         <controls>
-          <version>Version: {{appDataVersion}}</version>
+          <version>Version: {{appVersion}}</version>
         </controls>
         <hgroup>
           <h1>Idea Rx</h1>
