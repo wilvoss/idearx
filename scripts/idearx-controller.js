@@ -11,11 +11,12 @@ Vue.config.ignoredElements = ['app'];
 var app = new Vue({
   el: '#app',
   data: {
-    // app data
-    appDataVersion: '0.0.018',
+    //#region app data
+    appDataVersion: '0.0.019',
     newVersionAvailable: false,
+    //#endregion
 
-    // idea data
+    //#region idea data
     currentIdeaSet: new IdeaSetObject({}),
     currentIdeas: null,
     currentSelectedIdea: null,
@@ -27,14 +28,17 @@ var app = new Vue({
     selectedIdeasPath: [],
     ideasQueueForUndo: [], // array of all ideas that were "selected" by the user
     ideasQueueForRedo: [], // array of all ideas that were "deselected" by the user with the "Undo" feature
+    //#endregion
 
+    //#region visual state management
     visualStateShowNofication: false,
     visualStateShowModal: false,
     visualStateLastEvent: null,
+    //#endregion
   },
 
   methods: {
-    // === DATA MANIPULATION ===
+    //#region === DATA MANIPULATION ===
 
     /**
      * Reads the data source (usually .json, but can be .csv or .js in the future)
@@ -184,8 +188,9 @@ var app = new Vue({
       }
       return idea[0];
     },
+    //#endregion
 
-    // === STATE MANAGEMENT ===
+    //#region === STATE MANAGEMENT ===
 
     /**
      * Updates all current IdeaObject data as if the user had
@@ -205,8 +210,9 @@ var app = new Vue({
       this.currentIdeas.seen = true;
       this.MoveFocus();
     },
+    //#endregion
 
-    // === UTILITIES ===
+    //#region === UTILITIES ===
 
     /**
      * Stubbed in (isn't actually used atm)
@@ -266,8 +272,9 @@ var app = new Vue({
         });
       }
     },
+    //#endregion
 
-    // === EVENT HANDLERS ===
+    //#region === EVENT HANDLERS ===
 
     /**
      * Used to manage keyboard input from the user
@@ -300,6 +307,7 @@ var app = new Vue({
       note('HandleMouseUp() called');
       this.visualStateLastEvent = 'mouseup';
     },
+    //#endregion
   },
 
   mounted() {
