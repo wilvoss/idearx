@@ -8,7 +8,7 @@ class IdeaObject {
     this.isSelected = spec.isSelected === undefined ? false : spec.isSelected;
     this.children = spec.children === undefined ? [] : spec.children;
     this.parent = spec.parent === undefined ? null : spec.parent;
-    this.hslPreset = spec.hslPreset === undefined ? false : spec.hslPresect;
+    this.hslUsePreset = spec.hslUsePreset === undefined ? false : spec.hslUsePreset;
     this.hsl = spec.hsl === undefined ? '0, 100%, 100%' : spec.hsl;
   }
 }
@@ -24,11 +24,11 @@ function createNestedIdeaObject(_json, _parent = null) {
   // set the hsl value for the new IdeaObject (hue, saturation, luminosity) have been defined
   if (_json.hsl !== undefined) {
     ideaObject.hsl = _json.hsl;
-    ideaObject.hslPreset = true;
+    ideaObject.hslUsePreset = true;
   } else if (ideaObject.parent !== undefined && ideaObject.parent !== null && ideaObject.parent.hsl !== undefined) {
-    if (ideaObject.parent.hslPreset) {
+    if (ideaObject.parent.hslUsePreset) {
       ideaObject.hsl = ideaObject.parent.hsl;
-      ideaObject.hslPreset = true;
+      ideaObject.hslUsePreset = true;
     } else {
       ideaObject.hsl = getRandomInt(0, 360) + ',100%,50%'; // future: grab hsl from chatgpt call based on idea name
     }
