@@ -12,7 +12,7 @@ var app = new Vue({
   el: '#app',
   data: {
     //#region app data
-    appVersion: '0.0.021',
+    appVersion: '0.0.022',
     allMethods: Methods,
     allIdeaSets: IdeaSets,
     //#endregion
@@ -60,7 +60,7 @@ var app = new Vue({
      *   "isSelected" to false, this is janky but it informs
      *   the computed property "getIdeasFromCurrentLevelBasedOnMethod"
      *   which updates the view with a viable set of Ideas
-     * Updates the undo array with appropriately
+     * Updates the undo array appropriately
      * Updates ("Cleans") the redo array when _clean === true
      * @param {IdeaObject} _idea
      * @param {Boolean} _clean "true" by default
@@ -83,6 +83,7 @@ var app = new Vue({
       _idea.isSelected = true;
 
       if (count === 0 || this.currentMethod.value !== 'binary') {
+        // if idea is the final idea of a generation, update app state
         this.currentSelectedIdea = _idea;
         this.selectedIdeasPath.push(_idea);
       }
@@ -122,7 +123,6 @@ var app = new Vue({
      * This is horribly implemented, won't scale, and needs a better brain than mine
      */
     UndoLastIdea() {
-      note('UndoLastIdea() called');
       if (this.ideasQueueForUndo.length > 0) {
         note('UndoLastIdea() called');
         let idea = this.ideasQueueForUndo.pop();
@@ -156,7 +156,6 @@ var app = new Vue({
      * This is horribly implemented, doesn't scale, and needs a better brain than mine
      */
     RedoLastIdea() {
-      note('RedoLastIdea() called');
       if (this.ideasQueueForRedo.length > 0) {
         note('RedoLastIdea() called');
         let idea = this.ideasQueueForRedo.pop();
@@ -321,29 +320,37 @@ var app = new Vue({
     getIdeasFromCurrentLevelBasedOnMethod: function () {
       note('getRandomIdeasFromCurrentIdeasLevel() called');
       if (this.currentIdeas === null) return [];
+
+      // determine the current generation of ideas that have been interacted with by the user
       let parent = this.currentSelectedIdea.parent === null ? this.currentSelectedIdea : this.currentSelectedIdea.parent;
       let children = parent.children;
 
+      // if all ideas in the determined generation have been seen and/or selected, set the current generation to the next generation of descendants
       if (children.filter((obj) => !obj.seen && !obj.isSelected).length === 0) {
         children = this.currentSelectedIdea.children;
       }
-      const selectedChild = children.filter((obj) => obj.isSelected).length === 1 ? children.filter((obj) => obj.isSelected)[0] : null;
-      let filteredObjects = [];
 
+      // find the single selected idea in the current generation
+      const selectedChild = children.filter((obj) => obj.isSelected).length === 1 ? children.filter((obj) => obj.isSelected)[0] : null;
+      let filteredObjects = []; // defines the final object array that gets returned
+
+      // based on the current selected MethodObject, determine the appropriate ideas to display to the end user for consideration
       switch (this.currentMethod.value) {
-        case 'binary':
+        case 'binary': // shows 2 ideas from the current generation
           filteredObjects = children.filter((obj) => !obj.seen && !obj.isSelected);
           for (let i = filteredObjects.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [filteredObjects[i], filteredObjects[j]] = [filteredObjects[j], filteredObjects[i]];
           }
           if (selectedChild === null) {
+            // updates the final return object with 2 random ones because no ideas for the current generation have been selected
             let ideas = filteredObjects.slice(0, 2);
             ideas.forEach((idea) => {
               idea.showing = true;
             });
-            return ideas;
+            filteredObjects = ideas;
           } else {
+            // if 1 idea in the current generation has been selected, get a second random idea from the same generation and then update the final return object
             const randomObject = filteredObjects.slice(0, 1);
             randomObject[0].showing = true;
             const finalArray = [randomObject[0], selectedChild];
@@ -353,7 +360,7 @@ var app = new Vue({
           }
           break;
 
-        case 'full':
+        case 'full': // shows an alphabetically sorted flat view of all ideas in the current generation
           filteredObjects = children.filter((obj) => !obj.seen && !obj.isSelected);
           filteredObjects.sort((a, b) => {
             if (a.name < b.name) {

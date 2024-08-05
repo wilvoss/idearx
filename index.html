@@ -65,7 +65,7 @@
           </controls>
           <p>{{currentIdeaSet.cta}}</p>
           <ideas>
-            <idea :key="idea.name" @keydown.space.prevent="SelectIdea(idea)" role="button" tabindex="0" aria-label="Idea" :style="{backgroundColor: 'hsla(' + idea.hsl + ', .3)' }" :class="{selectednot: idea.isSelected}" v-for="(idea, index) in getIdeasFromCurrentLevelBasedOnMethod" @click="SelectIdea(idea)"><tooltip v-if="idea.description !== null">{{idea.description}}</tooltip>{{idea.name}}</idea>
+            <idea :key="idea.name" @keydown.space.prevent="SelectIdea(idea)" role="option" tabindex="0" aria-label="Idea" :style="{backgroundColor: 'hsla(' + idea.hsl + ', .3)' }" :class="{selectednot: idea.isSelected}" v-for="(idea, index) in getIdeasFromCurrentLevelBasedOnMethod" @click="SelectIdea(idea)"><tooltip v-if="idea.description !== null">{{idea.description}}</tooltip>{{idea.name}}</idea>
             <idea :style="{backgroundColor: 'hsla(' + getLastSelectedIdea.hsl + ', .3)' }" class="selected" v-if="selectedIdeasPath.length > 0 && getLastSelectedIdea.children.length === 0"><tooltip v-if="getLastSelectedIdea.description !== null">{{getLastSelectedIdea.description}}</tooltip>{{getLastSelectedIdea.name}}</idea>
           </ideas>
         </workbench>
