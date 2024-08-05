@@ -46,7 +46,7 @@
             <label for="ideaSetPicker">Pick a Focus</label>
             <select :title="'Select Focus' + (currentIdeaSet.name === null ? '' : ': ' + currentIdeaSet.name + ' is selected')" role="select" tabindex="0" aria-label="Select Focus" name="ideaSetPicker" id="ideaSetPicker" v-model="currentIdeaSet" @change="SelectIdeaSet()" class="big">
               <option :value="{}" disabled>Select</option>
-              <option v-for="idea in allIdeaSets" :key="idea.type" :value="idea">{{idea.name}}</option>
+              <option v-for="set in allIdeaSets" :key="set.type" :value="set" v-if="!set.hidden">{{set.name}}</option>
             </select>
           </control>
         </controls>

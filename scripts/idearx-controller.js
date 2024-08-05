@@ -12,7 +12,7 @@ var app = new Vue({
   el: '#app',
   data: {
     //#region app data
-    appVersion: '0.0.023',
+    appVersion: '0.0.025',
     allMethods: Methods,
     allIdeaSets: IdeaSets,
     //#endregion
@@ -250,6 +250,23 @@ var app = new Vue({
     },
 
     /**
+     *
+     * @param {Array} _ideas
+     * @returns sorted array
+     */
+    SortIdeasAlphabetically(_ideas) {
+      return _ideas.sort((a, b) => {
+        if (a.name < b.name) {
+          return -1;
+        }
+        if (a.name > b.name) {
+          return 1;
+        }
+        return 0;
+      });
+    },
+
+    /**
      * Sets the passed IdeaObject and all of its descendents to their original constructed state
      * @param {IdeaObject} _idea
      * @param {Boolean} _log "False" by default - used for debugging
@@ -362,18 +379,12 @@ var app = new Vue({
 
         case 'full': // updates the final return object with an alphabetically sorted array of all ideas in the current generation
           filteredObjects = children.filter((obj) => !obj.seen && !obj.isSelected);
-          filteredObjects.sort((a, b) => {
-            if (a.name < b.name) {
-              return -1;
-            }
-            if (a.name > b.name) {
-              return 1;
-            }
-            return 0;
-          });
+          filteredObjects = this.SortIdeasAlphabetically(filteredObjects);
           break;
 
         case 'merge':
+          filteredObjects = children.filter((obj) => !obj.seen && !obj.isSelected);
+          filteredObjects = this.SortIdeasAlphabetically(filteredObjects);
 
         default:
           break;
