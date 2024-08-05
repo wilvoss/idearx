@@ -12,7 +12,7 @@ var app = new Vue({
   el: '#app',
   data: {
     //#region app data
-    appVersion: '0.0.022',
+    appVersion: '0.0.023',
     allMethods: Methods,
     allIdeaSets: IdeaSets,
     //#endregion
@@ -360,7 +360,7 @@ var app = new Vue({
           }
           break;
 
-        case 'full': // shows an alphabetically sorted flat view of all ideas in the current generation
+        case 'full': // updates the final return object with an alphabetically sorted array of all ideas in the current generation
           filteredObjects = children.filter((obj) => !obj.seen && !obj.isSelected);
           filteredObjects.sort((a, b) => {
             if (a.name < b.name) {
