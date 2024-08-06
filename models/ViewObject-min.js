@@ -1,0 +1,1 @@
+class ViewObject{constructor(e){this.name=void 0===e.name?"":e.name,this.value=void 0===e.value?"":e.value,this.description=void 0===e.description?"":e.description}}let Views=[new ViewObject({name:"Cards",value:"cards",description:"Use cards when nagivate idea selection."}),new ViewObject({name:"Pie",value:"pie",description:"Use a pie chart to navigate idea selection."})];

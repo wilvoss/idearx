@@ -25,7 +25,7 @@ var IdeaSets = [
     cta: 'What are you feeling?',
     description: 'Focus on what you are feeling: Based on the Junto Emotion Wheel.',
     data: ['./data/feelings.json'],
-    AIActions: [new AIActionObject({ request: 'About the feeling {{idea.name}}' }), new AIActionObject({ request: 'Junto Emotion Wheel', url: 'https://www.thejuntoinstitute.com/emotion-wheels/' })],
+    AIActions: [new AIActionObject({ request: '{{idea.name}} Facts' }), new AIActionObject({ request: 'Junto Emotion Wheel', url: 'https://www.thejuntoinstitute.com/emotion-wheels/' })],
     locked: true,
   }),
   new IdeaSetObject({

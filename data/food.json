@@ -5,7 +5,7 @@
     {
       "n": "Cuisine",
       "c": [
-        { "n": "Any cuisine" },
+        { "n": "~ Any cuisine" },
         {
           "n": "European",
           "c": [
@@ -81,12 +81,12 @@
         }
       ]
     },
-    { "n": "Vibe", "c": [{ "n": "Comforting" }, { "n": "Decadent" }, { "n": "Healthy" }, { "n": "Sporty" }, { "n": "Festive" }] },
-    { "n": "Cost", "c": [{ "n": "$" }, { "n": "$$" }, { "n": "$$$" }, { "n": "$$$$" }] },
+    { "n": "Vibe", "c": [{ "n": "~ Any vibe" }, { "n": "Comforting" }, { "n": "Decadent" }, { "n": "Healthy" }, { "n": "Sporty" }, { "n": "Festive" }] },
+    { "n": "Cost", "c": [{ "n": "~ Any cost" }, { "n": "$" }, { "n": "$$" }, { "n": "$$$" }, { "n": "$$$$" }] },
     {
       "n": "When",
-      "c": [{ "n": "Breakfast" }, { "n": "Brunch" }, { "n": "Lunch" }, { "n": "Teatime" }, { "n": "Supper" }, { "n": "Dinner" }]
+      "c": [{ "n": "~ Any time" }, { "n": "Breakfast" }, { "n": "Brunch" }, { "n": "Lunch" }, { "n": "Teatime" }, { "n": "Supper" }, { "n": "Dinner" }]
     },
-    { "n": "Who's eating?", "c": [{ "n": "Adults 21+" }, { "n": "Large group" }, { "n": "Romantic partners" }, { "n": "Family and kids" }] }
+    { "n": "Who's eating?", "c": [{ "n": "~ Anybody" }, { "n": "Adults 21+" }, { "n": "Large group" }, { "n": "Romancers" }, { "n": "Family and kids" }] }
   ]
 }

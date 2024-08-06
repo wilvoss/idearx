@@ -1,6 +1,7 @@
 /// <reference path="../models/IdeaObject.js" />
 /// <reference path="../models/IdeaSetObject.js" />
 /// <reference path="../models/MethodObject.js" />
+/// <reference path="../models/ViewObject.js" />
 
 Vue.config.devtools = false;
 Vue.config.debug = false;
@@ -12,9 +13,10 @@ var app = new Vue({
   el: '#app',
   data: {
     //#region —————— APP DATA ——————
-    appVersion: '0.0.027',
+    appVersion: '0.0.028',
     allMethods: Methods,
     allIdeaSets: IdeaSets,
+    allViews: Views,
     //#endregion
 
     //#region —————— IDEA DATA ——————
@@ -22,6 +24,7 @@ var app = new Vue({
     currentIdeas: null,
     currentSelectedIdea: null,
     currentMethod: new MethodObject({}),
+    currentView: Views[0],
     currentMethodType: '',
     currentExerciseIsDirty: false,
     selectedIdeasPath: [],
@@ -41,8 +44,7 @@ var app = new Vue({
      * @param {IdeaSetObject} _set - The idea set to be selected. If undefined, the current idea set remains unchanged.
      */
     async SelectIdeaSet(_set) {
-      // Log the function call for debugging purposes
-      note('SelectIdeaSet() called');
+      note('async SelectIdeaSet() called');
 
       // Update the current idea set if a new set is provided
       this.currentIdeaSet = _set === undefined ? this.currentIdeaSet : _set;
@@ -68,8 +70,7 @@ var app = new Vue({
      * @param {IdeaObject} _idea - The idea object to be selected.
      */
     SelectIdea(_idea) {
-      // Log that the SelectIdea function was called
-      note('SelectIdea(_idea) called');
+      note('SelectIdea() called');
 
       // Check if the current method is 'binary'
       if (this.currentMethod.value === 'binary') {
@@ -113,7 +114,6 @@ var app = new Vue({
      * Moves focus to the appropriate element based on the last input event and the state of selected ideas.
      */
     MoveFocus() {
-      // Log that the MoveFocus function was called
       note('MoveFocus() called');
 
       // Check if the last input event was a keydown event
@@ -207,7 +207,7 @@ var app = new Vue({
      * @returns {Promise<Object>} A promise that resolves to the first idea object.
      */
     async GetCurrentIdeasJSON() {
-      note('getCurrentIdeasJSON() called');
+      note('async GetCurrentIdeasJSON() called');
       let idea = [];
 
       // Create an array of fetch promises for each URL in the current idea set
@@ -232,6 +232,7 @@ var app = new Vue({
      * Resets exercise including any settings overrides and the redo queue.
      */
     HardRestartExercise() {
+      note('HardRestartExercise() called');
       this.currentIdeas.children.forEach((idea) => {
         idea.lowestSelectedDescendent = '';
       });
@@ -263,6 +264,7 @@ var app = new Vue({
      * @param {number} [generation=0] - The current generation level (used for indentation).
      */
     PrintTree(node, generation = 0) {
+      note('PrintTree() called');
       // Create the prefix with spaces and the arrow based on the generation level
       const prefix = generation === 0 ? '' : ' '.repeat(generation * 4 - 1) + '—';
       // Append "SELECTED" if the node is selected
@@ -278,19 +280,20 @@ var app = new Vue({
 
     /**
      * Checks if any idea in the provided list is selected.
-     * @param {Array<IdeaObject>} ideas - The list of ideas to check.
+     * @param {Array<IdeaObject>} _ideas - The list of ideas to check.
      * @returns {boolean} - Returns true if at least one idea is selected, otherwise false.
      */
-    HasSelected(ideas) {
+    HasSelected(_ideas) {
       // Use the some() method to determine if any idea in the list is selected
-      return ideas.some((idea) => idea.isSelected);
+      return _ideas.some((idea) => idea.isSelected);
     },
 
     /**
      * Finds the first unfinished generation of explored lineage.
-     * @returns {Array<IdeaObject>|null} The lowest possible descendant without selected children ideas, or the first generation children if no suitable generation is found.
+     * @returns {IdeaObject[]|null} The lowest possible descendant without selected children ideas, or the first generation children if no suitable generation is found.
      */
     GetFirstUnfinishedGenerationOfExploredLineage() {
+      note('GetFirstUnfinishedGenerationOfExploredLineage() called');
       // Recursive function to traverse the tree
       function traverse(idea) {
         if (!idea.children.length) {
@@ -334,7 +337,7 @@ var app = new Vue({
      * @returns {Object|null} The deepest selected node, or null if no selected node is found.
      */
     FindDeepestSelected(node) {
-      note('FindDeepestSelected("' + node.name + '") called');
+      note('FindDeepestSelected() called');
       let lowestSelected = null;
 
       /**
@@ -366,6 +369,7 @@ var app = new Vue({
      * @returns {IdeaObject[]} - The sorted array of IdeaObject instances.
      */
     SortIdeasAlphabetically(_ideas) {
+      note('SortIdeasAlphabetically() called');
       return _ideas.sort((a, b) => {
         // Compare the name properties of two ideas
         if (a.name < b.name) {
@@ -402,20 +406,32 @@ var app = new Vue({
     //#region —————— DEBUG SETUP ——————
     /** Set conditions to skip interactions while developing */
     PreFillForDevelopment() {
+      note('PreFillForDevelopment() called');
       this.SelectIdeaSet(this.allIdeaSets[0]);
     },
     //#endregion
 
     //#region —————— EVENT HANDLERS ——————
-
+    /**
+     * Handles the click event for an AI action, preventing default behavior and opening a URL if provided.
+     * @param {Event} event - The click event object.
+     * @param {Object} _action - The action object containing the URL to be opened.
+     */
     HandleActionAIClick(event, _action) {
       note('HandleActionAIClick() called');
+
+      // Prevent the default action of the event
       event.preventDefault();
+
+      // Stop the event from propagating further
       event.stopPropagation();
+
+      // Check if the action has a URL
       if (_action.url !== '') {
+        // Open the URL in a new tab
         window.open(_action.url, '_blank');
       } else {
-        // insert AI logic
+        // Insert AI logic here
       }
     },
 
@@ -441,7 +457,7 @@ var app = new Vue({
         case 'Tab':
           console.log(event.target);
           if (this.currentIdeas && this.selectedIdeasPath.length === 0 && event.target.tagName.toLowerCase() !== 'idea') {
-            this.MoveFocus();
+            // this.MoveFocus();
           }
         default:
           break;
@@ -459,21 +475,23 @@ var app = new Vue({
   },
 
   mounted() {
+    //#region —————— vue mounted() ——————
     announce('App Initialized');
     if (UseDebug) {
       this.PreFillForDevelopment();
     }
     window.addEventListener('keydown', this.HandleKeyDown);
     window.addEventListener('mouseup', this.HandleMouseUp);
+    //#endregion
   },
 
   computed: {
+    //#region —————— vue computed() ——————
     /**
-     * Finds the appropriate set of sibling IdeaObjects that can be presented to the user for their interaction
-     * @returns {Array} an array of IdeaObjects
+     * COMPUTED: Finds the appropriate set of sibling IdeaObjects that can be presented to the user for their interaction
+     * @returns {IdeaObject[]} an array of IdeaObjects
      */
     getIdeasFromCurrentGenerationBasedOnMethod: function () {
-      note('getRandomIdeasFromCurrentIdeasGeneration() called');
       if (this.currentIdeas === null) return [];
 
       // determine the current generation of ideas that have been interacted with by the user
@@ -520,7 +538,6 @@ var app = new Vue({
           filteredObjects = this.GetFirstUnfinishedGenerationOfExploredLineage(this.currentIdeas, false);
 
           filteredObjects.forEach((idea) => {
-            highlight(idea.parent.name);
             if (idea.isSelected && idea.parent === this.currentIdeas) {
               idea.lowestSelectedDescendent = this.FindDeepestSelected(idea).name;
             }
@@ -535,9 +552,7 @@ var app = new Vue({
     },
 
     /**
-     * Gets the final "selected" Idea of a set of IdeaObject siblings
-     * Computed here because it's used in both this controller and in
-     *    the front-end html
+     * COMPUTED: Gets the final "selected" Idea of a set of IdeaObject siblings
      * @returns {IdeaObject}
      */
     getLastSelectedIdea: function () {
@@ -545,8 +560,8 @@ var app = new Vue({
     },
 
     /**
-     * Computes the lowest selected descendants based on the current method.
-     * @returns {Array} An array of the lowest selected descendants.
+     * COMPUTED: Gets the lowest selected descendants based on the current method.
+     * @returns {IdeaObject[]} An array of the lowest selected descendants.
      */
     getLowestSelectedDescendantsComputed: function () {
       const result = [];
@@ -572,7 +587,7 @@ var app = new Vue({
     },
 
     /**
-     * Determines whether AI actions should be shown based on the current method and ideas.
+     * COMPUTED: Determines whether AI actions should be shown based on the current method and ideas.
      * @returns {boolean} True if AI actions should be shown, false otherwise.
      */
     showAIActions: function () {
@@ -604,7 +619,7 @@ var app = new Vue({
     },
 
     /**
-     * Determines whether the exercise result should be shown based on the current method and ideas.
+     * COMPUTED: Determines whether the exercise result should be shown based on the current method and ideas.
      * @returns {boolean} True if the exercise result should be shown, false otherwise.
      */
     showExerciseResult: function () {
@@ -632,12 +647,29 @@ var app = new Vue({
       }
     },
 
+    /**
+     * COMPUTED: Hydrates AI actions by replacing placeholders with actual data and returns the updated actions.
+     * @returns {AIActionObject[]} - The array of hydrated AIActionObject instances.
+     */
     hydratedAIActions: function () {
+      // Initialize an array to hold the new actions
+      const newActions = [];
+
+      // Iterate over each action in the current idea set's AI actions
       this.currentIdeaSet.AIActions.forEach((action) => {
-        highlight(action.request);
-        action.request = action.request.replace('{{idea.name}}', '"' + this.getLastSelectedIdea.name + '"');
+        // Create a new AIActionObject from the current action
+        let newAction = new AIActionObject(action);
+
+        // Replace the placeholder in the request with the name of the last selected idea
+        newAction.request = newAction.request.replace('{{idea.name}}', '"' + this.getLastSelectedIdea.name + '"');
+
+        // Add the new action to the array of new actions
+        newActions.push(newAction);
       });
-      return this.currentIdeaSet.AIActions;
+
+      // Return the array of hydrated AI actions
+      return newActions;
     },
+    //#endregion
   },
 });

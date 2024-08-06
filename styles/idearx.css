@@ -19,9 +19,12 @@
 
     --colorBackground: hsl(0, 0%, 95%);
     --colorForeground: hsl(0, 0%, 20%);
-    --colorHighlight: hsl(200, 100%, 95%);
-    --colorAction: hsl(200, 100%, 39%);
-    --colorActionDark: hsl(200, 100%, 30%);
+    --colorPrimaryHighlight: hsl(200, 100%, 95%);
+    --colorPrimary: hsl(200, 100%, 39%);
+    --colorPrimaryDark: hsl(200, 100%, 30%);
+    --colorSecondaryHighlight: hsl(200, 0%, 95%);
+    --colorSecondary: hsl(200, 0%, 39%);
+    --colorSecondaryDark: hsl(200, 0%, 30%);
     --colorFocus: hsl(300, 100%, 50%);
     --colorFocusBackground: hsla(300, 100%, 50%, .1);
     --colorStageBackground: hsl(0, 100%, 100%);
@@ -87,10 +90,10 @@ stage {
 }
 
 a {
-    color: var(--colorAction);
+    color: var(--colorPrimary);
     text-decoration: none;
     display: inline-block;
-    border-bottom: 1px dashed var(--colorAction);
+    border-bottom: 1px dashed var(--colorPrimary);
 }
 
 a:hover {
@@ -109,13 +112,14 @@ button {
     display: inline-flex;
     justify-content: center;
     align-items: center;
+    min-width: 50px;
+    min-height: 34px;
     gap: calc(.5 * var(--defaultUnit));
-    border: 1px solid var(--colorAction);
+    border: 1px solid var(--colorPrimary);
     cursor: pointer;
     padding: 0 var(--defaultUnit);
-    min-height: 40px;
     background-color: var(--colorStageBackground);
-    color: var(--colorAction);
+    color: var(--colorPrimary);
     border-radius: var(--borderRadius);
     transition: var(--shortTransition);
     outline: 1px solid transparent;
@@ -127,14 +131,27 @@ button:hover, select:hover, button:focus-visible, select:focus-visible, button:a
 }
 
 button.action {
-    background-color: var(--colorHighlight);
-    color: var(--colorActionDark);
+    background-color: var(--colorPrimaryHighlight);
+    border-color: var(--colorPrimary);
+    color: var(--colorPrimaryDark);
+    min-height: 50px;
     box-shadow: var(--boxShadow);
     text-wrap: nowrap;
 }
 
+button.action:before {
+    content: '目 ';
+}
+
 button.action.link:after {
-    content: '⧉ ';
+    /* content: '⧉ '; */
+}
+
+.secondary button, .secondary select {
+    border: none;
+    background-color: var(--colorPrimaryHighlight);
+    /* color: var(--colorSecondary); */
+    /* padding: 0 calc(.5 * var(--defaultUnit)); */
 }
 
 icon {
@@ -145,7 +162,7 @@ icon {
     -webkit-mask-repeat: no-repeat;
     mask-position: center;
     -webkit-mask-position: center;
-    background-color: var(--colorAction);
+    background-color: var(--colorPrimary);
     width: 16px;
     height: 16px;
     pointer-events: none;
@@ -172,8 +189,9 @@ icon.chevron-down {
 select {
     display: flex;
     cursor: pointer;
-    text-transform: uppercase;
-    min-height: 40px;
+    /* text-transform: uppercase;
+    letter-spacing: 1px; */
+    min-height: 34px;
     justify-content: center;
     align-items: center;
     background-color: var(--colorStageBackground);
@@ -183,8 +201,8 @@ select {
     background-size: 15px;
     padding: 0 calc(2.5 * var(--defaultUnit)) 0 calc(1 * var(--defaultUnit));
     width: auto;
-    border: 1px solid var(--colorAction);
-    color: var(--colorAction);
+    border: 1px solid var(--colorPrimary);
+    color: var(--colorPrimary);
     border-radius: var(--borderRadius);
     outline: 1px solid transparent;
     transition: var(--shortTransition);
@@ -192,6 +210,9 @@ select {
 
 .vertical select {
     padding: 0 calc(2.5 * var(--defaultUnit));
+    min-height: 40px;
+    font-size: 1.2em;
+    font-weight: bold;
 }
 
 .vertical select option {
@@ -417,7 +438,7 @@ version {
     font-size: .8em;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 1024px) {
     .hide-mobile {
         display: none;
     }

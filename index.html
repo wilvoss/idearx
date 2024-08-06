@@ -52,15 +52,18 @@
         </controls>
         <p v-html="currentIdeaSet.description"></p>
         <workbench v-if="currentIdeaSet.name !== null">
-          <controlgroup>
+          <controlgroup class="secondary">
             <controls>
+              <select title="Select View" role="select" tabindex="0" aria-label="Select View" name="viewPicker" id="viewPicker" v-model="currentView" @change="HardRestartExercise()">
+                <option v-for="view in allViews" :key="view.value" :value="view">{{view.name}}</option>
+              </select>
               <select title="Select Method" role="select" tabindex="0" aria-label="Select Method" :disabled="currentIdeaSet.locked" name="methodPicker" id="methodPicker" v-model="currentMethod" @change="HardRestartExercise()">
                 <option v-for="method in allMethods" :key="method.value" :value="method">{{method.name}}</option>
               </select>
             </controls>
             <controls>
-              <button id="button-undo" title="Undo" role="button" tabindex="0" aria-label="Undo" class="symbol" v-if="currentMethod.allowUndo" :disabled="!currentExerciseIsDirty" @click="UndoLastIdea()"><icon class="undo"></icon></button>
-              <button id="button-redo" title="Redo" role="button" tabindex="0" aria-label="Redo" class="symbol" v-if="currentMethod.allowUndo" :disabled="ideasQueueForRedo.length === 0" @click="RedoLastIdea()"><icon class="redo"></icon></button>
+              <button id="button-undo" title="Undo" role="button" tabindex="0" aria-label="Undo" class="symbol hide-mobile" v-if="currentMethod.allowUndo" :disabled="!currentExerciseIsDirty" @click="UndoLastIdea()"><icon class="undo"></icon></button>
+              <button id="button-redo" title="Redo" role="button" tabindex="0" aria-label="Redo" class="symbol hide-mobile" v-if="currentMethod.allowUndo" :disabled="ideasQueueForRedo.length === 0" @click="RedoLastIdea()"><icon class="redo"></icon></button>
               <button id="button-restart" title="Restart" role="button" tabindex="0" aria-label="Restart" :disabled="!currentExerciseIsDirty" @click="HardRestartExercise()">Restart</button>
             </controls>
           </controlgroup>
@@ -90,6 +93,7 @@
     <script src="models/AIActionObject.js" type="text/javascript"></script>
     <script src="models/IdeaObject.js" type="text/javascript"></script>
     <script src="models/IdeaSetObject.js" type="text/javascript"></script>
+    <script src="models/ViewObject.js" type="text/javascript"></script>
     <script src="scripts/idearx-controller.js" type="text/javascript"></script>
   </body>
 </html>
