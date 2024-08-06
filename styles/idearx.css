@@ -23,6 +23,7 @@
     --colorAction: hsl(200, 100%, 39%);
     --colorActionDark: hsl(200, 100%, 30%);
     --colorFocus: hsl(300, 100%, 50%);
+    --colorFocusBackground: hsla(300, 100%, 50%, .1);
     --colorStageBackground: hsl(0, 100%, 100%);
 
     --shortTransition: 100ms ease-in-out all;
@@ -72,13 +73,36 @@ app {
 }
 
 stage {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
     width: 100%;
     /* height: 100%; */
     min-height: calc(100vh - var(--vertPadding));
     max-width: calc(var(--maxWidth) - 2 * var(--horPadding));
     padding: 0 var(--horPadding) var(--vertPadding);
     background: var(--colorStageBackground);
+    transition: var(--shortTransition);
+}
+
+a {
+    color: var(--colorAction);
+    text-decoration: none;
+    display: inline-block;
+    border-bottom: 1px dashed var(--colorAction);
+}
+
+a:hover {
+    color: var(--colorForeground);
+    border-bottom-color: var(--colorForeground);
+    border-bottom-style: solid;
+}
+
+a:focus, a:focus-visible {
+    outline: none;
+    border-bottom: 1px solid var(--colorFocus);
+    background: var(--colorFocusBackground);
 }
 
 button {
@@ -107,6 +131,10 @@ button.action {
     color: var(--colorActionDark);
     box-shadow: var(--boxShadow);
     text-wrap: nowrap;
+}
+
+button.action.link:after {
+    content: '⧉ ';
 }
 
 icon {
@@ -144,6 +172,7 @@ icon.chevron-down {
 select {
     display: flex;
     cursor: pointer;
+    text-transform: uppercase;
     min-height: 40px;
     justify-content: center;
     align-items: center;
@@ -161,6 +190,13 @@ select {
     transition: var(--shortTransition);
 }
 
+.vertical select {
+    padding: 0 calc(2.5 * var(--defaultUnit));
+}
+
+.vertical select option {
+    text-align: center;
+}
 
 :disabled, .disabled {
     pointer-events: none;
@@ -168,6 +204,19 @@ select {
     opacity: .3;
     cursor: default;
     box-shadow: none;
+}
+
+p {
+    max-width: calc(.5 * var(--maxWidth));
+    text-align: center;
+}
+
+cta {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: var(--defaultUnit);
 }
 
 hgroup {
@@ -197,10 +246,10 @@ hgroup h2 {
 
 workbench {
     display: flex;
+    width: 100%;
     justify-content: space-between;
     flex-direction: column;
-    border-top: 1px solid rgba(0, 0, 0, .2);
-    margin-top: calc(2 * var(--defaultUnit));
+    margin-top: calc(1 * var(--defaultUnit));
 }
 
 workbench p {
@@ -208,13 +257,19 @@ workbench p {
     text-align: center;
 }
 
-controls {
+controlgroup {
     display: flex;
     gap: calc(.25 * var(--defaultUnit));
     justify-content: space-between;
     align-items: center;
-    margin-top: var(--defaultUnit);
     transition: var(--shortTransition);
+}
+
+controlgroup controls {
+    display: flex;
+    gap: calc(.25 * var(--defaultUnit));
+    margin: var(--defaultUnit) 0;
+    border: none;
 }
 
 controls control {
@@ -229,6 +284,7 @@ controls control {
 controls.vertical {
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
 controls.vertical control {
@@ -359,4 +415,10 @@ version {
     /* position: absolute; */
     top: 10px;
     font-size: .8em;
+}
+
+@media only screen and (max-width: 600px) {
+    .hide-mobile {
+        display: none;
+    }
 }

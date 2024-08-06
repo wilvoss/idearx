@@ -12,7 +12,7 @@ var app = new Vue({
   el: '#app',
   data: {
     //#region —————— APP DATA ——————
-    appVersion: '0.0.026',
+    appVersion: '0.0.027',
     allMethods: Methods,
     allIdeaSets: IdeaSets,
     //#endregion
@@ -123,7 +123,9 @@ var app = new Vue({
           // If there is no last selected idea, or it has children, or no ideas are selected
           if (this.getLastSelectedIdea === undefined || this.getLastSelectedIdea.children.length > 0 || this.selectedIdeasPath.length === 0) {
             // Focus on the first 'idea' element in the document
-            document.getElementsByTagName('idea')[0].focus();
+            document.getElementById('idpicker').firstChild.focus();
+          } else if (this.showAIActions) {
+            document.getElementById('aiactions').firstChild.focus();
           } else {
             // Otherwise, focus on the 'button-restart' element
             document.getElementById('button-restart').focus();
@@ -405,6 +407,18 @@ var app = new Vue({
     //#endregion
 
     //#region —————— EVENT HANDLERS ——————
+
+    HandleActionAIClick(event, _action) {
+      note('HandleActionAIClick() called');
+      event.preventDefault();
+      event.stopPropagation();
+      if (_action.url !== '') {
+        window.open(_action.url, '_blank');
+      } else {
+        // insert AI logic
+      }
+    },
+
     /**
      * Used to manage keyboard input from the user
      * Used to establish current type of user input
@@ -412,6 +426,7 @@ var app = new Vue({
      */
     HandleKeyDown(event) {
       note('HandleKeyDown() called');
+      this.visualStateLastInputEvent = 'keydown';
       switch (event.key) {
         case 'z':
         case 'Z':
@@ -423,10 +438,14 @@ var app = new Vue({
             }
           }
           break;
+        case 'Tab':
+          console.log(event.target);
+          if (this.currentIdeas && this.selectedIdeasPath.length === 0 && event.target.tagName.toLowerCase() !== 'idea') {
+            this.MoveFocus();
+          }
         default:
           break;
       }
-      this.visualStateLastInputEvent = 'keydown';
     },
 
     /**
@@ -611,6 +630,14 @@ var app = new Vue({
         // Return true if the current method is 'full'
         return this.currentMethod.value === 'full';
       }
+    },
+
+    hydratedAIActions: function () {
+      this.currentIdeaSet.AIActions.forEach((action) => {
+        highlight(action.request);
+        action.request = action.request.replace('{{idea.name}}', '"' + this.getLastSelectedIdea.name + '"');
+      });
+      return this.currentIdeaSet.AIActions;
     },
   },
 });
