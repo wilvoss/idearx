@@ -54,7 +54,7 @@
         <workbench v-if="currentIdeaSet.name !== null">
           <controlgroup class="secondary">
             <controls>
-              <select title="Select View" role="select" tabindex="0" aria-label="Select View" name="viewPicker" id="viewPicker" v-model="currentView" @change="HardRestartExercise()">
+              <select title="Select View" role="select" tabindex="0" aria-label="Select View" name="viewPicker" id="viewPicker" v-model="currentView">
                 <option v-for="view in allViews" :key="view.value" :value="view">{{view.name}}</option>
               </select>
               <select title="Select Method" role="select" tabindex="0" aria-label="Select Method" :disabled="currentIdeaSet.locked" name="methodPicker" id="methodPicker" v-model="currentMethod" @change="HardRestartExercise()">

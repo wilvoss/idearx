@@ -85,7 +85,7 @@
     { "n": "Cost", "c": [{ "n": "~ Any cost" }, { "n": "$" }, { "n": "$$" }, { "n": "$$$" }, { "n": "$$$$" }] },
     {
       "n": "When",
-      "c": [{ "n": "~ Any time" }, { "n": "Breakfast" }, { "n": "Brunch" }, { "n": "Lunch" }, { "n": "Teatime" }, { "n": "Supper" }, { "n": "Dinner" }]
+      "c": [{ "n": "5. Any time" }, { "n": "1. Breakfast" }, { "n": "2. Brunch" }, { "n": "3. Lunch" }, { "n": "4. Teatime" }, { "n": "4.Dinner" }]
     },
     { "n": "Who's eating?", "c": [{ "n": "~ Anybody" }, { "n": "Adults 21+" }, { "n": "Large group" }, { "n": "Romancers" }, { "n": "Family and kids" }] }
   ]
