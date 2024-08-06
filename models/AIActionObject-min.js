@@ -1,0 +1,1 @@
+class AIActionObject{constructor(t){this.request=void 0===t.request?"":t.request,this.inputs=void 0===t.inputs?[]:t.inputs}}

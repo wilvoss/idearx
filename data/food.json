@@ -1,9 +1,11 @@
 {
   "n": "Food Choices",
+  "hsl": "0,100%,100%",
   "c": [
     {
       "n": "Cuisine",
       "c": [
+        { "n": "Any cuisine" },
         {
           "n": "European",
           "c": [
@@ -34,23 +36,23 @@
           "c": [
             {
               "n": "Central African",
-              "c": [{ "n": "" }]
+              "c": []
             },
             {
               "n": "East African",
-              "c": [{ "n": "" }]
+              "c": []
             },
             {
               "n": "North African",
-              "c": [{ "n": "" }]
+              "c": []
             },
             {
               "n": "Southern African",
-              "c": [{ "n": "" }]
+              "c": []
             },
             {
               "n": "West African",
-              "c": [{ "n": "" }]
+              "c": []
             }
           ]
         },
@@ -75,29 +77,16 @@
 
         {
           "n": "Asian",
-          "c": [
-            { "n": "Central Asian", "c": [{ "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }] },
-            { "n": "East Asian", "c": [{ "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }] },
-            { "n": "Chinese", "c": [{ "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }] },
-            { "n": "Highland Asian", "c": [{ "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }] },
-            { "n": "North Asian", "c": [{ "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }] },
-            { "n": "South Asian", "c": [{ "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }] },
-            { "n": "Indian", "c": [{ "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }] },
-            { "n": "Pakastani", "c": [{ "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }] },
-            { "n": "Mainland Southeast Asian", "c": [{ "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }] },
-            { "n": "Maritime Southeast Asian", "c": [{ "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }] },
-            { "n": "Indonesian", "c": [{ "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }] },
-            { "n": "West Asian cuisine", "c": [{ "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }, { "n": "" }] }
-          ]
+          "c": [{ "n": "Central Asian" }, { "n": "East Asian" }, { "n": "Chinese" }, { "n": "Highland Asian" }, { "n": "North Asian" }, { "n": "South Asian" }, { "n": "Indian" }, { "n": "Pakastani" }, { "n": "Mainland Southeast Asian" }, { "n": "Maritime Southeast Asian" }, { "n": "Indonesian" }, { "n": "West Asian cuisine" }]
         }
       ]
     },
-    { "n": "Essence", "c": [{ "n": "Comfort food" }, { "n": "Decadent" }, { "n": "Healthy" }] },
-    { "n": "Cost", "c": [{ "n": "Cheap" }, { "n": "Reasonable" }, { "n": "Pricey" }, { "n": "Stupid expensive" }] },
+    { "n": "Vibe", "c": [{ "n": "Comforting" }, { "n": "Decadent" }, { "n": "Healthy" }, { "n": "Sporty" }, { "n": "Festive" }] },
+    { "n": "Cost", "c": [{ "n": "$" }, { "n": "$$" }, { "n": "$$$" }, { "n": "$$$$" }] },
     {
-      "n": "Meal time",
-      "c": [{ "n": "Breakfast" }, { "n": "Second breakfast" }, { "n": "Brunch" }, { "n": "Lunch" }, { "n": "Second lunch" }, { "n": "Supper" }, { "n": "Teatime" }, { "n": "Dinner" }]
+      "n": "When",
+      "c": [{ "n": "Breakfast" }, { "n": "Brunch" }, { "n": "Lunch" }, { "n": "Teatime" }, { "n": "Supper" }, { "n": "Dinner" }]
     },
-    { "n": "Audience", "c": [{ "n": "21+" }, { "n": "Couples" }, { "n": "Family friendly" }, { "n": "Kids" }] }
+    { "n": "Who's eating?", "c": [{ "n": "Adults 21+" }, { "n": "Large group" }, { "n": "Romantic partners" }, { "n": "Family and kids" }] }
   ]
 }

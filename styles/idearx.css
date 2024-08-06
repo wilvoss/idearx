@@ -1,11 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Grandstander:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {
     --maxWidth: 1024px;
     --defaultUnit: 20px;
     --largeUnit: calc(var(--defaultUnit) * 4);
     --borderRadius: 25px;
+    --borderRadiusSmall: 3px;
     --bodyFont: "Jura", sans-serif;
+    --handFont: "Grandstander", cursive;
+    --boxShadow: 0px 4px 4px rgba(0, 0, 0, .2);
+    --boxShadowLifted: 0px 8px 8px rgba(0, 0, 0, .1);
 
     --horMargin: clamp(var(--defaultUnit), 5vw, var(--largeUnit));
     --horPadding: clamp(var(--defaultUnit), 5vw, var(--largeUnit));
@@ -14,8 +19,9 @@
 
     --colorBackground: hsl(0, 0%, 95%);
     --colorForeground: hsl(0, 0%, 20%);
-    --colorHighlight: hsl(190, 100%, 82%);
+    --colorHighlight: hsl(200, 100%, 95%);
     --colorAction: hsl(200, 100%, 39%);
+    --colorActionDark: hsl(200, 100%, 30%);
     --colorFocus: hsl(300, 100%, 50%);
     --colorStageBackground: hsl(0, 100%, 100%);
 
@@ -34,6 +40,7 @@ body {
     justify-content: center;
     align-items: start;
     font-family: var(--bodyFont);
+    line-height: 150%;
     padding: 0;
     margin: 0;
     background: var(--colorBackground);
@@ -93,6 +100,13 @@ button {
 button:hover, select:hover, button:focus-visible, select:focus-visible, button:active, select:active, button:focus, select:focus {
     outline: 1px solid var(--colorFocus);
     outline-offset: 1px;
+}
+
+button.action {
+    background-color: var(--colorHighlight);
+    color: var(--colorActionDark);
+    box-shadow: var(--boxShadow);
+    text-wrap: nowrap;
 }
 
 icon {
@@ -206,9 +220,10 @@ controls {
 controls control {
     display: flex;
     gap: 10px;
-    justify-content: end;
+    /* justify-content: end; */
     align-items: baseline;
     word-wrap: nowrap;
+    flex-wrap: wrap;
 }
 
 controls.vertical {
@@ -227,24 +242,24 @@ ideas {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: calc(.5 * var(--defaultUnit));
     width: 100%;
-    margin: 0;
+    margin: 0 0 var(--defaultUnit) 0;
 }
 
 idea {
     display: flex;
     cursor: pointer;
-    justify-content: center;
+    justify-content: start;
     font-size: 1.25em;
+    font-family: var(--handFont);
+    font-weight: 200;
     align-items: start;
     border: 1px solid black;
-    padding: calc(.75 * var(--defaultUnit)) var(--defaultUnit);
+    border-radius: var(--borderRadiusSmall);
+    padding: calc(.75 * var(--defaultUnit)) var(--defaultUnit) calc(.5 * var(--defaultUnit));
     background: var(--colorBackground);
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, .2);
+    box-shadow: var(--boxShadow);
     text-shadow: 0px 1px 0px rgba(255, 255, 255, .5);
     transition: var(--shortTransition);
-
-    /* border-radius: var(--borderRadius); */
-    font-weight: 800;
     background: var(--colorStageBackground);
     user-select: none;
     -webkit-user-select: none;
@@ -253,9 +268,10 @@ idea {
 }
 
 idea.selected, idea.selected:hover {
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0);
+    box-shadow: none;
     transform: translateY(-1px);
     cursor: default;
+    pointer-events: none;
 }
 
 idea.selected:before {
@@ -264,10 +280,25 @@ idea.selected:before {
     padding-right: calc(.5 * var(--defaultUnit));
 }
 
+idea.explored {
+    border: dashed;
+    border-color: rgba(0, 0, 0, .4);
+    background-image: linear-gradient(rgba(255, 255, 255, .8), rgba(255, 255, 255, .8));
+}
+
+idea.explored.selected:before {
+    content: '';
+}
+
+idea.marked.selected {
+    border: none;
+    font-weight: normal;
+}
+
 idea:hover,
 idea:focus {
     opacity: .9;
-    box-shadow: 0px 8px 8px rgba(0, 0, 0, .1);
+    box-shadow: var(--boxShadowLifted);
     transform: translateY(-2px);
     outline: none;
 }
@@ -285,6 +316,7 @@ idea:active {
 
 tooltip {
     display: block;
+    font-family: var(--bodyFont);
     pointer-events: none;
     user-select: none;
     -webkit-user-select: none;

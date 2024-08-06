@@ -46,34 +46,48 @@
             <label for="ideaSetPicker">Pick a Focus</label>
             <select :title="'Select Focus' + (currentIdeaSet.name === null ? '' : ': ' + currentIdeaSet.name + ' is selected')" role="select" tabindex="0" aria-label="Select Focus" name="ideaSetPicker" id="ideaSetPicker" v-model="currentIdeaSet" @change="SelectIdeaSet()" class="big">
               <option :value="{}" disabled>Select</option>
-              <option v-for="set in allIdeaSets" :key="set.type" :value="set" v-if="!set.hidden">{{set.name}}</option>
+              <option :title="set.description ? set.description : ''" v-for="set in allIdeaSets" :key="set.type" :value="set" v-if="!set.hidden">{{set.name}}</option>
             </select>
           </control>
         </controls>
         <workbench v-if="currentIdeaSet.name !== null">
           <controls>
             <controls>
-              <select title="Select Method" role="select" tabindex="0" aria-label="Select Method" :disabled="currentIdeaSet.locked" name="methodPicker" id="methodPicker" v-model="currentMethod" @change="RestartExercise()">
+              <select title="Select Method" role="select" tabindex="0" aria-label="Select Method" :disabled="currentIdeaSet.locked" name="methodPicker" id="methodPicker" v-model="currentMethod" @change="HardRestartExercise()">
                 <option v-for="method in allMethods" :key="method.value" :value="method">{{method.name}}</option>
               </select>
             </controls>
             <controls>
               <button id="button-undo" title="Undo" role="button" tabindex="0" aria-label="Undo" class="symbol" v-if="currentMethod.allowUndo" :disabled="!currentExerciseIsDirty" @click="UndoLastIdea()"><icon class="undo"></icon></button>
               <button id="button-redo" title="Redo" role="button" tabindex="0" aria-label="Redo" class="symbol" v-if="currentMethod.allowUndo" :disabled="ideasQueueForRedo.length === 0" @click="RedoLastIdea()"><icon class="redo"></icon></button>
-              <button id="button-restart" title="Restart" role="button" tabindex="0" aria-label="Restart" :disabled="!currentExerciseIsDirty" @click="RestartExercise()">Restart</button>
+              <button id="button-restart" title="Restart" role="button" tabindex="0" aria-label="Restart" :disabled="!currentExerciseIsDirty" @click="HardRestartExercise()">Restart</button>
             </controls>
           </controls>
           <p>{{currentIdeaSet.cta}}</p>
-          <ideas>
-            <idea :key="idea.name" @keydown.space.prevent="SelectIdea(idea)" role="option" tabindex="0" aria-label="Idea" :style="{backgroundColor: 'hsla(' + idea.hsl + ', .3)' }" :class="{selectednot: idea.isSelected}" v-for="(idea, index) in getIdeasFromCurrentLevelBasedOnMethod" @click="SelectIdea(idea)"><tooltip v-if="idea.description !== null">{{idea.description}}</tooltip>{{idea.name}}</idea>
-            <idea :style="{backgroundColor: 'hsla(' + getLastSelectedIdea.hsl + ', .3)' }" class="selected" v-if="selectedIdeasPath.length > 0 && getLastSelectedIdea.children.length === 0"><tooltip v-if="getLastSelectedIdea.description !== null">{{getLastSelectedIdea.description}}</tooltip>{{getLastSelectedIdea.name}}</idea>
+          <ideas v-if="getIdeasFromCurrentGenerationBasedOnMethod.length > 0 && getIdeasFromCurrentGenerationBasedOnMethod[0].parent!==null && getIdeasFromCurrentGenerationBasedOnMethod[0].parent!==undefined  && getIdeasFromCurrentGenerationBasedOnMethod[0].parent.name !== currentIdeas.name">
+            <idea :style="{backgroundColor: 'hsla(' + getLastSelectedIdea.hsl + ', .3)' }" class="explored selected">{{getLastSelectedIdea.name}}</idea>
           </ideas>
+          <ideas v-if="!showExerciseResult">
+            <idea :key="idea.name" @keydown.space.prevent="SelectIdea(idea)" role="option" :tabindex="idea.isSelected ? -1 : 0" aria-label="Idea" :style="{backgroundColor: 'hsla(' + idea.hsl + ', .3)' }" :class="{selected: idea.isSelected && currentMethod.value !== 'binary'}" v-for="(idea, index) in getIdeasFromCurrentGenerationBasedOnMethod" @click="SelectIdea(idea)">
+              <tooltip v-if="idea.description !== null"> {{idea.description}} </tooltip>
+              {{idea.lowestSelectedDescendent !== '' ? idea.lowestSelectedDescendent : idea.name}}
+            </idea>
+          </ideas>
+          <ideas v-if="showExerciseResult">
+            <idea v-for="idea in getLowestSelectedDescendantsComputed" class="selected" :style="{backgroundColor: 'hsla(' + idea.hsl + ', .3)' }"><tooltip v-if="idea.description !== null">{{idea.description}}</tooltip>{{idea.name}}</idea>
+          </ideas>
+          <controls v-if="showAIActions">
+            <control>
+              <button class="action" v-for="action in currentIdeaSet.AIActions">{{action.request}}</button>
+            </control>
+          </controls>
         </workbench>
       </stage>
     </app>
     <script src="helpers/console-enhancer.js" type="text/javascript"></script>
     <script src="helpers/vue.min.js" type="text/javascript"></script>
     <script src="models/MethodObject.js" type="text/javascript"></script>
+    <script src="models/AIActionObject.js" type="text/javascript"></script>
     <script src="models/IdeaObject.js" type="text/javascript"></script>
     <script src="models/IdeaSetObject.js" type="text/javascript"></script>
     <script src="scripts/idearx-controller.js" type="text/javascript"></script>

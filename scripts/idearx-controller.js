@@ -11,13 +11,13 @@ Vue.config.ignoredElements = ['app'];
 var app = new Vue({
   el: '#app',
   data: {
-    //#region app data
-    appVersion: '0.0.025',
+    //#region —————— APP DATA ——————
+    appVersion: '0.0.026',
     allMethods: Methods,
     allIdeaSets: IdeaSets,
     //#endregion
 
-    //#region idea data
+    //#region —————— IDEA DATA ——————
     currentIdeaSet: new IdeaSetObject({}),
     currentIdeas: null,
     currentSelectedIdea: null,
@@ -29,88 +29,103 @@ var app = new Vue({
     ideasQueueForRedo: [], // array of all ideas that were "deselected" by the user with the "Undo" feature
     //#endregion
 
-    //#region visual state management
+    //#region —————— VISUAL STATE MANAGEMENT ——————
     visualStateLastInputEvent: null,
     //#endregion
   },
 
   methods: {
-    //#region === DATA MANIPULATION ===
-
+    //#region —————— DATA MANIPULATION ——————
     /**
-     * Reads the data source (usually .json, but can be .csv or .js in the future)
-     * Generates the entire IdeaObject tree that is used for all data manipulation
-     * "Restarts" the exercise by clearing out any stale data
-     * @param {IdeaSetObject} _set
+     * Selects the current idea set and updates the relevant properties.
+     * @param {IdeaSetObject} _set - The idea set to be selected. If undefined, the current idea set remains unchanged.
      */
     async SelectIdeaSet(_set) {
+      // Log the function call for debugging purposes
       note('SelectIdeaSet() called');
+
+      // Update the current idea set if a new set is provided
       this.currentIdeaSet = _set === undefined ? this.currentIdeaSet : _set;
+
+      // Check if the current idea set has data
       if (this.currentIdeaSet.data !== null) {
+        // Fetch the current ideas in JSON format
         let json = await this.GetCurrentIdeasJSON();
+
+        // Convert the JSON data into a nested idea object
         this.currentIdeas = createNestedIdeaObject(json);
+
+        // Update the current method based on the selected idea set
         this.currentMethod = this.currentIdeaSet.method;
-        this.RestartExercise();
+
+        // Soft restart the exercise to apply the new idea set
+        this.SoftRestartExercise();
       }
     },
 
     /**
-     * Updates the passed _idea object to be selected
-     * Sets any visible sibling "seen" variable to true and
-     *   "isSelected" to false, this is janky but it informs
-     *   the computed property "getIdeasFromCurrentLevelBasedOnMethod"
-     *   which updates the view with a viable set of Ideas
-     * Updates the undo array appropriately
-     * Updates ("Cleans") the redo array when _clean === true
-     * @param {IdeaObject} _idea
-     * @param {Boolean} _clean "true" by default
+     * Selects an idea and updates the selection state based on the current method.
+     * @param {IdeaObject} _idea - The idea object to be selected.
      */
-    SelectIdea(_idea, _clean = true) {
+    SelectIdea(_idea) {
+      // Log that the SelectIdea function was called
       note('SelectIdea(_idea) called');
-      let count = 0; // used to determine if the _idea is the last unseen object amongst its siblings
-      if (_idea.parent.children && _idea.parent.children.length > 0) {
-        count = _idea.parent.children.length;
-        Array.from(_idea.parent.children).forEach((child) => {
-          child.isSelected = false;
-          if (child.showing || this.currentMethod.value !== 'binary') {
-            child.seen = true;
-          }
-          if (child.seen) {
-            count = count - 1;
-          }
-        });
-      }
-      _idea.isSelected = true;
 
-      if (count === 0 || this.currentMethod.value !== 'binary') {
-        // if idea is the final idea of a generation, update app state
+      // Check if the current method is 'binary'
+      if (this.currentMethod.value === 'binary') {
+        let count = 0;
+        // If the idea has children, count them and update their selection state
+        if (_idea.parent.children && _idea.parent.children.length > 0) {
+          count = _idea.parent.children.length;
+          Array.from(_idea.parent.children).forEach((child) => {
+            child.isSelected = false;
+            child.seen = child.showing;
+            // Decrease count if the child is seen
+            if (child.seen) {
+              count = count - 1;
+            }
+          });
+        }
+        // Select the idea and reset its lowest selected descendant
+        _idea.isSelected = true;
+        _idea.lowestSelectedDescendent = '';
+
+        // If no children are seen, update the current selected idea and path
+        if (count === 0) {
+          this.currentSelectedIdea = _idea;
+          this.selectedIdeasPath.push(_idea);
+        }
+      } else {
+        // For non-binary methods, simply select the idea and update the current selected idea and path
+        _idea.isSelected = true;
         this.currentSelectedIdea = _idea;
         this.selectedIdeasPath.push(_idea);
       }
 
+      // Add the idea to the undo queue and mark the exercise as dirty
       this.ideasQueueForUndo.push(_idea);
-
-      if (_clean) {
-        this.CleanDeselectedArrayBasedOnAncestry(_idea);
-      }
-
       this.currentExerciseIsDirty = true;
+      // Move focus to the appropriate element
       this.MoveFocus();
     },
 
     /**
-     * Moves keyboard focus based on use interaction and DOM update
-     * This helps keyboard navigation when a new set of ideas is displayed to the user.
-     *    Without it, the focus would be "lost"
-     *    With it the focus is placed on either the first idea element or the restart button based on context
+     * Moves focus to the appropriate element based on the last input event and the state of selected ideas.
      */
     MoveFocus() {
+      // Log that the MoveFocus function was called
       note('MoveFocus() called');
+
+      // Check if the last input event was a keydown event
       if (this.visualStateLastInputEvent === 'keydown') {
+        // Use Vue's nextTick to ensure DOM updates are complete before proceeding
         this.$nextTick(() => {
+          // If there is no last selected idea, or it has children, or no ideas are selected
           if (this.getLastSelectedIdea === undefined || this.getLastSelectedIdea.children.length > 0 || this.selectedIdeasPath.length === 0) {
+            // Focus on the first 'idea' element in the document
             document.getElementsByTagName('idea')[0].focus();
           } else {
+            // Otherwise, focus on the 'button-restart' element
             document.getElementById('button-restart').focus();
           }
         });
@@ -118,21 +133,34 @@ var app = new Vue({
     },
 
     /**
-     * Moves an IdeaObject from the ideasQueueForUndo array to the ideasQueueForRedo array
-     * Adjusts all affected ancestors, siblings and descendents
-     * This is horribly implemented, won't scale, and needs a better brain than mine
+     * Undoes the last idea from the undo queue.
      */
     UndoLastIdea() {
+      // Check if there are any ideas in the undo queue
       if (this.ideasQueueForUndo.length > 0) {
         note('UndoLastIdea() called');
+
+        // Pop the last idea from the undo queue
         let idea = this.ideasQueueForUndo.pop();
+
+        // Reset the lowest selected descendant
+        idea.lowestSelectedDescendent = '';
+
+        // Push the idea to the redo queue
         this.ideasQueueForRedo.push(idea);
-        if (idea) {
+
+        if (this.currentMethod.value !== 'binary') {
+          // For non-binary methods, reset the idea and move focus
+          this.ResetIdea(idea, true);
+          this.MoveFocus();
+          this.selectedIdeasPath.pop();
+        } else if (idea) {
+          // For binary methods, reset all appropriate ancestors, siblings and descendents
           if (this.getLastSelectedIdea === idea) {
             this.selectedIdeasPath.pop();
             if (idea.parent !== undefined) {
               if (idea.parent === this.currentIdeas) {
-                this.RestartExercise();
+                this.SoftRestartExercise();
               } else {
                 this.currentSelectedIdea = idea.parent;
                 idea.parent.children.forEach((child) => {
@@ -141,7 +169,7 @@ var app = new Vue({
                 });
               }
             } else {
-              this.RestartExercise(idea);
+              this.SoftRestartExercise(idea);
             }
           } else {
             this.ResetIdea(idea, true);
@@ -152,50 +180,68 @@ var app = new Vue({
     },
 
     /**
-     * Removes the last IdeaObject from the ideasQueueForRedo and then selects it via the "SelectIdea" method
-     * This is horribly implemented, doesn't scale, and needs a better brain than mine
+     * Reselects the last idea from the redo queue.
      */
     RedoLastIdea() {
+      // Check if there are any ideas in the redo queue
       if (this.ideasQueueForRedo.length > 0) {
         note('RedoLastIdea() called');
+
+        // Pop the last idea from the redo queue
         let idea = this.ideasQueueForRedo.pop();
+
         if (idea) {
-          this.SelectIdea(idea, false);
+          // If an idea is found, select it
+          this.SelectIdea(idea);
         } else {
+          // If no idea is found, move the focus
           this.MoveFocus();
         }
       }
     },
 
     /**
-     * Fetches, then concatenates all .json data sources for the current IdeaSetObject into a single json object
-     * @returns a single json object
+     * Fetches and returns the current ideas in JSON format.
+     * @returns {Promise<Object>} A promise that resolves to the first idea object.
      */
     async GetCurrentIdeasJSON() {
       note('getCurrentIdeasJSON() called');
       let idea = [];
+
+      // Create an array of fetch promises for each URL in the current idea set
       let fetchPromises = this.currentIdeaSet.data.map((url) => fetch(url).then((response) => response.json()));
 
       try {
+        // Wait for all fetch promises to resolve and concatenate the results
         let dataArrays = await Promise.all(fetchPromises);
         idea = [].concat(...dataArrays);
       } catch (error) {
+        // Log any errors that occur during the fetch process
         error(error);
       }
+
+      // Return the first idea object
       return idea[0];
     },
     //#endregion
 
-    //#region === STATE MANAGEMENT ===
+    //#region —————— STATE MANAGEMENT ——————
+    /**
+     * Resets exercise including any settings overrides and the redo queue.
+     */
+    HardRestartExercise() {
+      this.currentIdeas.children.forEach((idea) => {
+        idea.lowestSelectedDescendent = '';
+      });
+      this.ideasQueueForRedo = [];
+      this.SoftRestartExercise();
+    },
 
     /**
-     * Updates all current IdeaObject data as if the user had
-     *    just selected a new IdeaSetObject ("Pick a focus" in UI)
-     *    without changing any settings overrides like the current MethodObject
-     *    and without clearing out the ideasQueueForRedo array
+     * Resets exercise without changing any settings overrides or clearing the redo queue.
      */
-    RestartExercise() {
-      note('RestartExercise() called');
+    SoftRestartExercise() {
+      note('SoftRestartExercise() called');
       this.selectedIdeasPath = [];
       this.ideasQueueForUndo = [];
       this.currentExerciseIsDirty = false;
@@ -208,61 +254,125 @@ var app = new Vue({
     },
     //#endregion
 
-    //#region === UTILITIES ===
-
+    //#region —————— UTILITIES ——————
     /**
-     * Stubbed in (isn't actually used atm)
-     * Finds all selected descendents of the current top level IdeaObject
-     * This is voodoo magic and chatgpt wrote it for me
-     * @param {IdeaObject} _ideaObject
-     * @returns an array of IdeaObjects (i think)
+     * Recursively prints the tree structure of ideas, indicating the generation level and selection status.
+     * @param {IdeaObject} node - The current node to print.
+     * @param {number} [generation=0] - The current generation level (used for indentation).
      */
-    GetSelectedIdeasGetSelectedIdeasRecursively(_ideaObject) {
-      note('GetSelectedIdeas("' + _ideaObject.name + '") called');
-      if (!_ideaObject.isSelected) {
-        return null;
+    PrintTree(node, generation = 0) {
+      // Create the prefix with spaces and the arrow based on the generation level
+      const prefix = generation === 0 ? '' : ' '.repeat(generation * 4 - 1) + '—';
+      // Append "SELECTED" if the node is selected
+      const selectedText = node.isSelected ? ' SELECTED' : '';
+      // Print the current node's name and isSelected status
+      console.log(`${prefix}"${node.name}"${selectedText}`);
+
+      // Recursively print each child node
+      for (let child of node.children) {
+        this.PrintTree(child, generation + 1);
       }
-
-      const filteredChildren = _ideaObject.children.map(this.GetSelectedIdeasRecursively).filter((child) => child !== null);
-
-      return {
-        ..._ideaObject,
-        children: filteredChildren,
-      };
     },
 
     /**
-     * Updates the ideasQueueForRedo array by removing any IdeaObjects that aren't ancestors
-     * This is voodoo magic and chatgpt wrote it for me
-     * @param {IdeaObject} _idea
+     * Checks if any idea in the provided list is selected.
+     * @param {Array<IdeaObject>} ideas - The list of ideas to check.
+     * @returns {boolean} - Returns true if at least one idea is selected, otherwise false.
      */
-    CleanDeselectedArrayBasedOnAncestry(_idea) {
-      let ancestors = new Set();
-      let current = _idea;
-      while (current) {
-        ancestors.add(current);
-        current = current.parent;
-      }
-
-      this.ideasQueueForRedo = this.ideasQueueForRedo.filter((obj) => {
-        ancestors.has(obj) && obj !== this.currentIdeas;
-      });
+    HasSelected(ideas) {
+      // Use the some() method to determine if any idea in the list is selected
+      return ideas.some((idea) => idea.isSelected);
     },
 
     /**
-     *
-     * @param {Array} _ideas
-     * @returns sorted array
+     * Finds the first unfinished generation of explored lineage.
+     * @returns {Array<IdeaObject>|null} The lowest possible descendant without selected children ideas, or the first generation children if no suitable generation is found.
+     */
+    GetFirstUnfinishedGenerationOfExploredLineage() {
+      // Recursive function to traverse the tree
+      function traverse(idea) {
+        if (!idea.children.length) {
+          return null; // No children, no generation to check
+        }
+
+        if (!app.HasSelected(idea.children)) {
+          return idea.children; // Found a generation without any selected ideas
+        }
+
+        for (let child of idea.children) {
+          if (child.isSelected) {
+            const result = traverse(child);
+            if (result) {
+              return result; // Found a deeper generation without any selected ideas
+            }
+          }
+        }
+
+        return null; // No generation found - should never hit this
+      }
+
+      const siblings = this.currentIdeas.children;
+
+      for (let sibling of siblings) {
+        if (sibling.isSelected) {
+          const result = traverse(sibling);
+          if (result) {
+            return result; // Return the lowest possible descendant without selected children ideas
+          }
+        }
+      }
+
+      // If no suitable generation is found, return the first generation children
+      return siblings;
+    },
+
+    /**
+     * Finds the deepest selected node in the tree starting from the given node.
+     * @param {Object} node - The root node to start the search from.
+     * @returns {Object|null} The deepest selected node, or null if no selected node is found.
+     */
+    FindDeepestSelected(node) {
+      note('FindDeepestSelected("' + node.name + '") called');
+      let lowestSelected = null;
+
+      /**
+       * Recursive helper function to traverse the tree and find the deepest selected node.
+       * @param {Object} currentNode - The current node being traversed.
+       */
+      function traverse(currentNode) {
+        // Update lowestSelected if the current node is selected
+        if (currentNode.isSelected) {
+          lowestSelected = currentNode;
+        }
+
+        // Recursively traverse the children of the current node
+        if (currentNode.children && currentNode.children.length > 0) {
+          for (let child of currentNode.children) {
+            traverse(child);
+          }
+        }
+      }
+
+      // Start the traversal from the given node
+      traverse(node);
+      return lowestSelected;
+    },
+
+    /**
+     * Sorts an array of IdeaObject instances alphabetically by their name property.
+     * @param {IdeaObject[]} _ideas - The array of IdeaObject instances to be sorted.
+     * @returns {IdeaObject[]} - The sorted array of IdeaObject instances.
      */
     SortIdeasAlphabetically(_ideas) {
       return _ideas.sort((a, b) => {
+        // Compare the name properties of two ideas
         if (a.name < b.name) {
-          return -1;
+          return -1; // a comes before b
         }
         if (a.name > b.name) {
-          return 1;
+          return 1; // a comes after b
         }
-        return 0;
+        return 0; // a and b are equal
       });
     },
 
@@ -287,8 +397,14 @@ var app = new Vue({
     },
     //#endregion
 
-    //#region === EVENT HANDLERS ===
+    //#region —————— DEBUG SETUP ——————
+    /** Set conditions to skip interactions while developing */
+    PreFillForDevelopment() {
+      this.SelectIdeaSet(this.allIdeaSets[0]);
+    },
+    //#endregion
 
+    //#region —————— EVENT HANDLERS ——————
     /**
      * Used to manage keyboard input from the user
      * Used to establish current type of user input
@@ -325,6 +441,9 @@ var app = new Vue({
 
   mounted() {
     announce('App Initialized');
+    if (UseDebug) {
+      this.PreFillForDevelopment();
+    }
     window.addEventListener('keydown', this.HandleKeyDown);
     window.addEventListener('mouseup', this.HandleMouseUp);
   },
@@ -332,10 +451,10 @@ var app = new Vue({
   computed: {
     /**
      * Finds the appropriate set of sibling IdeaObjects that can be presented to the user for their interaction
-     * @returns an array of IdeaObjects
+     * @returns {Array} an array of IdeaObjects
      */
-    getIdeasFromCurrentLevelBasedOnMethod: function () {
-      note('getRandomIdeasFromCurrentIdeasLevel() called');
+    getIdeasFromCurrentGenerationBasedOnMethod: function () {
+      note('getRandomIdeasFromCurrentIdeasGeneration() called');
       if (this.currentIdeas === null) return [];
 
       // determine the current generation of ideas that have been interacted with by the user
@@ -353,7 +472,7 @@ var app = new Vue({
 
       // based on the current selected MethodObject, determine the appropriate ideas to display to the end user for consideration
       switch (this.currentMethod.value) {
-        case 'binary': // shows 2 ideas from the current generation
+        case 'binary': // gets 2 ideas from the current generation where the current generation still has some "unseen" ideas
           filteredObjects = children.filter((obj) => !obj.seen && !obj.isSelected);
           for (let i = filteredObjects.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -377,13 +496,16 @@ var app = new Vue({
           }
           break;
 
-        case 'full': // updates the final return object with an alphabetically sorted array of all ideas in the current generation
-          filteredObjects = children.filter((obj) => !obj.seen && !obj.isSelected);
-          filteredObjects = this.SortIdeasAlphabetically(filteredObjects);
-          break;
-
+        case 'full': // gets the current generation of ideas that are part of a partially explored lineage
         case 'merge':
-          filteredObjects = children.filter((obj) => !obj.seen && !obj.isSelected);
+          filteredObjects = this.GetFirstUnfinishedGenerationOfExploredLineage(this.currentIdeas, false);
+
+          filteredObjects.forEach((idea) => {
+            highlight(idea.parent.name);
+            if (idea.isSelected && idea.parent === this.currentIdeas) {
+              idea.lowestSelectedDescendent = this.FindDeepestSelected(idea).name;
+            }
+          });
           filteredObjects = this.SortIdeasAlphabetically(filteredObjects);
 
         default:
@@ -392,23 +514,103 @@ var app = new Vue({
 
       return filteredObjects;
     },
+
     /**
      * Gets the final "selected" Idea of a set of IdeaObject siblings
      * Computed here because it's used in both this controller and in
      *    the front-end html
-     * @returns a single IdeaObject
+     * @returns {IdeaObject}
      */
     getLastSelectedIdea: function () {
       return this.selectedIdeasPath[this.selectedIdeasPath.length - 1];
     },
+
     /**
-     * Stubbed in (isn't actually used atm)
-     * Used to display the results of "GetSelectedIdeas" in the front-end html
-     * @returns an array of IdeaObjects (i think)
+     * Computes the lowest selected descendants based on the current method.
+     * @returns {Array} An array of the lowest selected descendants.
      */
-    getAllSelectedIdeasRecursively: function () {
-      note('getAllSelectedIdeasRecursively() called');
-      return this.GetSelectedIdeas(this.currentIdeas);
+    getLowestSelectedDescendantsComputed: function () {
+      const result = [];
+
+      // Check if the current method is 'binary'
+      if (this.currentMethod.value === 'binary') {
+        // Find the deepest selected idea in the entire tree
+        const deepestSelected = this.FindDeepestSelected(this.currentIdeas);
+        if (deepestSelected) {
+          result.push(deepestSelected);
+        }
+      } else {
+        // For other methods, find the deepest selected idea for each child
+        for (let child of this.currentIdeas.children) {
+          const deepestSelected = this.FindDeepestSelected(child);
+          if (deepestSelected) {
+            result.push(deepestSelected);
+          }
+        }
+      }
+
+      return result;
+    },
+
+    /**
+     * Determines whether AI actions should be shown based on the current method and ideas.
+     * @returns {boolean} True if AI actions should be shown, false otherwise.
+     */
+    showAIActions: function () {
+      let result = false;
+
+      // Check if currentIdeas is defined
+      if (this.currentIdeas) {
+        switch (this.currentMethod.value) {
+          case 'binary':
+            // For 'binary' method, check if all children have been seen
+            result = this.currentIdeas.children.every((idea) => idea.seen === true);
+            break;
+          case 'merge':
+            // For 'merge' method, check if any child has a non-empty lowestSelectedDescendent
+            result = this.currentIdeas.children.some((idea) => idea.lowestSelectedDescendent !== '');
+            break;
+          default:
+            // For other methods, check if any object in the current generation matches the first child
+            result = this.getIdeasFromCurrentGenerationBasedOnMethod.some((obj) => Object.keys(obj).every((key) => obj[key] === this.currentIdeas.children[0][key]) && Object.keys(this.currentIdeas.children[0]).every((key) => obj[key] === this.currentIdeas.children[0][key]));
+            // If a match is found, check if any child is selected
+            if (result) {
+              result = this.HasSelected(this.currentIdeas.children);
+            }
+            break;
+        }
+      }
+
+      return result;
+    },
+
+    /**
+     * Determines whether the exercise result should be shown based on the current method and ideas.
+     * @returns {boolean} True if the exercise result should be shown, false otherwise.
+     */
+    showExerciseResult: function () {
+      // Check if currentIdeas is defined and the current method is 'binary'
+      if (this.currentIdeas && this.currentMethod.value === 'binary') {
+        // For 'binary' method, check if all children have been seen
+        return this.currentIdeas.children.every((idea) => idea.seen === true);
+      }
+
+      // Check if any object in the current generation matches the first child
+      const result = this.getIdeasFromCurrentGenerationBasedOnMethod.some((obj) => Object.keys(obj).every((key) => obj[key] === this.currentIdeas.children[0][key]) && Object.keys(this.currentIdeas.children[0]).every((key) => obj[key] === this.currentIdeas.children[0][key]));
+
+      // If no match is found, return false
+      if (!result) {
+        return false;
+      }
+
+      // Check if any child is selected
+      let somethingIsSelected = this.HasSelected(this.currentIdeas.children);
+      if (!somethingIsSelected) {
+        return false;
+      } else {
+        // Return true if the current method is 'full'
+        return this.currentMethod.value === 'full';
+      }
     },
   },
 });

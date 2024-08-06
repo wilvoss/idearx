@@ -8,6 +8,7 @@ class IdeaObject {
     this.isSelected = spec.isSelected === undefined ? false : spec.isSelected;
     this.children = spec.children === undefined ? [] : spec.children;
     this.parent = spec.parent === undefined ? null : spec.parent;
+    this.lowestSelectedDescendent = spec.lowestSelectedDescendent === undefined ? '' : spec.lowestSelectedDescendent;
     this.hslUsePreset = spec.hslUsePreset === undefined ? false : spec.hslUsePreset;
     this.hsl = spec.hsl === undefined ? '0, 100%, 100%' : spec.hsl;
   }

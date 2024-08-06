@@ -1,4 +1,5 @@
 /// <reference path="../models/MethodObject.js" />
+/// <reference path="../models/AIActionObject.js" />
 
 class IdeaSetObject {
   constructor(spec) {
@@ -9,7 +10,7 @@ class IdeaSetObject {
     this.description = spec.description === undefined ? '' : spec.description;
     this.data = spec.data === undefined ? null : spec.data;
     this.method = spec.method === undefined ? Methods[0] : spec.method;
-    this.getAIFeedback = spec.getAIFeedback === undefined ? false : spec.getAIFeedback;
+    this.AIActions = spec.AIActions === undefined ? [] : spec.AIActions;
     // this.locked is used to disabled the Method picker in the UI
     this.locked = spec.locked === undefined ? false : spec.locked;
     this.hidden = spec.hidden === undefined ? false : spec.hidden;
@@ -21,9 +22,10 @@ var IdeaSets = [
     name: 'Feelings Wheel',
     value: 'feelings',
     method: Methods[0],
-    cta: 'What are you feeling right now?',
+    cta: 'Focus on what you are feeling!',
     description: 'This feelings wheel is based on the Junto Emotion Wheel.',
     data: ['./data/feelings.json'],
+    AIActions: [new AIActionObject({ request: 'Learn about this feeling' })],
     locked: true,
   }),
   new IdeaSetObject({
@@ -33,15 +35,15 @@ var IdeaSets = [
     cta: 'Focus on exactly what you want to eat!',
     description: 'This exercise will help you figure out all of the parameters you want to consider when selecting a restaurant.',
     data: ['./data/food.json'],
+    AIActions: [new AIActionObject({ request: 'Find recipes' }), new AIActionObject({ request: 'Find venues nearby', inputs: ['Zip code'] }), new AIActionObject({ request: 'Find grocery stores nearby', inputs: ['Zip code'] })],
     getAIFeedback: true,
     locked: true,
-    hidden: true,
   }),
   new IdeaSetObject({
     name: 'Lorum picker',
     value: 'lorum',
     method: Methods[1],
-    cta: 'Which latin text is better?',
+    cta: 'Focus on the best random latin text!',
     description: 'This is a test!',
     data: ['./data/test.json'],
   }),
@@ -49,7 +51,7 @@ var IdeaSets = [
     name: 'LETTERS!',
     value: 'letter',
     method: Methods[0],
-    cta: 'Which letter is better?',
+    cta: 'Focus on letters!',
     description: 'This is a test!',
     data: ['./data/test2.json'],
   }),
