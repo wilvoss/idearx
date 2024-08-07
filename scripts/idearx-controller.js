@@ -13,7 +13,7 @@ var app = new Vue({
   el: '#app',
   data: {
     //#region —————— APP DATA ——————
-    appVersion: '0.0.030',
+    appVersion: '0.0.031',
     allMethods: Methods,
     allIdeaSets: IdeaSets,
     allViews: Views,

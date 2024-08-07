@@ -363,7 +363,7 @@ idea.selected:before {
 }
 
 idea.explored {
-    border: dashed;
+    border-style: dashed;
     border-color: rgba(0, 0, 0, .4);
     background-image: linear-gradient(rgba(255, 255, 255, .8), rgba(255, 255, 255, .8));
 }
