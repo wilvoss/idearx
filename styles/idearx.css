@@ -286,11 +286,16 @@ controlgroup {
     transition: var(--shortTransition);
 }
 
-controlgroup controls {
+controls {
     display: flex;
+    width: 100%;
     gap: calc(.25 * var(--defaultUnit));
     margin: var(--defaultUnit) 0;
     border: none;
+}
+
+controlgroup controls {
+    width: auto;
 }
 
 controls control {
