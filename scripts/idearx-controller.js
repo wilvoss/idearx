@@ -13,7 +13,7 @@ var app = new Vue({
   el: '#app',
   data: {
     //#region —————— APP DATA ——————
-    appVersion: '0.0.031',
+    appVersion: '0.0.032',
     allMethods: Methods,
     allIdeaSets: IdeaSets,
     allViews: Views,
@@ -28,8 +28,8 @@ var app = new Vue({
     currentMethodType: '',
     currentExerciseIsDirty: false,
     selectedIdeasPath: [],
-    ideasQueueForUndo: [], // array of all ideas that were "selected" by the user
-    ideasQueueForRedo: [], // array of all ideas that were "deselected" by the user with the "Undo" feature
+    ideasLIFOForUndo: [], // array of all ideas that were "selected" by the user
+    ideasLIFOForRedo: [], // array of all ideas that were "deselected" by the user with the "Undo" feature
     //#endregion
 
     //#region —————— VISUAL STATE MANAGEMENT ——————
@@ -104,7 +104,7 @@ var app = new Vue({
       }
 
       // Add the idea to the undo queue and mark the exercise as dirty
-      this.ideasQueueForUndo.push(_idea);
+      this.ideasLIFOForUndo.push(_idea);
       this.currentExerciseIsDirty = true;
       // Move focus to the appropriate element
       this.MoveFocus();
@@ -139,17 +139,17 @@ var app = new Vue({
      */
     UndoLastIdea() {
       // Check if there are any ideas in the undo queue
-      if (this.ideasQueueForUndo.length > 0) {
+      if (this.ideasLIFOForUndo.length > 0) {
         note('UndoLastIdea() called');
 
         // Pop the last idea from the undo queue
-        let idea = this.ideasQueueForUndo.pop();
+        let idea = this.ideasLIFOForUndo.pop();
 
         // Reset the lowest selected descendant
         idea.lowestSelectedDescendent = '';
 
         // Push the idea to the redo queue
-        this.ideasQueueForRedo.push(idea);
+        this.ideasLIFOForRedo.push(idea);
 
         if (this.currentMethod.value !== 'binary') {
           // For non-binary methods, reset the idea and move focus
@@ -186,11 +186,11 @@ var app = new Vue({
      */
     RedoLastIdea() {
       // Check if there are any ideas in the redo queue
-      if (this.ideasQueueForRedo.length > 0) {
+      if (this.ideasLIFOForRedo.length > 0) {
         note('RedoLastIdea() called');
 
         // Pop the last idea from the redo queue
-        let idea = this.ideasQueueForRedo.pop();
+        let idea = this.ideasLIFOForRedo.pop();
 
         if (idea) {
           // If an idea is found, select it
@@ -236,7 +236,7 @@ var app = new Vue({
       this.currentIdeas.children.forEach((idea) => {
         idea.lowestSelectedDescendent = '';
       });
-      this.ideasQueueForRedo = [];
+      this.ideasLIFOForRedo = [];
       this.SoftRestartExercise();
     },
 
@@ -246,7 +246,7 @@ var app = new Vue({
     SoftRestartExercise() {
       note('SoftRestartExercise() called');
       this.selectedIdeasPath = [];
-      this.ideasQueueForUndo = [];
+      this.ideasLIFOForUndo = [];
       this.currentExerciseIsDirty = false;
       this.currentSelectedIdea = this.currentIdeas;
       this.currentMethodType = this.currentMethod.value;
