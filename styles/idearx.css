@@ -143,15 +143,9 @@ button.action:before {
     content: '目 ';
 }
 
-button.action.link:after {
-    /* content: '⧉ '; */
-}
-
 .secondary button, .secondary select {
     border: none;
     background-color: var(--colorPrimaryHighlight);
-    /* color: var(--colorSecondary); */
-    /* padding: 0 calc(.5 * var(--defaultUnit)); */
 }
 
 icon {

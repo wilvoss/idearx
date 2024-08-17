@@ -63,7 +63,7 @@
             </controls>
             <controls>
               <button id="button-undo" title="Undo" role="button" tabindex="0" aria-label="Undo" class="symbol hide-mobile" v-if="currentMethod.allowUndo" :disabled="!currentExerciseIsDirty" @click="UndoLastIdea()"><icon class="undo"></icon></button>
-              <button id="button-redo" title="Redo" role="button" tabindex="0" aria-label="Redo" class="symbol hide-mobile" v-if="currentMethod.allowUndo" :disabled="ideasQueueForRedo.length === 0" @click="RedoLastIdea()"><icon class="redo"></icon></button>
+              <button id="button-redo" title="Redo" role="button" tabindex="0" aria-label="Redo" class="symbol hide-mobile" v-if="currentMethod.allowUndo" :disabled="ideasLIFOForRedo.length === 0" @click="RedoLastIdea()"><icon class="redo"></icon></button>
               <button id="button-restart" title="Restart" role="button" tabindex="0" aria-label="Restart" :disabled="!currentExerciseIsDirty" @click="HardRestartExercise()">Restart</button>
             </controls>
           </controlgroup>
