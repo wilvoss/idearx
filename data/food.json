@@ -3,9 +3,25 @@
   "hsl": "0,100%,100%",
   "c": [
     {
+      "o": 1,
+      "n": "When",
+      "c": [
+        { "o": 6, "n": "Any time" },
+        { "o": 1, "n": "Breakfast" },
+        { "o": 2, "n": "Brunch" },
+        { "o": 3, "n": "Lunch" },
+        { "o": 4, "n": "Teatime" },
+        { "o": 5, "n": "Dinner" }
+      ]
+    },
+    { "o": 2, "n": "Who's eating?", "c": [{ "o": 105, "n": "Anybody" }, { "n": "Adults 21+" }, { "n": "Large group" }, { "n": "Romancers" }, { "n": "Family and kids" }] },
+    { "o": 3, "n": "Cost", "c": [{ "o": 105, "n": "Any cost" }, { "n": "$" }, { "n": "$$" }, { "n": "$$$" }, { "n": "$$$$" }] },
+    { "o": 4, "n": "Vibe", "c": [{ "o": 105, "n": "Any vibe" }, { "n": "Comforting" }, { "n": "Decadent" }, { "n": "Healthy" }, { "n": "Sporty" }, { "n": "Festive" }] },
+    {
+      "o": 5,
       "n": "Cuisine",
       "c": [
-        { "n": "~ Any cuisine" },
+        { "o": 105, "n": "Any cuisine" },
         {
           "n": "European",
           "c": [
@@ -80,13 +96,6 @@
           "c": [{ "n": "Central Asian" }, { "n": "East Asian" }, { "n": "Chinese" }, { "n": "Highland Asian" }, { "n": "North Asian" }, { "n": "South Asian" }, { "n": "Indian" }, { "n": "Pakastani" }, { "n": "Mainland Southeast Asian" }, { "n": "Maritime Southeast Asian" }, { "n": "Indonesian" }, { "n": "West Asian cuisine" }]
         }
       ]
-    },
-    { "n": "Vibe", "c": [{ "n": "~ Any vibe" }, { "n": "Comforting" }, { "n": "Decadent" }, { "n": "Healthy" }, { "n": "Sporty" }, { "n": "Festive" }] },
-    { "n": "Cost", "c": [{ "n": "~ Any cost" }, { "n": "$" }, { "n": "$$" }, { "n": "$$$" }, { "n": "$$$$" }] },
-    {
-      "n": "When",
-      "c": [{ "n": "5. Any time" }, { "n": "1. Breakfast" }, { "n": "2. Brunch" }, { "n": "3. Lunch" }, { "n": "4. Teatime" }, { "n": "4.Dinner" }]
-    },
-    { "n": "Who's eating?", "c": [{ "n": "~ Anybody" }, { "n": "Adults 21+" }, { "n": "Large group" }, { "n": "Romancers" }, { "n": "Family and kids" }] }
+    }
   ]
 }

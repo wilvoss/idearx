@@ -1,6 +1,7 @@
 class IdeaObject {
   constructor(spec) {
     this.name = spec.name === undefined ? 'Idea' : spec.name;
+    this.order = spec.order === undefined ? -1 : spec.order;
     this.type = spec.type === undefined ? 'binary' : spec.type;
     this.description = spec.description === undefined ? null : spec.description;
     this.seen = spec.seen === undefined ? false : spec.seen;
@@ -38,6 +39,10 @@ function createNestedIdeaObject(_json, _parent = null) {
   // set the description value for the new IdeaObject
   if (_json.d !== undefined) {
     ideaObject.description = _json.d;
+  }
+
+  if (_json.o !== undefined) {
+    ideaObject.order = parseInt(_json.o);
   }
 
   // repeat the above code for all descendents recursively

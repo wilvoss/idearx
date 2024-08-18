@@ -35,7 +35,7 @@ var IdeaSets = [
     cta: 'Define your options!',
     description: 'Focus on your next meal: This exercise will help you figure out all of the parameters you want to consider when thinking about a meal.',
     data: ['./data/food.json'],
-    AIActions: [new AIActionObject({ request: 'Find Recipes' }), new AIActionObject({ request: 'Find Venues', inputs: ['Zip code'] }), new AIActionObject({ request: 'Find Grocers', inputs: ['Zip code'] })],
+    AIActions: [new AIActionObject({ request: 'Find Recipes' }), new AIActionObject({ request: 'Find Venues Nearby', inputs: ['Zip code'] }), new AIActionObject({ request: 'Find Local Grocers', inputs: ['Zip code'] })],
     locked: true,
   }),
   new IdeaSetObject({

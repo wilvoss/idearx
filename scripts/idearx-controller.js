@@ -13,7 +13,7 @@ var app = new Vue({
   el: '#app',
   data: {
     //#region —————— APP DATA ——————
-    appVersion: '0.0.033',
+    appVersion: '0.0.034',
     allMethods: Methods,
     allIdeaSets: IdeaSets,
     allViews: Views,
@@ -368,10 +368,17 @@ var app = new Vue({
      * @param {IdeaObject[]} _ideas - The array of IdeaObject instances to be sorted.
      * @returns {IdeaObject[]} - The sorted array of IdeaObject instances.
      */
-    SortIdeasAlphabetically(_ideas) {
-      note('SortIdeasAlphabetically() called');
+    SortIdeasByOrderThenAlphabetically(_ideas) {
+      note('SortIdeasByOrderThenAlphabetically() called');
       return _ideas.sort((a, b) => {
-        // Compare the name properties of two ideas
+        // Compare the order properties of two ideas
+        if (a.order < b.order) {
+          return -1; // a comes before b
+        }
+        if (a.order > b.order) {
+          return 1; // a comes after b
+        }
+        // If order properties are equal, compare the name properties
         if (a.name < b.name) {
           return -1; // a comes before b
         }
@@ -381,7 +388,6 @@ var app = new Vue({
         return 0; // a and b are equal
       });
     },
-
     /**
      * Sets the passed IdeaObject and all of its descendents to their original constructed state
      * @param {IdeaObject} _idea
@@ -407,7 +413,7 @@ var app = new Vue({
     /** Set conditions to skip interactions while developing */
     PreFillForDevelopment() {
       note('PreFillForDevelopment() called');
-      this.SelectIdeaSet(this.allIdeaSets[0]);
+      this.SelectIdeaSet(this.allIdeaSets[1]);
     },
     //#endregion
 
@@ -420,10 +426,7 @@ var app = new Vue({
     HandleActionAIClick(event, _action) {
       note('HandleActionAIClick() called');
 
-      // Prevent the default action of the event
       event.preventDefault();
-
-      // Stop the event from propagating further
       event.stopPropagation();
 
       // Check if the action has a URL
@@ -432,6 +435,16 @@ var app = new Vue({
         window.open(_action.url, '_blank');
       } else {
         // Insert AI logic here
+        let ideaStringArray = [];
+        this.getLowestSelectedDescendantsComputed.forEach((idea) => {
+          ideaStringArray.push(idea.name);
+        });
+        const ideaString = _action.request + '+' + ideaStringArray.join('+');
+
+        // in lieu of AI interface, generate google search query
+        window.open('https://duckduckgo.com/?q=' + ideaString, '_blank');
+
+        //insert logic to call AI API through Cloudflare, passing the ideastring in some form
       }
     },
 
@@ -542,7 +555,7 @@ var app = new Vue({
               idea.lowestSelectedDescendent = this.FindDeepestSelected(idea).name;
             }
           });
-          filteredObjects = this.SortIdeasAlphabetically(filteredObjects);
+          filteredObjects = this.SortIdeasByOrderThenAlphabetically(filteredObjects);
 
         default:
           break;
