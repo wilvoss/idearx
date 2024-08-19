@@ -25,7 +25,7 @@ var IdeaSets = [
     cta: 'What are you feeling?',
     description: 'Focus on what you are feeling: Based on the Junto Emotion Wheel.',
     data: ['./data/feelings.json'],
-    AIActions: [new AIActionObject({ request: '{{idea.name}} Facts' }), new AIActionObject({ request: 'Junto Emotion Wheel', url: 'https://www.thejuntoinstitute.com/emotion-wheels/' })],
+    AIActions: [new AIActionObject({ request: 'Learn About this Feeling' }), new AIActionObject({ request: 'Junto Emotion Wheel', url: 'https://www.thejuntoinstitute.com/emotion-wheels/' })],
     locked: true,
   }),
   new IdeaSetObject({
@@ -35,7 +35,7 @@ var IdeaSets = [
     cta: 'Define your options!',
     description: 'Focus on your next meal: This exercise will help you figure out all of the parameters you want to consider when thinking about a meal.',
     data: ['./data/food.json'],
-    AIActions: [new AIActionObject({ request: 'Find Recipes' }), new AIActionObject({ request: 'Find Venues Nearby', inputs: ['Zip code'] }), new AIActionObject({ request: 'Find Local Grocers', inputs: ['Zip code'] })],
+    AIActions: [new AIActionObject({ request: 'Find Recipes' }), new AIActionObject({ request: 'Find Places to Eat Nearby', inputs: ['Zip code'] }), new AIActionObject({ request: 'Find Local Grocers', inputs: ['Zip code'] })],
     locked: true,
   }),
   new IdeaSetObject({

@@ -1,6 +1,7 @@
 class IdeaObject {
   constructor(spec) {
     this.name = spec.name === undefined ? 'Idea' : spec.name;
+    this.searchName = spec.searchName === undefined ? '' : spec.searchName;
     this.order = spec.order === undefined ? -1 : spec.order;
     this.type = spec.type === undefined ? 'binary' : spec.type;
     this.description = spec.description === undefined ? null : spec.description;
@@ -39,6 +40,10 @@ function createNestedIdeaObject(_json, _parent = null) {
   // set the description value for the new IdeaObject
   if (_json.d !== undefined) {
     ideaObject.description = _json.d;
+  }
+
+  if (_json.s !== undefined) {
+    ideaObject.searchName = _json.s;
   }
 
   if (_json.o !== undefined) {

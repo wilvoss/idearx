@@ -12,8 +12,9 @@ Vue.config.ignoredElements = ['app'];
 var app = new Vue({
   el: '#app',
   data: {
+    appVersion: '0.0.036',
+
     //#region —————— APP DATA ——————
-    appVersion: '0.0.034',
     allMethods: Methods,
     allIdeaSets: IdeaSets,
     allViews: Views,
@@ -437,12 +438,30 @@ var app = new Vue({
         // Insert AI logic here
         let ideaStringArray = [];
         this.getLowestSelectedDescendantsComputed.forEach((idea) => {
-          ideaStringArray.push(idea.name);
+          if (idea.searchName !== '') {
+            ideaStringArray.push(idea.searchName);
+          } else {
+            ideaStringArray.push(idea.name);
+          }
         });
-        const ideaString = _action.request + '+' + ideaStringArray.join('+');
+        let ideaString = ideaStringArray.join(' ').toLowerCase().replace('find', '');
+        // ideaString = ideaString;
+        const isMappable = _action.request.toLowerCase().indexOf('local') !== -1 || _action.request.toLowerCase().indexOf('nearby') !== -1;
+        const suffix = ' ' + _action.request.toLowerCase().replace('nearby', '').replace('local', '').replace('find', '').trim();
 
         // in lieu of AI interface, generate google search query
-        window.open('https://duckduckgo.com/?q=' + ideaString, '_blank');
+        // window.open('https://google.com/search?q=' + ideaString, '_blank');
+        if (isMappable) {
+          {
+            ideaString = ideaString.replace('local', '').replace('nearby', '');
+            ideaString = ideaString.replace('  ', '');
+
+            window.open('https://google.com/maps/?q=' + ideaString.trim() + suffix, '_blank');
+          }
+        } else {
+          ideaString = ideaString.replace('  ', '');
+          window.open('https://duckduckgo.com/?q=' + ideaString.trim() + suffix, '_blank');
+        }
 
         //insert logic to call AI API through Cloudflare, passing the ideastring in some form
       }

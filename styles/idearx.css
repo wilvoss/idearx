@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Grandstander:ital,wght@0,100..900;1,100..900&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Grandstander:ital,wght@0,100..900;1,100..900&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap');
 
 :root {
     --maxWidth: 1024px;
@@ -8,7 +9,7 @@
     --borderRadius: 25px;
     --borderRadiusSmall: 3px;
     --bodyFont: "Jura", sans-serif;
-    --handFont: "Grandstander", cursive;
+    --handFont: "Inconsolata", cursive;
     --boxShadow: 0px 4px 4px rgba(0, 0, 0, .2);
     --boxShadowLifted: 0px 8px 8px rgba(0, 0, 0, .1);
 
@@ -17,17 +18,16 @@
     --vertMargin: var(--largeUnit);
     --vertPadding: var(--largeUnit);
 
-    --colorBackground: hsl(0, 0%, 95%);
-    --colorForeground: hsl(0, 0%, 20%);
-    --colorPrimaryHighlight: hsl(200, 100%, 95%);
-    --colorPrimary: hsl(200, 100%, 39%);
-    --colorPrimaryDark: hsl(200, 100%, 30%);
-    --colorSecondaryHighlight: hsl(200, 0%, 95%);
-    --colorSecondary: hsl(200, 0%, 39%);
-    --colorSecondaryDark: hsl(200, 0%, 30%);
-    --colorFocus: hsl(300, 100%, 50%);
-    --colorFocusBackground: hsla(300, 100%, 50%, .1);
-    --colorStageBackground: hsl(0, 100%, 100%);
+    --hslBackground: 0, 0%, 95%;
+    --hslForeground: 0, 0%, 20%;
+    --hslPrimaryHighlight: 200, 100%, 95%;
+    --hslPrimary: 200, 100%, 39%;
+    --hslPrimaryDark: 200, 100%, 30%;
+    --hslSecondaryHighlight: 200, 0%, 95%;
+    --hslSecondary: 200, 0%, 39%;
+    --hslSecondaryDark: 200, 0%, 30%;
+    --hslFocus: 300, 100%, 50%;
+    --hslStageBackground: 0, 100%, 100%;
 
     --shortTransition: 100ms ease-in-out all;
 }
@@ -47,8 +47,8 @@ body {
     line-height: 150%;
     padding: 0;
     margin: 0;
-    background: var(--colorBackground);
-    color: var(--colorForeground);
+    background: hsl(var(--hslBackground));
+    color: hsl(var(--hslForeground));
 }
 
 
@@ -72,7 +72,23 @@ app {
     width: 100%;
     height: 100%;
     padding: 0;
-    background: var(--colorStageBackground);
+    background: hsl(var(--hslStageBackground));
+}
+
+modal {
+    position: absolute;
+    display: flex;
+    display: none;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background: hsl(var(--hslForeground));
+    opacity: 1;
+    z-index: 300;
+    gap: var(--defaultGap);
 }
 
 stage {
@@ -85,27 +101,27 @@ stage {
     min-height: calc(100vh - var(--vertPadding));
     max-width: calc(var(--maxWidth) - 2 * var(--horPadding));
     padding: 0 var(--horPadding) var(--vertPadding);
-    background: var(--colorStageBackground);
+    background: hsl(var(--hslStageBackground));
     transition: var(--shortTransition);
 }
 
 a {
-    color: var(--colorPrimary);
+    color: hsl(var(--hslPrimary));
     text-decoration: none;
     display: inline-block;
-    border-bottom: 1px dashed var(--colorPrimary);
+    border-bottom: 1px dashed hsl(var(--hslPrimary));
 }
 
 a:hover {
-    color: var(--colorForeground);
-    border-bottom-color: var(--colorForeground);
+    color: hsl(var(--hslForeground));
+    border-bottom-color: hsl(var(--hslForeground));
     border-bottom-style: solid;
 }
 
 a:focus, a:focus-visible {
     outline: none;
-    border-bottom: 1px solid var(--colorFocus);
-    background: var(--colorFocusBackground);
+    border-bottom: 1px solid hsl(var(--hslFocus));
+    background: hsla(var(--hslFocus), .1);
 }
 
 button {
@@ -115,25 +131,25 @@ button {
     min-width: 50px;
     min-height: 34px;
     gap: calc(.5 * var(--defaultUnit));
-    border: 1px solid var(--colorPrimary);
+    border: 1px solid hsl(var(--hslPrimary));
     cursor: pointer;
     padding: 0 var(--defaultUnit);
-    background-color: var(--colorStageBackground);
-    color: var(--colorPrimary);
+    background-color: hsl(var(--hslStageBackground));
+    color: hsl(var(--hslPrimary));
     border-radius: var(--borderRadius);
     transition: var(--shortTransition);
     outline: 1px solid transparent;
 }
 
 button:hover, select:hover, button:focus-visible, select:focus-visible, button:active, select:active, button:focus, select:focus {
-    outline: 1px solid var(--colorFocus);
+    outline: 1px solid hsl(var(--hslFocus));
     outline-offset: 1px;
 }
 
 button.action {
-    background-color: var(--colorPrimaryHighlight);
-    border-color: var(--colorPrimary);
-    color: var(--colorPrimaryDark);
+    background-color: hsl(var(--hslPrimaryHighlight));
+    border-color: hsl(var(--hslPrimary));
+    color: hsl(var(--hslPrimaryDark));
     min-height: 50px;
     box-shadow: var(--boxShadow);
     text-wrap: nowrap;
@@ -145,7 +161,7 @@ button.action:before {
 
 .secondary button, .secondary select {
     border: none;
-    background-color: var(--colorPrimaryHighlight);
+    background-color: hsl(var(--hslPrimaryHighlight));
 }
 
 icon {
@@ -156,7 +172,7 @@ icon {
     -webkit-mask-repeat: no-repeat;
     mask-position: center;
     -webkit-mask-position: center;
-    background-color: var(--colorPrimary);
+    background-color: hsl(var(--hslPrimary));
     width: 16px;
     height: 16px;
     pointer-events: none;
@@ -188,15 +204,15 @@ select {
     min-height: 34px;
     justify-content: center;
     align-items: center;
-    background-color: var(--colorStageBackground);
+    background-color: hsl(var(--hslStageBackground));
     background-image: url(../images/chevron-down.svg);
     background-position: right 13px center;
     background-repeat: no-repeat;
     background-size: 15px;
     padding: 0 calc(2.5 * var(--defaultUnit)) 0 calc(1 * var(--defaultUnit));
     width: auto;
-    border: 1px solid var(--colorPrimary);
-    color: var(--colorPrimary);
+    border: 1px solid hsl(var(--hslPrimary));
+    color: hsl(var(--hslPrimary));
     border-radius: var(--borderRadius);
     outline: 1px solid transparent;
     transition: var(--shortTransition);
@@ -327,16 +343,16 @@ idea {
     justify-content: start;
     font-size: 1.2em;
     font-family: var(--handFont);
-    font-weight: 200;
+    font-weight: 600;
     align-items: start;
     border: 1px solid black;
     border-radius: var(--borderRadiusSmall);
-    padding: calc(.75 * var(--defaultUnit)) var(--defaultUnit) calc(.5 * var(--defaultUnit));
-    background: var(--colorBackground);
+    padding: calc(.65 * var(--defaultUnit)) var(--defaultUnit);
+    background: hsl(var(--hslBackground));
     box-shadow: var(--boxShadow);
     text-shadow: 0px 1px 0px rgba(255, 255, 255, .5);
     transition: var(--shortTransition);
-    background: var(--colorStageBackground);
+    background: hsl(var(--hslStageBackground));
     user-select: none;
     -webkit-user-select: none;
     transform: translateY(0px);
@@ -373,13 +389,13 @@ idea.marked.selected {
 
 idea:hover,
 idea:focus {
-    box-shadow: var(--boxShadowLifted);
+    box-shadow: hsl(var(--boxShadowLifted));
     transform: translateY(-2px);
     outline: none;
 }
 
 idea:focus-visible {
-    outline: 1px solid var(--colorFocus);
+    outline: 1px solid hsl(var(--hslFocus));
     outline-offset: 1px;
 }
 
@@ -401,8 +417,8 @@ tooltip {
     font-size: .65em;
     padding: calc(.5 * var(--defaultUnit)) calc(.8 * var(--defaultUnit));
     transform: translate(0px, calc(-.5 * var(--defaultUnit) - 36px));
-    background: var(--colorForeground);
-    color: var(--colorBackground);
+    background: hsl(var(--hslForeground));
+    color: hsl(var(--hslBackground));
     bottom: -2%;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, .3);
     border-radius: calc(.25 * var(--borderRadius));
@@ -420,7 +436,7 @@ tooltip:after {
     margin-left: -5px;
     border-width: 10px;
     border-style: solid;
-    border-color: var(--colorForeground) transparent transparent transparent;
+    border-color: hsl(var(--hslForeground)) transparent transparent transparent;
 }
 
 idea:hover tooltip {

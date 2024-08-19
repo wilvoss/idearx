@@ -15,7 +15,17 @@
       ]
     },
     { "o": 2, "n": "Who's eating?", "c": [{ "o": 105, "n": "Anybody" }, { "n": "Adults 21+" }, { "n": "Large group" }, { "n": "Romancers" }, { "n": "Family and kids" }] },
-    { "o": 3, "n": "Cost", "c": [{ "o": 105, "n": "Any cost" }, { "n": "$" }, { "n": "$$" }, { "n": "$$$" }, { "n": "$$$$" }] },
+    {
+      "o": 3,
+      "n": "Cost",
+      "c": [
+        { "o": 105, "n": "Any cost" },
+        { "s": "Cheap", "n": "$" },
+        { "s": "Reasonably priced", "n": "$$" },
+        { "s": "Pricey", "n": "$$$" },
+        { "s": "Expensive", "n": "$$$$" }
+      ]
+    },
     { "o": 4, "n": "Vibe", "c": [{ "o": 105, "n": "Any vibe" }, { "n": "Comforting" }, { "n": "Decadent" }, { "n": "Healthy" }, { "n": "Sporty" }, { "n": "Festive" }] },
     {
       "o": 5,
