@@ -30,7 +30,15 @@
 
   <body>
     <app id="app" v-cloak>
-      <modal></modal>
+      <modal :disabled="!visualStateShowModal" v-if="visualStateShowModal">
+        <controls class="vertical">
+          <p>Help us refine your search!</p>
+          <control v-for="(input, index) in currentSelectedAIAction.inputs">
+            <input @input="ValidateInput(event, input)" :maxlength="input.max" :max="input.max" :id="'modalinput' + index" :type="input.type" :placeholder="input.placeholder" v-model="input.value" />
+          </control>
+          <controlgroup><button @click="visualStateShowModal = false">Cancel</button><button class="primary" @click="HandleInputFormSubmitClicked()">Submit</button></controlgroup>
+        </controls>
+      </modal>
       <stage>
         <controls>
           <version>Version: {{appVersion}}</version>
@@ -82,7 +90,7 @@
           </ideas>
           <controls v-if="showAIActions">
             <control id="aiactions">
-              <button class="action" :class="{link: action.url!==''}" v-for="action in hydratedAIActions" @click="HandleActionAIClick(event, action)">{{action.request}}</button>
+              <button class="action primary" :class="{link: action.url!==''}" v-for="action in hydratedAIActions" @click="HandleActionAIClick(event, action)">{{action.request}}</button>
             </control>
           </controls>
         </workbench>
@@ -92,6 +100,7 @@
     <script src="helpers/vue.min.js" type="text/javascript"></script>
     <script src="models/MethodObject.js" type="text/javascript"></script>
     <script src="models/AIActionObject.js" type="text/javascript"></script>
+    <script src="models/InputObject.js" type="text/javascript"></script>
     <script src="models/IdeaObject.js" type="text/javascript"></script>
     <script src="models/IdeaSetObject.js" type="text/javascript"></script>
     <script src="models/ViewObject.js" type="text/javascript"></script>

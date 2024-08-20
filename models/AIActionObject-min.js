@@ -1,1 +1,1 @@
-class AIActionObject{constructor(t){this.request=void 0===t.request?"":t.request,this.url=void 0===t.url?"":t.url,this.inputs=void 0===t.inputs?[]:t.inputs}}
+class AIActionObject{constructor(t){this.request=void 0===t.request?"":t.request,this.url=void 0===t.url?"":t.url,this.type=void 0===t.type?"all":t.type,this.inputs=void 0===t.inputs?[]:t.inputs}}

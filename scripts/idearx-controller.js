@@ -1,3 +1,4 @@
+/// <reference path="../models/AIActionObject.js" />
 /// <reference path="../models/IdeaObject.js" />
 /// <reference path="../models/IdeaSetObject.js" />
 /// <reference path="../models/MethodObject.js" />
@@ -12,7 +13,7 @@ Vue.config.ignoredElements = ['app'];
 var app = new Vue({
   el: '#app',
   data: {
-    appVersion: '0.0.036',
+    appVersion: '0.0.037',
 
     //#region —————— APP DATA ——————
     allMethods: Methods,
@@ -24,6 +25,8 @@ var app = new Vue({
     currentIdeaSet: new IdeaSetObject({}),
     currentIdeas: null,
     currentSelectedIdea: null,
+    currentSelectedAIAction: new AIActionObject({}),
+    currentIdeaQueryString: '',
     currentMethod: new MethodObject({}),
     currentView: Views[0],
     currentMethodType: '',
@@ -35,6 +38,7 @@ var app = new Vue({
 
     //#region —————— VISUAL STATE MANAGEMENT ——————
     visualStateLastInputEvent: null,
+    visualStateShowModal: false,
     //#endregion
   },
 
@@ -408,6 +412,31 @@ var app = new Vue({
         });
       }
     },
+    /**
+     * Validates the input against a given regex pattern and removes invalid characters.
+     *
+     * @param {Event} event - The input event triggered by the user.
+     * @param {Object} _action - The action object containing the pattern and value.
+     * @param {string} _action.pattern - The regex pattern to validate the input against.
+     * @param {string} _action.value - The current value of the input field.
+     */
+    ValidateInput(event, _action) {
+      event.preventDefault();
+      event.stopPropagation();
+      // Check if the pattern is not empty
+      if (_action.pattern && _action.pattern !== '') {
+        // Create a new RegExp object from the pattern
+        const regex = new RegExp(_action.pattern, 'u');
+        // Test the input against the pattern
+        _action.value = _action.value
+          .split('')
+          .filter((char) => regex.test(char))
+          .join('');
+      }
+    },
+    OpenNewWindowWithURL(_url) {
+      window.open(_url.trim(), '_blank');
+    },
     //#endregion
 
     //#region —————— DEBUG SETUP ——————
@@ -429,7 +458,7 @@ var app = new Vue({
 
       event.preventDefault();
       event.stopPropagation();
-
+      this.currentSelectedAIAction = _action;
       // Check if the action has a URL
       if (_action.url !== '') {
         // Open the URL in a new tab
@@ -439,32 +468,45 @@ var app = new Vue({
         let ideaStringArray = [];
         this.getLowestSelectedDescendantsComputed.forEach((idea) => {
           if (idea.searchName !== '') {
-            ideaStringArray.push(idea.searchName);
+            ideaStringArray.push('"' + idea.searchName + '"');
           } else {
-            ideaStringArray.push(idea.name);
+            ideaStringArray.push('"' + idea.name + '"');
           }
         });
-        let ideaString = ideaStringArray.join(' ').toLowerCase().replace('find', '');
-        // ideaString = ideaString;
-        const isMappable = _action.request.toLowerCase().indexOf('local') !== -1 || _action.request.toLowerCase().indexOf('nearby') !== -1;
-        const suffix = ' ' + _action.request.toLowerCase().replace('nearby', '').replace('local', '').replace('find', '').trim();
+        this.currentIdeaQueryString = ideaStringArray.join(' ').toLowerCase().replace('find', '');
+        const suffix = ' ' + _action.request.toLowerCase().replace('find', '').trim();
 
         // in lieu of AI interface, generate google search query
-        // window.open('https://google.com/search?q=' + ideaString, '_blank');
-        if (isMappable) {
+        if (_action.type === 'map') {
           {
-            ideaString = ideaString.replace('local', '').replace('nearby', '');
-            ideaString = ideaString.replace('  ', '');
-
-            window.open('https://google.com/maps/?q=' + ideaString.trim() + suffix, '_blank');
+            this.currentIdeaQueryString = this.currentIdeaQueryString.replace('local', '').replace('nearby', '');
+            this.currentIdeaQueryString = this.currentIdeaQueryString.replace('  ', '');
+            this.currentIdeaQueryString = this.currentIdeaQueryString.trim() + suffix;
+            this.currentIdeaQueryString = this.currentIdeaQueryString.replace('  ', '');
+            if (_action.inputs.length > 0) {
+              this.visualStateShowModal = true;
+              this.$nextTick(() => {
+                document.getElementsByTagName('input')[0].select();
+              });
+            } else {
+              this.OpenNewWindowWithURL('https://google.com/maps/?q=' + this.currentIdeaQueryString);
+            }
           }
         } else {
-          ideaString = ideaString.replace('  ', '');
-          window.open('https://duckduckgo.com/?q=' + ideaString.trim() + suffix, '_blank');
+          this.OpenNewWindowWithURL('https://duckduckgo.com/?q=' + this.currentIdeaQueryString + suffix);
         }
 
         //insert logic to call AI API through Cloudflare, passing the ideastring in some form
       }
+    },
+
+    HandleInputFormSubmitClicked() {
+      for (let index = 0; index < this.currentSelectedAIAction.inputs.length; index++) {
+        const input = this.currentSelectedAIAction.inputs[index];
+        this.currentIdeaQueryString = this.currentIdeaQueryString + ' ' + input.value;
+      }
+      this.OpenNewWindowWithURL('https://google.com/maps/?q=' + this.currentIdeaQueryString);
+      this.visualStateShowModal = false;
     },
 
     /**
@@ -491,6 +533,15 @@ var app = new Vue({
           if (this.currentIdeas && this.selectedIdeasPath.length === 0 && event.target.tagName.toLowerCase() !== 'idea') {
             // this.MoveFocus();
           }
+          break;
+        case 'Escape':
+          this.visualStateShowModal = false;
+          break;
+        case 'Enter':
+          if (this.visualStateShowModal) {
+            this.HandleInputFormSubmitClicked();
+          }
+          break;
         default:
           break;
       }

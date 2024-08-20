@@ -1,4 +1,5 @@
 /// <reference path="../models/MethodObject.js" />
+/// <reference path="../models/InputObject.js" />
 /// <reference path="../models/AIActionObject.js" />
 
 class IdeaSetObject {
@@ -35,7 +36,19 @@ var IdeaSets = [
     cta: 'Define your options!',
     description: 'Focus on your next meal: This exercise will help you figure out all of the parameters you want to consider when thinking about a meal.',
     data: ['./data/food.json'],
-    AIActions: [new AIActionObject({ request: 'Find Recipes' }), new AIActionObject({ request: 'Find Places to Eat Nearby', inputs: ['Zip code'] }), new AIActionObject({ request: 'Find Local Grocers', inputs: ['Zip code'] })],
+    AIActions: [
+      new AIActionObject({ request: 'Find Recipes' }),
+      new AIActionObject({
+        request: 'Find Places to Eat',
+        type: 'map',
+        inputs: [new InputObject({ label: 'City', pattern: "^[\\p{L}\\p{N}\\s'-]+$", placeholder: 'City' }), new InputObject({ label: 'Zip code', pattern: "^[\\p{N}\\s'-]+$", placeholder: 'Zip code', max: 10 })],
+      }),
+      new AIActionObject({
+        request: 'Find Grocers',
+        type: 'map',
+        inputs: [new InputObject({ label: 'City', pattern: "^[\\p{L}\\p{N}\\s'-]+$", placeholder: 'City' }), new InputObject({ label: 'Zip code', pattern: "^[\\p{N}\\s'-]+$", placeholder: 'Zip code', max: 10 })],
+      }),
+    ],
     locked: true,
   }),
   new IdeaSetObject({

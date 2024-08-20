@@ -1,0 +1,1 @@
+class InputObject{constructor(e){this.label=void 0===e.label?"":e.label,this.placeholder=void 0===e.placeholder?"":e.placeholder,this.type=void 0===e.type?"text":e.type,this.value=void 0===e.value?"":e.value,this.min=void 0===e.min?0:e.min,this.max=void 0===e.max?524288:e.max,this.pattern=void 0===e.pattern?"":e.pattern,this.isRequired=void 0!==e.isRequired&&e.isRequired}}
