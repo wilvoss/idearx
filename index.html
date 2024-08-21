@@ -86,7 +86,7 @@
           <ideas id="idpicker" v-if="!showExerciseResult">
             <idea :title="idea.name" :key="idea.name" @keydown.space.prevent="() => SelectIdea(idea)" role="option" :tabindex="idea.isSelected ? -1 : 0" aria-label="Idea" :style="{backgroundColor: 'hsla(' + idea.hsl + ', .3)' }" :class="{selected: idea.isSelected && currentMethod.value !== 'binary'}" v-for="(idea, index) in getIdeasFromCurrentGenerationBasedOnMethod" @click="() => SelectIdea(idea)">
               <tooltip v-if="idea.description !== null"> {{idea.description}} </tooltip>
-              <count v-if="!idea.isSelected && idea.children.length > 0">({{idea.children.length}} options)</count>
+              <count v-if="!idea.isSelected && idea.children.length > 0">{{idea.children.length}}</count>
               {{idea.lowestSelectedDescendent !== '' ? idea.lowestSelectedDescendent : idea.name}}
             </idea>
           </ideas>

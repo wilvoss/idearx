@@ -26,7 +26,7 @@ let Methods = [
   new MethodObject({
     name: 'Multi-Tree Selection',
     value: 'merge',
-    description: 'Merge the most best and most accurate options within different categories.',
+    description: 'Merge the best and most accurate options within different categories.',
     allowUndo: true,
   }),
 ];
