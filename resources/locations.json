@@ -1,0 +1,30 @@
+{
+  "countries": [
+    {
+      "name": "United States",
+      "cities": [
+        {
+          "name": "Seattle",
+          "neighborhoods": ["Capitol Hill", "Ballard", "Fremont"]
+        },
+        {
+          "name": "New York",
+          "neighborhoods": ["Manhattan", "Brooklyn", "Queens"]
+        }
+      ]
+    },
+    {
+      "name": "Canada",
+      "cities": [
+        {
+          "name": "Toronto",
+          "neighborhoods": ["Downtown", "Scarborough", "North York"]
+        },
+        {
+          "name": "Vancouver",
+          "neighborhoods": ["Kitsilano", "Gastown", "Yaletown"]
+        }
+      ]
+    }
+  ]
+}

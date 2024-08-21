@@ -13,20 +13,20 @@ class MethodObject {
 
 let Methods = [
   new MethodObject({
-    name: 'Tree Drill',
+    name: 'Drill Down Selection',
     value: 'full',
-    description: 'Drill down a tree till you reach the best leaf.',
+    description: 'Dive into one concept, picking ever more refined variations until you find the most precise version.',
     allowUndo: true,
   }),
   new MethodObject({
-    name: 'Binary Crawl',
+    name: 'Paired Comparison',
     value: 'binary',
     description: 'Just like the eye doctor, "is this better, or this", and repeat until you land on the best focus.',
   }),
   new MethodObject({
-    name: 'Merge Drill',
+    name: 'Multi-Tree Selection',
     value: 'merge',
-    description: 'Merge the best ideas within different categories, recursively.',
+    description: 'Merge the most best and most accurate options within different categories.',
     allowUndo: true,
   }),
 ];

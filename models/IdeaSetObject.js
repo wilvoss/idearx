@@ -20,7 +20,7 @@ class IdeaSetObject {
 
 var IdeaSets = [
   new IdeaSetObject({
-    name: 'Feelings',
+    name: '🎭 Feelings',
     value: 'feelings',
     method: Methods[0],
     cta: 'What are you feeling?',
@@ -30,7 +30,7 @@ var IdeaSets = [
     locked: true,
   }),
   new IdeaSetObject({
-    name: 'Food',
+    name: '🥣 Eating',
     value: 'food',
     method: Methods[2],
     cta: 'Define your options!',
@@ -49,20 +49,12 @@ var IdeaSets = [
         inputs: [new InputObject({ label: 'City', pattern: "^[\\p{L}\\p{N}\\s'-]+$", placeholder: 'City' }), new InputObject({ label: 'Zip code', pattern: "^[\\p{N}\\s'-]+$", placeholder: 'Zip code', max: 10 })],
       }),
     ],
-    locked: true,
+    // locked: true,
   }),
   new IdeaSetObject({
-    name: 'Lorum picker',
-    value: 'lorum',
-    method: Methods[1],
-    cta: 'Which is better?',
-    description: 'Focus on the best random latin text!',
-    data: ['./data/test.json'],
-  }),
-  new IdeaSetObject({
-    name: 'LETTERS!',
+    name: '🔠 LETTERS!',
     value: 'letter',
-    method: Methods[0],
+    method: Methods[1],
     cta: 'Which is best?',
     description: 'Focus on letters!',
     data: ['./data/test2.json'],

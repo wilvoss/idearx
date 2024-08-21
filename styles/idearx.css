@@ -107,6 +107,7 @@ stage {
 
 a {
     color: hsl(var(--hslPrimary));
+    cursor: pointer;
     text-decoration: none;
     display: inline-block;
     border-bottom: 1px dashed hsl(var(--hslPrimary));
@@ -122,6 +123,24 @@ a:focus, a:focus-visible {
     outline: none;
     border-bottom: 1px solid hsl(var(--hslFocus));
     background: hsla(var(--hslFocus), .1);
+}
+
+info {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 16px;
+    height: 13px;
+    padding-bottom: 3px;
+    border-radius: var(--borderRadius);
+    margin-left: 4px;
+    color: white;
+    background-color: hsl(var(--hslPrimary));
+    cursor: pointer;
+}
+
+info:hover {
+    background-color: hsl(var(--hslForeground));
 }
 
 button {
@@ -162,11 +181,6 @@ button.action {
 
 button.action:before {
     content: '目 ';
-}
-
-.secondary button, .secondary select {
-    border: none;
-    background-color: hsl(var(--hslPrimaryHighlight));
 }
 
 icon {
@@ -224,11 +238,11 @@ select {
     background-size: 15px;
     border-radius: var(--borderRadius);
     padding: 0 calc(2.5 * var(--defaultUnit)) 0 calc(1 * var(--defaultUnit));
-
+    text-transform: capitalize;
 }
 
 .vertical select {
-    padding: 0 calc(2.5 * var(--defaultUnit));
+    padding: 0 calc(2.5 * var(--defaultUnit)) 0 calc(1.5 * var(--defaultUnit));
     min-height: 40px;
     font-size: 1.2em;
     font-weight: bold;
@@ -236,6 +250,7 @@ select {
 
 .vertical select option {
     text-align: center;
+    text-transform: capitalize;
 }
 
 :disabled, .disabled {
@@ -249,6 +264,13 @@ select {
 p {
     max-width: calc(.5 * var(--maxWidth));
     text-align: center;
+}
+
+explanation {
+    display: block;
+    width: calc(100% - 2 * var(--defaultUnit));
+    padding: var(--defaultUnit);
+    text-align: left;
 }
 
 cta {
@@ -281,7 +303,7 @@ hgroup h1, hgroup h2, hgroup p {
 }
 
 hgroup h2 {
-    margin-top: calc(2 * var(--defaultUnit));
+    /* margin-top: calc(2 * var(--defaultUnit)); */
 }
 
 workbench {
@@ -309,7 +331,7 @@ controls {
     display: flex;
     width: 100%;
     gap: calc(.25 * var(--defaultUnit));
-    margin: var(--defaultUnit) 0;
+    margin-top: var(--defaultUnit);
     border: none;
 }
 
@@ -386,9 +408,22 @@ idea {
     outline: 1px solid transparent;
 }
 
+idea count {
+    display: block;
+    position: absolute;
+    text-align: right;
+    width: calc(100% - 2 * var(--defaultUnit) - 5px);
+    padding: 0 var(--defaultUnit);
+    transform: translateY(calc(-1 * var(--defaultUnit) + 4px));
+    color: hsla(var(--hslForeground), 1);
+    font-size: 10px;
+    font-weight: normal;
+    /* font-family: var(--bodyFont); */
+}
+
 idea.selected, idea.selected:hover {
     box-shadow: none;
-    transform: translateY(-1px);
+    transform: translateY(0px);
     cursor: default;
     pointer-events: none;
 }
@@ -416,7 +451,7 @@ idea.marked.selected {
 
 idea:hover,
 idea:focus {
-    box-shadow: hsl(var(--boxShadowLifted));
+    box-shadow: var(--boxShadowLifted);
     transform: translateY(-2px);
     outline: none;
 }
@@ -438,10 +473,12 @@ tooltip {
     pointer-events: none;
     user-select: none;
     -webkit-user-select: none;
+    line-height: 1.5em;
     opacity: 0;
     position: absolute;
     width: calc(100% - 2.5 * var(--defaultUnit));
-    font-size: .65em;
+    max-width: 300px;
+    font-size: 13px;
     padding: calc(.5 * var(--defaultUnit)) calc(.8 * var(--defaultUnit));
     transform: translate(0px, calc(-.5 * var(--defaultUnit) - 36px));
     background: hsl(var(--hslForeground));
@@ -471,6 +508,18 @@ idea:hover tooltip {
     transition-delay: 150ms;
     transform: translate(0px, calc(-.5 * var(--defaultUnit) - 46px));
 }
+
+info tooltip {
+    bottom: unset;
+    transform: translate(-5px, -36px);
+}
+
+info:hover tooltip {
+    opacity: 1;
+    transition-delay: 150ms;
+    transform: translate(-5px, -46px);
+}
+
 
 version {
     display: block;

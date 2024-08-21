@@ -20,7 +20,7 @@ class IdeaObject {
 // FUTURE: examine the incoming data and determine if it's a straight array of strings or a an object that meets the appropriate criteria
 function createNestedIdeaObject(_json, _parent = null) {
   const ideaObject = new IdeaObject({
-    name: _json.n,
+    name: _json.name || _json.n || _json.value || null,
     parent: _parent,
   });
 

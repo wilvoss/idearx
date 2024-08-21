@@ -34,9 +34,9 @@
         <controls class="vertical">
           <p>Help us refine your search!</p>
           <control v-for="(input, index) in currentSelectedAIAction.inputs">
-            <input @input="ValidateInput(event, input)" :maxlength="input.max" :max="input.max" :id="'modalinput' + index" :type="input.type" :placeholder="input.placeholder" v-model="input.value" />
+            <input @input="() => ValidateInput(event, input)" :maxlength="input.max" :max="input.max" :id="'modalinput' + index" :type="input.type" :placeholder="input.placeholder" v-model="input.value" />
           </control>
-          <controlgroup><button @click="visualStateShowModal = false">Cancel</button><button class="primary" @click="HandleInputFormSubmitClicked()">Submit</button></controlgroup>
+          <controlgroup><button @click="visualStateShowModal = false">Cancel</button><button class="primary" @click="HandleInputFormSubmitClicked">Submit</button> </controlgroup>
         </controls>
       </modal>
       <stage>
@@ -45,43 +45,48 @@
         </controls>
         <hgroup>
           <h1>Idea Rx</h1>
-          <p>Bring your ideas or intuitions into focus.</p>
-          <!-- <h2 v-if="currentIdeaSet.name === null">Hello and Welcome!</h2>
-          <p v-if="currentIdeaSet.name === null">If you have a bunch of options you are trying to choose from, we can help. To get started select one of our pre-made sets! In the future, you'll be able to upload your own dataset!</p> -->
+          <p>Bring your thoughts into focus.</p>
         </hgroup>
-
         <controls class="vertical">
           <control class="vertical">
             <label for="ideaSetPicker">Pick a Focus</label>
-            <select :title="'Select Focus' + (currentIdeaSet.name === null ? '' : ': ' + currentIdeaSet.name + ' is selected')" role="select" tabindex="0" aria-label="Select Focus" name="ideaSetPicker" id="ideaSetPicker" v-model="currentIdeaSet" @change="SelectIdeaSet()" class="big">
+            <select :title="'Select Focus' + (currentIdeaSet.name === null ? '' : ': ' + currentIdeaSet.name + ' is selected')" role="select" tabindex="0" aria-label="Select Focus" name="ideaSetPicker" id="ideaSetPicker" v-model="currentIdeaSet" @change="SelectIdeaSet" class="big">
               <option :value="{}" disabled>Select</option>
-              <option :title="set.description ? set.description : ''" v-for="set in allIdeaSets" :key="set.type" :value="set" v-if="!set.hidden">{{set.name}}</option>
+              <option :title="set.description ? set.description : ''" v-for="set in getAllIdeaSetsSortedAlphabetically" :key="set.type" :value="set" v-if="!set.hidden">{{set.name}}</option>
             </select>
           </control>
+          <p>
+            Or <a @click="TriggerFileUpload">upload</a> your own idea data.
+            <info
+              ><tooltip>You can upload simple <strong>JSON</strong> (nesting allowed) <and>or simple lists contained in <strong>CSV</strong> and <strong>TXT</strong> files.</tooltip>ℹ</info
+            >
+          </p>
+          <input type="file" ref="fileInput" @change="HandleUploadLinkClick" accept=".json, .csv, .txt" style="display: none" />
         </controls>
-        <p v-html="currentIdeaSet.description"></p>
         <workbench v-if="currentIdeaSet.name !== null">
           <controlgroup class="secondary">
+            <controls>
+              <select title="Select Method" role="select" tabindex="0" aria-label="Select Method" :disabled="currentIdeaSet.locked" name="methodPicker" id="methodPicker" v-model="currentMethod" @change="HardRestartExercise">
+                <option :title="method.description ? method.description : ''" v-for="method in allMethods" :key="method.value" :value="method">{{method.name}}</option>
+              </select>
+            </controls>
             <controls>
               <select title="Select View" role="select" tabindex="0" aria-label="Select View" name="viewPicker" id="viewPicker" v-model="currentView">
                 <option v-for="view in allViews" :key="view.value" :value="view">{{view.name}}</option>
               </select>
-              <select title="Select Method" role="select" tabindex="0" aria-label="Select Method" :disabled="currentIdeaSet.locked" name="methodPicker" id="methodPicker" v-model="currentMethod" @change="HardRestartExercise()">
-                <option v-for="method in allMethods" :key="method.value" :value="method">{{method.name}}</option>
-              </select>
-            </controls>
-            <controls>
-              <button id="button-undo" title="Undo" role="button" tabindex="0" aria-label="Undo" class="symbol hide-mobile" v-if="currentMethod.allowUndo" :disabled="!currentExerciseIsDirty" @click="UndoLastIdea()"><icon class="undo"></icon></button>
-              <button id="button-redo" title="Redo" role="button" tabindex="0" aria-label="Redo" class="symbol hide-mobile" v-if="currentMethod.allowUndo" :disabled="ideasLIFOForRedo.length === 0" @click="RedoLastIdea()"><icon class="redo"></icon></button>
-              <button id="button-restart" title="Restart" role="button" tabindex="0" aria-label="Restart" :disabled="!currentExerciseIsDirty" @click="HardRestartExercise()">Restart</button>
+              <button id="button-undo" title="Undo" role="button" tabindex="0" aria-label="Undo" class="symbol hide-mobile" v-if="currentMethod.allowUndo" :disabled="!currentExerciseIsDirty" @click="UndoLastIdea"><icon class="undo"></icon></button>
+              <button id="button-redo" title="Redo" role="button" tabindex="0" aria-label="Redo" class="symbol hide-mobile" v-if="currentMethod.allowUndo" :disabled="ideasLIFOForRedo.length === 0" @click="RedoLastIdea"><icon class="redo"></icon></button>
+              <button id="button-restart" title="Restart" role="button" tabindex="0" aria-label="Restart" :disabled="!currentExerciseIsDirty" @click="HardRestartExercise">Restart</button>
             </controls>
           </controlgroup>
+          <explanation v-html="currentMethod.description"></explanation>
           <ideas v-if="getIdeasFromCurrentGenerationBasedOnMethod.length > 0 && getIdeasFromCurrentGenerationBasedOnMethod[0].parent!==null && getIdeasFromCurrentGenerationBasedOnMethod[0].parent!==undefined  && getIdeasFromCurrentGenerationBasedOnMethod[0].parent.name !== currentIdeas.name">
             <idea :style="{backgroundColor: 'hsla(' + getLastSelectedIdea.hsl + ', .3)' }" class="explored selected">{{getLastSelectedIdea.name}}</idea>
           </ideas>
           <ideas id="idpicker" v-if="!showExerciseResult">
-            <idea :title="idea.name" :key="idea.name" @keydown.space.prevent="SelectIdea(idea)" role="option" :tabindex="idea.isSelected ? -1 : 0" aria-label="Idea" :style="{backgroundColor: 'hsla(' + idea.hsl + ', .3)' }" :class="{selected: idea.isSelected && currentMethod.value !== 'binary'}" v-for="(idea, index) in getIdeasFromCurrentGenerationBasedOnMethod" @click="SelectIdea(idea)">
+            <idea :title="idea.name" :key="idea.name" @keydown.space.prevent="() => SelectIdea(idea)" role="option" :tabindex="idea.isSelected ? -1 : 0" aria-label="Idea" :style="{backgroundColor: 'hsla(' + idea.hsl + ', .3)' }" :class="{selected: idea.isSelected && currentMethod.value !== 'binary'}" v-for="(idea, index) in getIdeasFromCurrentGenerationBasedOnMethod" @click="() => SelectIdea(idea)">
               <tooltip v-if="idea.description !== null"> {{idea.description}} </tooltip>
+              <count v-if="!idea.isSelected && idea.children.length > 0">({{idea.children.length}} options)</count>
               {{idea.lowestSelectedDescendent !== '' ? idea.lowestSelectedDescendent : idea.name}}
             </idea>
           </ideas>
@@ -90,7 +95,7 @@
           </ideas>
           <controls v-if="showAIActions">
             <control id="aiactions">
-              <button class="action primary" :class="{link: action.url!==''}" v-for="action in hydratedAIActions" @click="HandleActionAIClick(event, action)">{{action.request}}</button>
+              <button class="action primary" :class="{link: action.url!==''}" v-for="action in hydratedAIActions" @click="() => HandleActionAIClick(event, action)">{{action.request}}</button>
             </control>
           </controls>
         </workbench>

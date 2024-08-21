@@ -13,7 +13,7 @@ Vue.config.ignoredElements = ['app'];
 var app = new Vue({
   el: '#app',
   data: {
-    appVersion: '0.0.037',
+    appVersion: '0.0.038',
 
     //#region —————— APP DATA ——————
     allMethods: Methods,
@@ -48,7 +48,7 @@ var app = new Vue({
      * Selects the current idea set and updates the relevant properties.
      * @param {IdeaSetObject} _set - The idea set to be selected. If undefined, the current idea set remains unchanged.
      */
-    async SelectIdeaSet(_set) {
+    async SelectIdeaSet(event, _set) {
       note('async SelectIdeaSet() called');
 
       // Update the current idea set if a new set is provided
@@ -57,7 +57,7 @@ var app = new Vue({
       // Check if the current idea set has data
       if (this.currentIdeaSet.data !== null) {
         // Fetch the current ideas in JSON format
-        let json = await this.GetCurrentIdeasJSON();
+        let json = Array.isArray(this.currentIdeaSet.data) ? await this.GetCurrentIdeasJSON() : this.currentIdeaSet.data;
 
         // Convert the JSON data into a nested idea object
         this.currentIdeas = createNestedIdeaObject(json);
@@ -367,7 +367,6 @@ var app = new Vue({
       traverse(node);
       return lowestSelected;
     },
-
     /**
      * Sorts an array of IdeaObject instances alphabetically by their name property.
      * @param {IdeaObject[]} _ideas - The array of IdeaObject instances to be sorted.
@@ -441,9 +440,9 @@ var app = new Vue({
 
     //#region —————— DEBUG SETUP ——————
     /** Set conditions to skip interactions while developing */
-    PreFillForDevelopment() {
+    PreFillForDevelopment(event) {
       note('PreFillForDevelopment() called');
-      this.SelectIdeaSet(this.allIdeaSets[1]);
+      this.SelectIdeaSet(event, this.allIdeaSets[0]);
     },
     //#endregion
 
@@ -554,6 +553,144 @@ var app = new Vue({
       note('HandleMouseUp() called');
       this.visualStateLastInputEvent = 'mouseup';
     },
+    /**
+     * There are test files in "resources"
+     */
+    TriggerFileUpload() {
+      note('TriggerFileUpload() called');
+      this.$refs.fileInput.click();
+    },
+    /**
+     * Handles the file upload event and processes the uploaded file.
+     * @param {Event} event - The file upload event.
+     */
+    HandleUploadLinkClick(event) {
+      note('HandleUploadLinkClick() called');
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const content = e.target.result;
+          let jsonObject;
+
+          // Check the file type and parse the content accordingly.
+          if (file.type === 'application/json') {
+            jsonObject = JSON.parse(content);
+          } else if (file.type === 'text/csv' || file.type === 'text/plain') {
+            jsonObject = this.ConvertToJSON(content, file.name.split('.')[0]);
+          }
+
+          if (jsonObject) {
+            // Transform the JSON object to the desired structure.
+            const transformedJson = this.TransformJson(jsonObject);
+
+            // Create a new IdeaSetObject and add it to the list.
+            let set = new IdeaSetObject({
+              name: '🖹 ' + transformedJson.name,
+              value: transformedJson.name,
+              cta: '',
+              description: '',
+              method: file.type === 'application/json' ? this.allMethods[0] : this.allMethods[1],
+              data: transformedJson,
+            });
+
+            // Add logic to replace a set that already has the same "name", can test against "value".
+            this.allIdeaSets = this.allIdeaSets.filter((obj) => obj.value !== set.value);
+            this.allIdeaSets.push(set);
+            this.SelectIdeaSet(event, set);
+          }
+        };
+        reader.readAsText(file);
+      }
+    },
+    /**
+     * Transforms a JSON object to a specific structure.
+     * @param {Object} obj - The JSON object to transform.
+     * @returns {Object} The transformed JSON object.
+     */
+    TransformJson(obj) {
+      note('TransformJson() called');
+
+      /**
+       * Recursively transforms the input object.
+       * @param {Object|Array} input - The input object or array to transform.
+       * @param {string|null} parentKey - The key of the parent object.
+       * @returns {Object|Array} The transformed object or array.
+       */
+      const transform = (input, parentKey = null) => {
+        if (Array.isArray(input)) {
+          // If the input is an array, recursively transform each item.
+          return input.map((item) => transform(item));
+        } else if (typeof input === 'object' && input !== null) {
+          const newObj = {};
+          if (obj.hsl) {
+            if (obj.hsl !== 'random') {
+              newObj.hsl = obj.hsl;
+              newObj.hslUsePreset = true;
+            }
+          } else {
+            newObj.hsl = '0, 100%, 100%';
+          }
+          const keys = Object.keys(input);
+          const nameKey = keys.find((key) => key === 'name' || key === 'value');
+
+          if (nameKey) {
+            // If a 'name' or 'value' key exists, use its value for the 'name' property.
+            newObj.name = input[nameKey];
+          } else {
+            // Otherwise, use the key of the first array as the 'name' property.
+            const firstArrayKey = keys.find((key) => Array.isArray(input[key]));
+            newObj.name = firstArrayKey || parentKey;
+          }
+
+          // Find the key that contains an array of children objects.
+          const childrenKey = keys.find((key) => Array.isArray(input[key]));
+          if (childrenKey) {
+            // Recursively transform each child object.
+            newObj.c = input[childrenKey].map((item) => {
+              if (typeof item === 'string') {
+                // If the item is a string, convert it to an object with a 'name' property.
+                return { name: item };
+              }
+              return transform(item, childrenKey);
+            });
+          }
+
+          return newObj;
+        }
+        return input;
+      };
+
+      // Start the transformation with the root object and its first key.
+      return transform(obj, Object.keys(obj)[0]);
+    },
+
+    /**
+     * Converts a string content to a JSON object.
+     * @param {string} content - The string content to convert.
+     * @returns {Object[]} The converted JSON object.
+     */
+    ConvertToJSON(content, fileName) {
+      // Split the content by new lines.
+      const lines = content.split('\n');
+
+      // Map each line to an object with a 'name' property.
+      const objectsArray = lines.map((line) => ({
+        name: line.trim(),
+      }));
+
+      // Extract the file name without the extension.
+      const nameWithoutExtension = fileName.replace(/\.[^/.]+$/, '');
+
+      // Create the final JSON object.
+      const jsonObject = {
+        name: nameWithoutExtension,
+        c: objectsArray,
+      };
+
+      return jsonObject;
+    },
+
     //#endregion
   },
 
@@ -570,6 +707,21 @@ var app = new Vue({
 
   computed: {
     //#region —————— vue computed() ——————
+    getAllIdeaSetsSortedAlphabetically: function () {
+      return this.allIdeaSets.sort((a, b) => {
+        const nameA = a.name.slice(2);
+        const nameB = b.name.slice(2);
+
+        if (nameA < nameB) {
+          return -1; // a comes before b
+        }
+        if (nameA > nameB) {
+          return 1; // a comes after b
+        }
+        return 0; // a and b are equal
+      });
+    },
+
     /**
      * COMPUTED: Finds the appropriate set of sibling IdeaObjects that can be presented to the user for their interaction
      * @returns {IdeaObject[]} an array of IdeaObjects
