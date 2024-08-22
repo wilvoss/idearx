@@ -56,10 +56,7 @@
             </select>
           </control>
           <p>
-            Or <a @click="TriggerFileUpload">upload</a> your own idea data.
-            <info
-              ><tooltip>You can upload simple <strong>JSON</strong> (nesting allowed) <and>or simple lists contained in <strong>CSV</strong> and <strong>TXT</strong> files.</tooltip>ℹ</info
-            >
+            Or <a @click="TriggerFileUpload">upload</a> your own idea data. <tooltip> You can upload simple <strong>JSON</strong> (nesting allowed) and/or simple lists contained in <strong>CSV</strong> and <strong>TXT</strong> files.</tooltip><info>ℹ</info>
           </p>
           <input type="file" ref="fileInput" @change="HandleUploadLinkClick" accept=".json, .csv, .txt" style="display: none" />
         </controls>
@@ -71,28 +68,34 @@
               </select>
             </controls>
             <controls>
-             
               <button id="button-undo" title="Undo" role="button" tabindex="0" aria-label="Undo" class="symbol hide-mobile" v-if="currentMethod.allowUndo" :disabled="!currentExerciseIsDirty" @click="UndoLastIdea"><icon class="undo"></icon></button>
               <button id="button-redo" title="Redo" role="button" tabindex="0" aria-label="Redo" class="symbol hide-mobile" v-if="currentMethod.allowUndo" :disabled="ideasLIFOForRedo.length === 0" @click="RedoLastIdea"><icon class="redo"></icon></button>
               <button id="button-restart" title="Restart" role="button" tabindex="0" aria-label="Restart" :disabled="!currentExerciseIsDirty" @click="HardRestartExercise">Restart</button>
-             <select title="Select View" role="select" tabindex="0" aria-label="Select View" name="viewPicker" id="viewPicker" v-model="currentView">
+              <select title="Select View" role="select" tabindex="0" aria-label="Select View" name="viewPicker" id="viewPicker" v-model="currentView">
                 <option v-for="view in allViews" :key="view.value" :value="view">{{view.name}}</option>
-              </select></controls>
+              </select>
+            </controls>
           </controlgroup>
           <explanation v-html="currentMethod.description"></explanation>
-          <ideas v-if="getIdeasFromCurrentGenerationBasedOnMethod.length > 0 && getIdeasFromCurrentGenerationBasedOnMethod[0].parent!==null && getIdeasFromCurrentGenerationBasedOnMethod[0].parent!==undefined  && getIdeasFromCurrentGenerationBasedOnMethod[0].parent.name !== currentIdeas.name">
-            <idea style="border-width: 1px;" :style="{backgroundColor: 'hsla(' + getLastSelectedIdea.hsl + ', .5)' }" class="explored selected">{{getLastSelectedIdea.name}}</idea>
-          </ideas>
-          <ideas id="idpicker" v-if="!showExerciseResult">
-            <idea :title="idea.name" :key="idea.name" @keydown.space.prevent="() => SelectIdea(idea)" role="option" :tabindex="idea.isSelected ? -1 : 0" aria-label="Idea" :style="{ backgroundColor: 'hsla(' + idea.hsl + ', 1)' }" :class="{selected: idea.isSelected && currentMethod.value !== 'binary'}" v-for="(idea, index) in getIdeasFromCurrentGenerationBasedOnMethod" @click="() => SelectIdea(idea)">
-              <tooltip v-if="idea.description !== null"> {{idea.description}} </tooltip>
-              <count v-if="!idea.isSelected && idea.children.length > 0">{{idea.children.length}}</count>
-              {{idea.lowestSelectedDescendent !== '' ? idea.lowestSelectedDescendent : idea.name}}
-            </idea>
-          </ideas>
-          <ideas v-if="showExerciseResult">
-            <idea v-for="idea in getLowestSelectedDescendantsComputed" class="selected" :style="{backgroundColor: 'hsla(' + idea.hsl + ', 1)' }"><tooltip v-if="idea.description !== null">{{idea.description}}</tooltip>{{idea.name}}</idea>
-          </ideas>
+          <page v-if="currentView.value === 'cards'">
+            <ideas v-if="getIdeasFromCurrentGenerationBasedOnMethod.length > 0 && getIdeasFromCurrentGenerationBasedOnMethod[0].parent!==null && getIdeasFromCurrentGenerationBasedOnMethod[0].parent!==undefined  && getIdeasFromCurrentGenerationBasedOnMethod[0].parent.name !== currentIdeas.name">
+              <idea style="border-width: 1px" :style="{backgroundColor: 'hsla(' + getLastSelectedIdea.hsl + ', .5)' }" class="explored selected">{{getLastSelectedIdea.name}}</idea>
+            </ideas>
+            <ideas id="idpicker" v-if="!showExerciseResult">
+              <idea :title="idea.name" :key="idea.name" @keydown.space.prevent="() => SelectIdea(idea)" role="option" :tabindex="idea.isSelected ? -1 : 0" aria-label="Idea" :style="{ backgroundColor: 'hsla(' + idea.hsl + ', 1)' }" :class="{selected: idea.isSelected && currentMethod.value !== 'binary'}" v-for="(idea, index) in getIdeasFromCurrentGenerationBasedOnMethod" @click="() => SelectIdea(idea)">
+                <tooltip v-if="idea.description !== null"> {{idea.description}} </tooltip>
+                <count v-if="!idea.isSelected && idea.children.length > 0">{{idea.children.length}}</count>
+                {{idea.lowestSelectedDescendent !== '' ? idea.lowestSelectedDescendent : idea.name}}
+              </idea>
+            </ideas>
+            <ideas v-if="showExerciseResult">
+              <idea v-for="idea in getLowestSelectedDescendantsComputed" class="selected" :style="{backgroundColor: 'hsla(' + idea.hsl + ', 1)' }"><tooltip v-if="idea.description !== null">{{idea.description}}</tooltip>{{idea.name}}</idea>
+            </ideas>
+          </page>
+          <page v-if="this.currentView.value === 'pie'">
+            <!-- Place view code for Pie Chart display here -->
+            <p class="error">Pie Chart view code here.</p>
+          </page>
           <controls v-if="showAIActions">
             <control id="aiactions">
               <button class="action primary" :class="{link: action.url!==''}" v-for="action in hydratedAIActions" @click="() => HandleActionAIClick(event, action)">{{action.request}}</button>

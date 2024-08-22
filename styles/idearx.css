@@ -27,6 +27,7 @@
     --hslSecondaryDark: 200, 0%, 30%;
     --hslFocus: 300, 100%, 50%;
     --hslStageBackground: 0, 100%, 100%;
+    --hslError: 0, 100%, 50%;
 
     --shortTransition: 100ms ease-in-out all;
 }
@@ -62,6 +63,10 @@ h1 {
 
 h2, h3, h4, h5, h6 {
     font-weight: 500;
+}
+
+.error {
+    color: hsl(var(--hslError));
 }
 
 app {
