@@ -71,27 +71,27 @@
               </select>
             </controls>
             <controls>
-              <select title="Select View" role="select" tabindex="0" aria-label="Select View" name="viewPicker" id="viewPicker" v-model="currentView">
-                <option v-for="view in allViews" :key="view.value" :value="view">{{view.name}}</option>
-              </select>
+             
               <button id="button-undo" title="Undo" role="button" tabindex="0" aria-label="Undo" class="symbol hide-mobile" v-if="currentMethod.allowUndo" :disabled="!currentExerciseIsDirty" @click="UndoLastIdea"><icon class="undo"></icon></button>
               <button id="button-redo" title="Redo" role="button" tabindex="0" aria-label="Redo" class="symbol hide-mobile" v-if="currentMethod.allowUndo" :disabled="ideasLIFOForRedo.length === 0" @click="RedoLastIdea"><icon class="redo"></icon></button>
               <button id="button-restart" title="Restart" role="button" tabindex="0" aria-label="Restart" :disabled="!currentExerciseIsDirty" @click="HardRestartExercise">Restart</button>
-            </controls>
+             <select title="Select View" role="select" tabindex="0" aria-label="Select View" name="viewPicker" id="viewPicker" v-model="currentView">
+                <option v-for="view in allViews" :key="view.value" :value="view">{{view.name}}</option>
+              </select></controls>
           </controlgroup>
           <explanation v-html="currentMethod.description"></explanation>
           <ideas v-if="getIdeasFromCurrentGenerationBasedOnMethod.length > 0 && getIdeasFromCurrentGenerationBasedOnMethod[0].parent!==null && getIdeasFromCurrentGenerationBasedOnMethod[0].parent!==undefined  && getIdeasFromCurrentGenerationBasedOnMethod[0].parent.name !== currentIdeas.name">
-            <idea :style="{backgroundColor: 'hsla(' + getLastSelectedIdea.hsl + ', .3)' }" class="explored selected">{{getLastSelectedIdea.name}}</idea>
+            <idea style="border-width: 1px;" :style="{backgroundColor: 'hsla(' + getLastSelectedIdea.hsl + ', .5)' }" class="explored selected">{{getLastSelectedIdea.name}}</idea>
           </ideas>
           <ideas id="idpicker" v-if="!showExerciseResult">
-            <idea :title="idea.name" :key="idea.name" @keydown.space.prevent="() => SelectIdea(idea)" role="option" :tabindex="idea.isSelected ? -1 : 0" aria-label="Idea" :style="{backgroundColor: 'hsla(' + idea.hsl + ', .3)' }" :class="{selected: idea.isSelected && currentMethod.value !== 'binary'}" v-for="(idea, index) in getIdeasFromCurrentGenerationBasedOnMethod" @click="() => SelectIdea(idea)">
+            <idea :title="idea.name" :key="idea.name" @keydown.space.prevent="() => SelectIdea(idea)" role="option" :tabindex="idea.isSelected ? -1 : 0" aria-label="Idea" :style="{ backgroundColor: 'hsla(' + idea.hsl + ', 1)' }" :class="{selected: idea.isSelected && currentMethod.value !== 'binary'}" v-for="(idea, index) in getIdeasFromCurrentGenerationBasedOnMethod" @click="() => SelectIdea(idea)">
               <tooltip v-if="idea.description !== null"> {{idea.description}} </tooltip>
               <count v-if="!idea.isSelected && idea.children.length > 0">{{idea.children.length}}</count>
               {{idea.lowestSelectedDescendent !== '' ? idea.lowestSelectedDescendent : idea.name}}
             </idea>
           </ideas>
           <ideas v-if="showExerciseResult">
-            <idea v-for="idea in getLowestSelectedDescendantsComputed" class="selected" :style="{backgroundColor: 'hsla(' + idea.hsl + ', .3)' }"><tooltip v-if="idea.description !== null">{{idea.description}}</tooltip>{{idea.name}}</idea>
+            <idea v-for="idea in getLowestSelectedDescendantsComputed" class="selected" :style="{backgroundColor: 'hsla(' + idea.hsl + ', 1)' }"><tooltip v-if="idea.description !== null">{{idea.description}}</tooltip>{{idea.name}}</idea>
           </ideas>
           <controls v-if="showAIActions">
             <control id="aiactions">

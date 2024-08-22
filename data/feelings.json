@@ -14,7 +14,7 @@
         { "n": "Distant", "c": [{ "n": "Withdrawn" }, { "n": "Suspicious" }] },
         { "n": "Critical", "c": [{ "n": "Skeptical" }, { "n": "Sarcastic" }] }
       ],
-      "hsl": "0,100%,50%"
+      "hsl": "0,100%,87%"
     },
     {
       "n": "Disgust",
@@ -25,7 +25,7 @@
         { "n": "Awful", "c": [{ "n": "Revulsion" }, { "n": "Detestable" }] },
         { "n": "Avoidance", "c": [{ "n": "Aversion" }, { "n": "Hesitant" }] }
       ],
-      "hsl": "265,100%,50%"
+      "hsl": "265,100%,87%"
     },
     {
       "n": "Sad",
@@ -38,7 +38,7 @@
         { "n": "Lonely", "c": [{ "n": "Abandoned" }, { "n": "Isolated" }] },
         { "n": "Bored", "c": [{ "n": "Apathetic" }, { "n": "Indifferent" }] }
       ],
-      "hsl": "200,100%,50%"
+      "hsl": "200,100%,85%"
     },
     {
       "n": "Happy",
@@ -53,7 +53,7 @@
         { "n": "Interested", "c": [{ "n": "Inquisitive" }, { "n": "Amused" }] },
         { "n": "Joyful", "c": [{ "n": "Liberated" }, { "n": "Ecstatic" }] }
       ],
-      "hsl": "65,100%,50%"
+      "hsl": "62,100%,70%"
     },
     {
       "n": "Surprise",
@@ -64,7 +64,7 @@
         { "n": "Amazed", "c": [{ "n": "Astonished" }, { "n": "Awe" }] },
         { "n": "Excited", "c": [{ "n": "Eager" }, { "n": "Energetic" }] }
       ],
-      "hsl": "43,100%,50%"
+      "hsl": "38,100%,80%"
     },
     {
       "n": "Fear",
@@ -77,7 +77,7 @@
         { "n": "Anxious", "c": [{ "n": "Worried" }, { "n": "Overwhelmed" }] },
         { "n": "Scared", "c": [{ "n": "Frightened" }, { "n": "Terrified" }] }
       ],
-      "hsl": "120,100%,50%"
+      "hsl": "115,100%,83%"
     }
   ]
 }

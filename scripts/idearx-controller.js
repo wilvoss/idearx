@@ -13,7 +13,7 @@ Vue.config.ignoredElements = ['app'];
 var app = new Vue({
   el: '#app',
   data: {
-    appVersion: '0.0.039',
+    appVersion: '0.0.040',
 
     //#region —————— APP DATA ——————
     allMethods: Methods,
@@ -442,7 +442,7 @@ var app = new Vue({
     /** Set conditions to skip interactions while developing */
     PreFillForDevelopment(event) {
       note('PreFillForDevelopment() called');
-      this.SelectIdeaSet(event, this.allIdeaSets[0]);
+      this.SelectIdeaSet(event, this.allIdeaSets[1]);
     },
     //#endregion
 
@@ -629,7 +629,7 @@ var app = new Vue({
               newObj.hslUsePreset = true;
             }
           } else {
-            newObj.hsl = '0, 100%, 100%';
+            newObj.hsl = '0, 0%, 90%';
           }
           const keys = Object.keys(input);
           const nameKey = keys.find((key) => key === 'name' || key === 'value');
@@ -709,8 +709,8 @@ var app = new Vue({
     //#region —————— vue computed() ——————
     getAllIdeaSetsSortedAlphabetically: function () {
       return this.allIdeaSets.sort((a, b) => {
-        const nameA = a.name.slice(2);
-        const nameB = b.name.slice(2);
+        const nameA = a.name.slice(3).trim().toLowerCase();
+        const nameB = b.name.slice(3).trim().toLowerCase();
 
         if (nameA < nameB) {
           return -1; // a comes before b

@@ -249,7 +249,6 @@ select {
 }
 
 .vertical select option {
-    text-align: center;
     text-transform: capitalize;
 }
 
@@ -394,7 +393,9 @@ idea {
     font-family: var(--cardFont);
     font-weight: 600;
     align-items: start;
-    border: 1px solid black;
+    border: 0px solid hsla(0, 0%, 0%, .2);
+    border-bottom-width: 1px;
+    border-top: 1px solid hsla(0, 100%, 100%, .6);
     border-radius: var(--borderRadiusSmall);
     padding: calc(.65 * var(--defaultUnit)) var(--defaultUnit);
     background: hsl(var(--hslBackground));
@@ -405,7 +406,8 @@ idea {
     user-select: none;
     -webkit-user-select: none;
     transform: translateY(0px);
-    outline: 1px solid transparent;
+    outline: 1px solid hsla(var(--hslFocus), 0);
+    outline-offset: 1px;
 }
 
 idea count {
@@ -453,7 +455,6 @@ idea:hover,
 idea:focus {
     box-shadow: var(--boxShadowLifted);
     transform: translateY(-2px);
-    outline: none;
 }
 
 idea:focus-visible {
@@ -528,7 +529,7 @@ version {
     font-size: .8em;
 }
 
-@media only screen and (max-width: 1024px) {
+@media only screen and (max-width: 720px) {
     .hide-mobile {
         display: none;
     }

@@ -12,7 +12,7 @@ class IdeaObject {
     this.parent = spec.parent === undefined ? null : spec.parent;
     this.lowestSelectedDescendent = spec.lowestSelectedDescendent === undefined ? '' : spec.lowestSelectedDescendent;
     this.hslUsePreset = spec.hslUsePreset === undefined ? false : spec.hslUsePreset;
-    this.hsl = spec.hsl === undefined ? '0, 100%, 100%' : spec.hsl;
+    this.hsl = spec.hsl === undefined ? '0, 0%, 90%' : spec.hsl;
   }
 }
 
@@ -33,7 +33,7 @@ function createNestedIdeaObject(_json, _parent = null) {
       ideaObject.hsl = ideaObject.parent.hsl;
       ideaObject.hslUsePreset = true;
     } else {
-      ideaObject.hsl = getRandomInt(0, 360) + ',100%,50%'; // future: grab hsl from chatgpt call based on idea name
+      ideaObject.hsl = getRandomInt(0, 360) + ',100%,88%'; // future: grab hsl from chatgpt call based on idea name
     }
   }
 
