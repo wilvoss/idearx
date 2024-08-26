@@ -56,7 +56,11 @@
             </select>
           </control>
           <p>
-            Or <a @click="TriggerFileUpload">upload</a> your own idea data. <tooltip> You can upload simple <strong>JSON</strong> (nesting allowed) and/or simple lists contained in <strong>CSV</strong> and <strong>TXT</strong> files.</tooltip><info>ℹ</info>
+            Or <a @click="TriggerFileUpload">upload</a> your own idea data.
+            <info>
+              <tooltip> You can upload simple <strong>JSON</strong> (nesting allowed) and/or simple lists contained in <strong>CSV</strong> and <strong>TXT</strong> files.</tooltip>
+              ℹ
+            </info>
           </p>
           <input type="file" ref="fileInput" @change="HandleUploadLinkClick" accept=".json, .csv, .txt" style="display: none" />
         </controls>

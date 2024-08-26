@@ -13,7 +13,7 @@ Vue.config.ignoredElements = ['app'];
 var app = new Vue({
   el: '#app',
   data: {
-    appVersion: '0.0.041',
+    appVersion: '0.0.042',
 
     //#region —————— APP DATA ——————
     allMethods: Methods,
