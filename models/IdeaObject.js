@@ -1,5 +1,8 @@
+let inc = 0;
+
 class IdeaObject {
   constructor(spec) {
+    this.id = 'idea' + inc++;
     this.name = spec.name === undefined ? 'Idea' : spec.name;
     this.searchName = spec.searchName === undefined ? '' : spec.searchName;
     this.order = spec.order === undefined ? -1 : spec.order;

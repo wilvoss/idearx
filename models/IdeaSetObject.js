@@ -30,6 +30,16 @@ var IdeaSets = [
     locked: true,
   }),
   new IdeaSetObject({
+    name: '🫂 Needs',
+    value: 'needs',
+    method: Methods[0],
+    cta: 'What do you need?',
+    description: 'Focus on what you need: Based on Nonviolent Communication by Marshal Rosenberg, PH.D.',
+    data: ['./data/needs.json'],
+    AIActions: [new AIActionObject({ request: 'Learn About this Need' }), new AIActionObject({ request: 'Nonviolent Communication', url: 'https://en.wikipedia.org/wiki/Nonviolent_Communication' })],
+    locked: true,
+  }),
+  new IdeaSetObject({
     name: '🥣 Eating',
     value: 'food',
     method: Methods[2],

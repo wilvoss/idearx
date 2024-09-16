@@ -1,0 +1,233 @@
+{
+  "n": "Needs Wheel",
+  "c": [
+    {
+      "n": "Life",
+      "c": [
+        {
+          "n": "Gratefullness",
+          "c": [
+            { "n": "Remembrance", "c": [{ "n": "Grieving" }, { "n": "Mourning" }] },
+            { "n": "Thankfullness", "c": [{ "n": "Gratitude" }, { "n": "Celebration" }] }
+          ]
+        },
+        {
+          "n": "Happiness",
+          "c": [
+            { "n": "Joy", "c": [{ "n": "Delight" }, { "n": "Humor" }] },
+            { "n": "Inspiration", "c": [{ "n": "Beauty" }, { "n": "Appreciation" }] }
+          ]
+        }
+      ]
+    },
+    {
+      "n": "Wholeness",
+      "c": [
+        {
+          "n": "Responsibility",
+          "c": [
+            { "n": "Civility", "c": [{ "n": "Politeness" }, { "n": "Courteousness" }] },
+            { "n": "Accountability", "c": [{ "n": "Certitude" }, { "n": "Right-Action" }] }
+          ]
+        },
+        {
+          "n": "Integrity",
+          "c": [
+            { "n": "Fairness", "c": [{ "n": "Justice" }, { "n": "Equality" }] },
+            { "n": "Truthfullness", "c": [{ "n": "Goodness" }, { "n": "Honesty" }] }
+          ]
+        }
+      ]
+    },
+    {
+      "n": "Harmony",
+      "c": [
+        {
+          "n": "Peace",
+          "c": [
+            { "n": "Unity", "c": [{ "n": "Agreement" }, { "n": "Consensus" }] },
+            { "n": "Balance", "c": [{ "n": "Calmness" }, { "n": "Serenity" }] }
+          ]
+        },
+        {
+          "n": "Acceptance",
+          "c": [
+            { "n": "Fluidity", "c": [{ "n": "Ease" }, { "n": "Convenience" }] },
+            { "n": "Tolerance", "c": [{ "n": "Modesty" }, { "n": "Humility" }] }
+          ]
+        }
+      ]
+    },
+    {
+      "n": "Autonomy",
+      "c": [
+        {
+          "n": "Individuality",
+          "c": [
+            { "n": "Leadership", "c": [{ "n": "Influence" }, { "n": "Decisiveness" }] },
+            { "n": "Strength", "c": [{ "n": "Resolve" }, { "n": "Courage" }] }
+          ]
+        },
+        {
+          "n": "Independence",
+          "c": [
+            { "n": "Separateness", "c": [{ "n": "Boundaries" }, { "n": "Space/Privacy" }] },
+            { "n": "Freedom", "c": [{ "n": "Self-Determination" }, { "n": "Choice" }] }
+          ]
+        }
+      ]
+    },
+    {
+      "n": "Well-Being",
+      "c": [
+        {
+          "n": "Health",
+          "c": [
+            { "n": "Rejuvenation", "c": [{ "n": "Healing" }, { "n": "Rest/Relaxation" }] },
+            { "n": "Self-Care", "c": [{ "n": "Relief" }, { "n": "Comfort" }] }
+          ]
+        },
+        {
+          "n": "Sustenance",
+          "c": [
+            { "n": "Energy", "c": [{ "n": "Nutrition" }, { "n": "Nourishment" }] },
+            { "n": "Vitality", "c": [{ "n": "Vivacity" }, { "n": "Liveliness" }] }
+          ]
+        }
+      ]
+    },
+    {
+      "n": "Fulfillment",
+      "c": [
+        {
+          "n": "Aliveness",
+          "c": [
+            { "n": "Enjoyment", "c": [{ "n": "Fun & Play" }, { "n": "Spontaneity" }] },
+            { "n": "Richness", "c": [{ "n": "Excitement" }, { "n": "Variety" }] }
+          ]
+        },
+        {
+          "n": "Experience",
+          "c": [
+            { "n": "Stimulation", "c": [{ "n": "Challenge" }, { "n": "Opportunity" }] },
+            { "n": "Adventure", "c": [{ "n": "Exploration" }, { "n": "Discovery" }] }
+          ]
+        }
+      ]
+    },
+    {
+      "n": "Trust",
+      "c": [
+        {
+          "n": "Safety",
+          "c": [
+            { "n": "Protection", "c": [{ "n": "Security" }, { "n": "Preparedness" }] },
+            { "n": "Stability", "c": [{ "n": "Order" }, { "n": "Structure" }] }
+          ]
+        },
+        {
+          "n": "Assurance",
+          "c": [
+            { "n": "Predictability", "c": [{ "n": "Consistency" }, { "n": "Reliability" }] },
+            { "n": "Dependability", "c": [{ "n": "Loyalty" }, { "n": "Commitment" }] }
+          ]
+        }
+      ]
+    },
+    {
+      "n": "Self-Efficacy",
+      "c": [
+        {
+          "n": "Awareness",
+          "c": [
+            { "n": "Wisdom", "c": [{ "n": "Clarity" }, { "n": "Curiosity" }] },
+            { "n": "Knowledge", "c": [{ "n": "Learning" }, { "n": "Growth" }] }
+          ]
+        },
+        {
+          "n": "Agency",
+          "c": [
+            { "n": "Capability", "c": [{ "n": "Skill" }, { "n": "Competence" }] },
+            { "n": "Confidence", "c": [{ "n": "Effectiveness" }, { "n": "Proficiency" }] }
+          ]
+        }
+      ]
+    },
+    {
+      "n": "Love",
+      "c": [
+        {
+          "n": "Empathy",
+          "c": [
+            { "n": "Understanding", "c": [{ "n": "Presence" }, { "n": "Patience" }] },
+            { "n": "Compassion", "c": [{ "n": "Kindness" }, { "n": "Consideration" }] }
+          ]
+        },
+        {
+          "n": "Connection",
+          "c": [
+            { "n": "Openness", "c": [{ "n": "Tolerance" }, { "n": "Acceptance" }] },
+            { "n": "Relatedness", "c": [{ "n": "Receptivity" }, { "n": "Sincerity" }] }
+          ]
+        }
+      ]
+    },
+    {
+      "n": "Identity",
+      "c": [
+        {
+          "n": "Uniqueness",
+          "c": [
+            { "n": "Expression", "c": [{ "n": "Creativity" }, { "n": "Originality" }] },
+            { "n": "Extraordinary", "c": [{ "n": "To be Known" }, { "n": "Specialness" }] }
+          ]
+        },
+        {
+          "n": "Authenticity",
+          "c": [
+            { "n": "Genuineness", "c": [{ "n": "Congruence" }, { "n": "Sincerity" }] },
+            { "n": "Significance", "c": [{ "n": "Purpose" }, { "n": "Meaning" }] }
+          ]
+        }
+      ]
+    },
+    {
+      "n": "Worth",
+      "c": [
+        {
+          "n": "To Matter",
+          "c": [
+            { "n": "Acknowledgement", "c": [{ "n": "Appreciation" }, { "n": "Attention" }] },
+            { "n": "Respect", "c": [{ "n": "Admiration" }, { "n": "Value" }] }
+          ]
+        },
+        {
+          "n": "Esteem",
+          "c": [
+            { "n": "Achievement", "c": [{ "n": "Success" }, { "n": "Accomplishment" }] },
+            { "n": "Recognition", "c": [{ "n": "Validation" }, { "n": "Affirmation" }] }
+          ]
+        }
+      ]
+    },
+    {
+      "n": "Mutuality",
+      "c": [
+        {
+          "n": "Collaboration",
+          "c": [
+            { "n": "Contribution", "c": [{ "n": "Care & Giving" }, { "n": "Nurturance" }] },
+            { "n": "Cooperation", "c": [{ "n": "Help & Support" }, { "n": "Participation" }] }
+          ]
+        },
+        {
+          "n": "Relationship",
+          "c": [
+            { "n": "Closeness", "c": [{ "n": "Intimacy" }, { "n": "Affection" }] },
+            { "n": "Community", "c": [{ "n": "Inclusion" }, { "n": "Belonging" }] }
+          ]
+        }
+      ]
+    }
+  ]
+}

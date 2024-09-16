@@ -13,7 +13,7 @@ Vue.config.ignoredElements = ['app'];
 var app = new Vue({
   el: '#app',
   data: {
-    appVersion: '0.0.043',
+    appVersion: '0.0.044',
 
     //#region —————— APP DATA ——————
     allMethods: Methods,
@@ -27,6 +27,7 @@ var app = new Vue({
     currentSelectedIdea: null,
     currentSelectedAIAction: new AIActionObject({}),
     currentIdeaQueryString: '',
+    currentAIQueryString: '',
     currentMethod: new MethodObject({}),
     currentView: Views[0],
     currentMethodType: '',
@@ -436,6 +437,32 @@ var app = new Vue({
     OpenNewWindowWithURL(_url) {
       window.open(_url.trim(), '_blank');
     },
+
+    async GetAIResponse(_data) {
+      const response = await fetch('https://winter-king-9e9f.bigtentgames.workers.dev/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Host: window.location.hostname,
+          Origin: window.location.origin,
+        },
+        body: JSON.stringify(_data),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Server error: ' + response.status);
+          }
+          return response.text();
+        })
+        .then((payload) => {
+          return JSON.parse(payload);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+      return response;
+    },
+
     //#endregion
 
     //#region —————— DEBUG SETUP ——————
@@ -452,7 +479,7 @@ var app = new Vue({
      * @param {Event} event - The click event object.
      * @param {Object} _action - The action object containing the URL to be opened.
      */
-    HandleActionAIClick(event, _action) {
+    async HandleActionAIClick(event, _action) {
       note('HandleActionAIClick() called');
 
       event.preventDefault();
@@ -472,10 +499,17 @@ var app = new Vue({
             ideaStringArray.push('"' + idea.name + '"');
           }
         });
-        this.currentIdeaQueryString = ideaStringArray.join(' ').toLowerCase().replace('find', '');
-        const suffix = ' ' + _action.request.toLowerCase().replace('find', '').trim();
+        const aiPrefix = _action.request.toLowerCase().trim() + ' ';
+        this.currentAIQueryString = aiPrefix + ideaStringArray.join(' ');
+        // insert cloudflare worker call to get openai payload here
+        // the rest of this is mostly filler until that ^ is done.
+        let aiResponse = this.HandleCallToWorkerForAIPaylout(this.currentAIQueryString)
+          .then((response) => console.log(response))
+          .catch((error) => console.error('Error:', error));
 
-        // in lieu of AI interface, generate google search query
+        const suffix = ' ' + _action.request.toLowerCase().trim();
+        this.currentIdeaQueryString = this.currentAIQueryString.toLowerCase().replace('find', '');
+
         if (_action.type === 'map') {
           {
             this.currentIdeaQueryString = this.currentIdeaQueryString.replace('local', '').replace('nearby', '');
@@ -499,11 +533,32 @@ var app = new Vue({
       }
     },
 
+    async HandleCallToWorkerForAIPaylout(_requests) {
+      const response = await fetch('https://winter-king-9e9f.bigtentgames.workers.dev/', {
+        method: 'POST',
+        headers: {
+          Host: window.location.hostname,
+          Origin: window.location.origin,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(_requests),
+      });
+
+      const data = await response.json();
+      return data;
+    },
+
     HandleInputFormSubmitClicked() {
       for (let index = 0; index < this.currentSelectedAIAction.inputs.length; index++) {
         const input = this.currentSelectedAIAction.inputs[index];
         this.currentIdeaQueryString = this.currentIdeaQueryString + ' ' + input.value;
+        this.currentAIQueryString = this.currentAIQueryString + ' ' + input.value;
       }
+
+      let aiResponse = this.HandleCallToWorkerForAIPaylout(this.currentAIQueryString)
+        .then((response) => console.log(response))
+        .catch((error) => console.error('Error:', error));
+
       this.OpenNewWindowWithURL('https://google.com/maps/?q=' + this.currentIdeaQueryString);
       this.visualStateShowModal = false;
     },
