@@ -139,6 +139,7 @@ info {
     padding-bottom: 3px;
     border-radius: var(--borderRadius);
     margin-left: 4px;
+    margin-right: 4px;
     color: white;
     background-color: hsl(var(--hslPrimary));
     cursor: pointer;
@@ -266,14 +267,15 @@ select {
 }
 
 p {
+    width: 100%;
     max-width: calc(.5 * var(--maxWidth));
     text-align: center;
 }
 
-explanation {
+explanation, description {
     display: block;
     width: calc(100% - 2 * var(--defaultUnit));
-    padding: var(--defaultUnit);
+    padding: var(--defaultUnit) 0;
     text-align: left;
 }
 

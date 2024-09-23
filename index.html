@@ -56,7 +56,7 @@
             </select>
           </control>
           <p>
-            Or <a @click="TriggerFileUpload">upload</a> your own idea data.
+            Or <a @click="TriggerFileUpload">upload</a> your own idea data (<a :href="allIdeaSets[0].data" target="_blank">download template</a>).
             <info>
               <tooltip> You can upload simple <strong>JSON</strong> (nesting allowed) or simple lists contained in <strong>CSV</strong> and <strong>TXT</strong> files.</tooltip>
               ℹ
@@ -100,6 +100,7 @@
             <!-- Place view code for Pie Chart display here -->
             <p class="error">Pie Chart view code here.</p>
           </page>
+          <description v-html="currentIdeaSet.description"></description>
           <controls v-if="showAIActions">
             <control id="aiactions">
               <button class="action primary" :class="{link: action.url!==''}" v-for="action in hydratedAIActions" @click="() => HandleActionAIClick(event, action)">{{action.request}}</button>
